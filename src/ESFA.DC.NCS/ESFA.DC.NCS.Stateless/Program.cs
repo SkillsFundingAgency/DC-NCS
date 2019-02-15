@@ -20,8 +20,8 @@ namespace ESFA.DC.NCS.Stateless
                 // Registering a service maps a service type name to a .NET type.
                 // When Service Fabric creates an instance of this service type,
                 // an instance of the class is created in this host process.
-
-                ServiceRuntime.RegisterServiceAsync("ESFA.DC.NCS.StatelessType",
+                ServiceRuntime.RegisterServiceAsync(
+                    "ESFA.DC.NCS.StatelessType",
                     context => new Stateless(context)).GetAwaiter().GetResult();
 
                 ServiceEventSource.Current.ServiceTypeRegistered(Process.GetCurrentProcess().Id, typeof(Stateless).Name);
