@@ -6,4 +6,14 @@
     <Parameter Name="MyParameter" Value="Value1" />
   </Section>
   -->
+  <Section Name="NcsServiceConfiguration">
+    <Parameter Name="ServiceBusConnectionString" Value="" />
+    <Parameter Name="TopicName" Value="" />
+    <Parameter Name="SubscriptionName" Value=""/>
+    <Parameter Name="JobStatusQueueName" Value="" />
+    <Parameter Name="AuditQueueName" Value="" />
+    <Parameter Name="LoggerConnectionString" Value="abc" />
+    <Parameter Name="DssDbConnectionString" Value="" />
+    <Parameter Name="NcsDbConnectionString" Value="" />
+  </Section>
 </Settings>
