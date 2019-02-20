@@ -1,6 +1,6 @@
 ﻿namespace ESFA.DC.NCS.Stateless.Config.Interfaces
 {
-    public interface ILoggerOptions
+    public interface ILoggerConfiguration
     {
         string LoggerConnectionString { get; }
     }

@@ -2,7 +2,7 @@
 
 namespace ESFA.DC.NCS.Stateless.Config
 {
-    public class LoggerOptions : ILoggerOptions
+    public class LoggerConfiguration : ILoggerConfiguration
     {
         public string LoggerConnectionString { get; set; }
     }

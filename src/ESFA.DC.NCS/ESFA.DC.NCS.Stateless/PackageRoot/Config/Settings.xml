@@ -7,12 +7,18 @@
   </Section>
   -->
   <Section Name="NcsServiceConfiguration">
-    <Parameter Name="ServiceBusConnectionString" Value="" />
+    <Parameter Name="DssServiceBusConnectionString" Value="" />
+    <Parameter Name="DssQueueName" Value="" />
     <Parameter Name="TopicName" Value="" />
     <Parameter Name="SubscriptionName" Value=""/>
     <Parameter Name="JobStatusQueueName" Value="" />
     <Parameter Name="AuditQueueName" Value="" />
-    <Parameter Name="LoggerConnectionString" Value="abc" />
+    <Parameter Name="LoggerConnectionString" Value="" />
+  </Section>
+  <Section Name="LoggerConfiguration">
+    <Parameter Name="LoggerConnectionString" Value="" />
+  </Section>
+  <Section Name="DatabaseConfiguration">
     <Parameter Name="DssDbConnectionString" Value="" />
     <Parameter Name="NcsDbConnectionString" Value="" />
   </Section>

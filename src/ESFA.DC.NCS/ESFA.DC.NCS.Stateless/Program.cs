@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Threading;
 using Autofac.Integration.ServiceFabric;
-using Microsoft.ServiceFabric.Services.Runtime;
 
 namespace ESFA.DC.NCS.Stateless
 {

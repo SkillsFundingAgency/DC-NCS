@@ -2,13 +2,42 @@
 <ApplicationManifest xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ApplicationTypeName="ESFA.DC.NCSType" ApplicationTypeVersion="1.0.0" xmlns="http://schemas.microsoft.com/2011/01/fabric">
   <Parameters>
     <Parameter Name="ESFA.DC.NCS.Stateless_InstanceCount" DefaultValue="-1" />
+    <Parameter Name="DssServiceBusConnectionString" DefaultValue="DssServiceBusConnectionString" />
+    <Parameter Name="DssQueueName" DefaultValue="DssQueueName" />
+    <Parameter Name="TopicName" DefaultValue="topicName" />
+    <Parameter Name="SubscriptionName" DefaultValue="subscriptionName" />
+    <Parameter Name="JobStatusQueueName" DefaultValue="jobStatusQueue" />
+    <Parameter Name="AuditQueueName" DefaultValue="AuditQueue" />
+    <Parameter Name="LoggerConnectionString" DefaultValue="loggerConnectionString" />
+    <Parameter Name="DssDbConnectionString" DefaultValue="DssDbConnectionString" />
+    <Parameter Name="NcsDbConnectionString" DefaultValue="NcsDbConnectionString" />
   </Parameters>
   <!-- Import the ServiceManifest from the ServicePackage. The ServiceManifestName and ServiceManifestVersion 
        should match the Name and Version attributes of the ServiceManifest element defined in the 
        ServiceManifest.xml file. -->
   <ServiceManifestImport>
     <ServiceManifestRef ServiceManifestName="ESFA.DC.NCS.StatelessPkg" ServiceManifestVersion="1.0.0" />
-    <ConfigOverrides />
+    <ConfigOverrides>
+      <ConfigOverride Name="Config">
+        <Settings>
+          <Section Name="NcsServiceConfiguration">
+            <Parameter Name="DssServiceBusConnectionString" Value="[DssServiceBusConnectionString]" />
+            <Parameter Name="DssQueueName" Value="[DssQueueName]" />
+            <Parameter Name="TopicName" Value="[TopicName]" />
+            <Parameter Name="SubscriptionName" Value="[SubscriptionName]" />
+            <Parameter Name="JobStatusQueueName" Value="[JobStatusQueueName]" />
+            <Parameter Name="AuditQueueName" Value="[AuditQueueName]" />
+          </Section>
+          <Section Name="LoggerConfiguration">
+            <Parameter Name="LoggerConnectionString" Value="[LoggerConnectionString]" />
+          </Section>
+          <Section Name="DatabaseConfiguration">
+            <Parameter Name="DssDbConnectionString" Value="[DssDbConnectionString]" />
+            <Parameter Name="NcsDbConnectionString" Value="[NcsDbConnectionString]" />
+          </Section>
+        </Settings>
+      </ConfigOverride>
+    </ConfigOverrides>
   </ServiceManifestImport>
   <DefaultServices>
     <!-- The section below creates instances of service types, when an instance of this 

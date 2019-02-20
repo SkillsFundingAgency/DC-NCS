@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESFA.DC.NCS.Stateless", "ES
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESFA.DC.NCS.Console", "ESFA.DC.NCS.Console\ESFA.DC.NCS.Console.csproj", "{79779C6A-F6D2-436F-AD2C-C0A6629D5EA0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESFA.DC.NCS.Interfaces", "ESFA.DC.NCS.Interfaces\ESFA.DC.NCS.Interfaces.csproj", "{A057EAA2-4CC2-4C5F-A3B1-F56C1EC93430}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,14 @@ Global
 		{79779C6A-F6D2-436F-AD2C-C0A6629D5EA0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{79779C6A-F6D2-436F-AD2C-C0A6629D5EA0}.Release|x64.ActiveCfg = Release|Any CPU
 		{79779C6A-F6D2-436F-AD2C-C0A6629D5EA0}.Release|x64.Build.0 = Release|Any CPU
+		{A057EAA2-4CC2-4C5F-A3B1-F56C1EC93430}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A057EAA2-4CC2-4C5F-A3B1-F56C1EC93430}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A057EAA2-4CC2-4C5F-A3B1-F56C1EC93430}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A057EAA2-4CC2-4C5F-A3B1-F56C1EC93430}.Debug|x64.Build.0 = Debug|Any CPU
+		{A057EAA2-4CC2-4C5F-A3B1-F56C1EC93430}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A057EAA2-4CC2-4C5F-A3B1-F56C1EC93430}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A057EAA2-4CC2-4C5F-A3B1-F56C1EC93430}.Release|x64.ActiveCfg = Release|Any CPU
+		{A057EAA2-4CC2-4C5F-A3B1-F56C1EC93430}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
