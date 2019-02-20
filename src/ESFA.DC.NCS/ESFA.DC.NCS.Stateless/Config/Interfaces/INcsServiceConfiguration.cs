@@ -2,7 +2,9 @@
 {
     public interface INcsServiceConfiguration
     {
-        string ServiceBusConnectionString { get; }
+        string DssServiceBusConnectionString { get; }
+
+        string DssQueueName { get; }
 
         string TopicName { get; }
 
@@ -11,11 +13,5 @@
         string JobStatusQueueName { get; }
 
         string AuditQueueName { get; }
-
-        string LoggerConnectionString { get; }
-
-        string DssDbConnectionString { get; }
-
-        string NcsDbConnectionString { get; }
     }
 }

@@ -10,6 +10,7 @@ namespace ESFA.DC.NCS.Console
     {
         static void Main(string[] args)
         {
+            // TODO: Mock message and access service entry point
         }
     }
 }
