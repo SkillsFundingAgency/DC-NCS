@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ESFA.DC.CrossLoad.Dto;
 using ESFA.DC.Logging.Interfaces;
 using ESFA.DC.NCS.Interfaces;
+using ESFA.DC.NCS.Models.Messages;
 using ESFA.DC.Queueing.Interface;
 
 namespace ESFA.DC.NCS.Stateless
@@ -13,10 +14,12 @@ namespace ESFA.DC.NCS.Stateless
     public class MessageHandler : IMessageHandler
     {
         private readonly ILogger _logger;
+        private readonly IQueuePublishService<DssPublishMessageModel> _queuePublishService;
 
-        public MessageHandler(ILogger logger)
+        public MessageHandler(ILogger logger, IQueuePublishService<DssPublishMessageModel> queuePublishService)
         {
             _logger = logger;
+            _queuePublishService = queuePublishService;
         }
 
         public async Task<IQueueCallbackResult> Callback(MessageCrossLoadDcftToDctDto message, IDictionary<string, object> messageProperties, CancellationToken cancellationToken)
@@ -25,18 +28,14 @@ namespace ESFA.DC.NCS.Stateless
             {
                 Debug.WriteLine("Entered Callback method");
 
-                if (string.IsNullOrEmpty(message.ErrorMessage))
-                {
-                    var touchPointId = GetTouchPointIdFromMessage(message);
+                // TODO: run tasks
 
-                    // TODO: run tasks
-                }
-                else
+                var publishMessage = new DssPublishMessageModel
                 {
-                    _logger.LogWarning($"NCS job failed for Job Id {message.JobId} because of {message.ErrorMessage}");
+                    TestProperty = "Model structure TBC"
+                };
 
-                    // TODO: update job status to failed
-                }
+                await _queuePublishService.PublishAsync(publishMessage);
 
                 return new QueueCallbackResult(true, null);
             }

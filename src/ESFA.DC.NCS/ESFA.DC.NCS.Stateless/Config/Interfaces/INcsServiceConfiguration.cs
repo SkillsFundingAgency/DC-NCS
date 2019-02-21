@@ -4,7 +4,9 @@
     {
         string DssServiceBusConnectionString { get; }
 
-        string DssQueueName { get; }
+        string DssSubscriptionQueueName { get; }
+
+        string DssPublishQueueName { get; }
 
         string TopicName { get; }
 

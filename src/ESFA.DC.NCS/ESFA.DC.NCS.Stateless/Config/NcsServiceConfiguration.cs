@@ -6,7 +6,9 @@ namespace ESFA.DC.NCS.Stateless.Config
     {
         public string DssServiceBusConnectionString { get; set; }
 
-        public string DssQueueName { get; set; }
+        public string DssSubscriptionQueueName { get; set; }
+
+        public string DssPublishQueueName { get; set; }
 
         public string TopicName { get; set; }
 
