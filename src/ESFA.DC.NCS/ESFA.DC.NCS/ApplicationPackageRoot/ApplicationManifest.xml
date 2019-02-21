@@ -3,7 +3,8 @@
   <Parameters>
     <Parameter Name="ESFA.DC.NCS.Stateless_InstanceCount" DefaultValue="-1" />
     <Parameter Name="DssServiceBusConnectionString" DefaultValue="DssServiceBusConnectionString" />
-    <Parameter Name="DssQueueName" DefaultValue="DssQueueName" />
+    <Parameter Name="DssSubscriptionQueueName" DefaultValue="DssSubscriptionQueueName" />
+    <Parameter Name="DssPublishQueueName" DefaultValue="DssPublishQueueName" />
     <Parameter Name="TopicName" DefaultValue="topicName" />
     <Parameter Name="SubscriptionName" DefaultValue="subscriptionName" />
     <Parameter Name="JobStatusQueueName" DefaultValue="jobStatusQueue" />
@@ -22,7 +23,8 @@
         <Settings>
           <Section Name="NcsServiceConfiguration">
             <Parameter Name="DssServiceBusConnectionString" Value="[DssServiceBusConnectionString]" />
-            <Parameter Name="DssQueueName" Value="[DssQueueName]" />
+            <Parameter Name="DssSubscriptionQueueName" Value="[DssSubscriptionQueueName]" />
+            <Parameter Name="DssPublishQueueName" Value="[DssPublishQueueName]" />
             <Parameter Name="TopicName" Value="[TopicName]" />
             <Parameter Name="SubscriptionName" Value="[SubscriptionName]" />
             <Parameter Name="JobStatusQueueName" Value="[JobStatusQueueName]" />

@@ -7,6 +7,7 @@ using ESFA.DC.Logging.Config.Interfaces;
 using ESFA.DC.Logging.Enums;
 using ESFA.DC.Logging.Interfaces;
 using ESFA.DC.NCS.Interfaces;
+using ESFA.DC.NCS.Models.Messages;
 using ESFA.DC.NCS.Stateless.Config;
 using ESFA.DC.NCS.Stateless.Config.Interfaces;
 using ESFA.DC.Queueing;
@@ -83,18 +84,24 @@ namespace ESFA.DC.NCS.Stateless
 
         private static ContainerBuilder RegisterQueues(this ContainerBuilder containerBuilder, INcsServiceConfiguration ncsServiceConfiguration)
         {
-            IQueueConfiguration dssQueueConfiguration = new QueueConfiguration(
+            IQueueConfiguration dssSubscriptionQueueConfiguration = new QueueConfiguration(
                 ncsServiceConfiguration.DssServiceBusConnectionString,
-                ncsServiceConfiguration.DssQueueName,
+                ncsServiceConfiguration.DssSubscriptionQueueName,
                 1);
 
-            containerBuilder.Register(c =>
-            {
-                return new QueueSubscriptionService<MessageCrossLoadDcftToDctDto>(
-                    dssQueueConfiguration,
-                    c.Resolve<IJsonSerializationService>(),
-                    c.Resolve<ILogger>());
-            }).As<IQueueSubscriptionService<MessageCrossLoadDcftToDctDto>>();
+            IQueueConfiguration dssPublishQueueConfiguration = new QueueConfiguration(
+                ncsServiceConfiguration.DssServiceBusConnectionString,
+                ncsServiceConfiguration.DssPublishQueueName,
+                1);
+
+            containerBuilder.Register(c => new QueueSubscriptionService<MessageCrossLoadDcftToDctDto>(
+                dssSubscriptionQueueConfiguration,
+                c.Resolve<IJsonSerializationService>(),
+                c.Resolve<ILogger>())).As<IQueueSubscriptionService<MessageCrossLoadDcftToDctDto>>();
+
+            containerBuilder.Register(c => new QueuePublishService<DssPublishMessageModel>(
+                dssPublishQueueConfiguration,
+                c.Resolve<IJsonSerializationService>())).As<IQueuePublishService<DssPublishMessageModel>>();
 
             return containerBuilder;
         }
