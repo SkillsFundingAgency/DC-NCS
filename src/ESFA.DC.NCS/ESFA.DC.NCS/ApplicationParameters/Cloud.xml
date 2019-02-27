@@ -2,9 +2,7 @@
 <Application xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Name="fabric:/ESFA.DC.NCS" xmlns="http://schemas.microsoft.com/2011/01/fabric">
   <Parameters>
     <Parameter Name="ESFA.DC.NCS.Stateless_InstanceCount" Value="-1" />
-    <Parameter Name="DssServiceBusConnectionString" Value="__DssServiceBusConnectionString__" />
-    <Parameter Name="DssSubscriptionQueueName" Value="__DssSubscriptionQueueName__" />
-    <Parameter Name="DssPublishQueueName" Value="__DssPublishQueueName__" />
+    <Parameter Name="ServiceBusConnectionString" Value="__ServiceBusConnectionString__" />
     <Parameter Name="TopicName" Value="__topicName__" />
     <Parameter Name="SubscriptionName" Value="__subscriptionName__" />
     <Parameter Name="JobStatusQueueName" Value="__jobStatusQueue__" />

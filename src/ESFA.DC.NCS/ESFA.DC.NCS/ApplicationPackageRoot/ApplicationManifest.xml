@@ -2,9 +2,7 @@
 <ApplicationManifest xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ApplicationTypeName="ESFA.DC.NCSType" ApplicationTypeVersion="1.0.0" xmlns="http://schemas.microsoft.com/2011/01/fabric">
   <Parameters>
     <Parameter Name="ESFA.DC.NCS.Stateless_InstanceCount" DefaultValue="-1" />
-    <Parameter Name="DssServiceBusConnectionString" DefaultValue="DssServiceBusConnectionString" />
-    <Parameter Name="DssSubscriptionQueueName" DefaultValue="DssSubscriptionQueueName" />
-    <Parameter Name="DssPublishQueueName" DefaultValue="DssPublishQueueName" />
+    <Parameter Name="ServiceBusConnectionString" DefaultValue="ServiceBusConnectionString" />
     <Parameter Name="TopicName" DefaultValue="topicName" />
     <Parameter Name="SubscriptionName" DefaultValue="subscriptionName" />
     <Parameter Name="JobStatusQueueName" DefaultValue="jobStatusQueue" />
@@ -22,9 +20,7 @@
       <ConfigOverride Name="Config">
         <Settings>
           <Section Name="NcsServiceConfiguration">
-            <Parameter Name="DssServiceBusConnectionString" Value="[DssServiceBusConnectionString]" />
-            <Parameter Name="DssSubscriptionQueueName" Value="[DssSubscriptionQueueName]" />
-            <Parameter Name="DssPublishQueueName" Value="[DssPublishQueueName]" />
+            <Parameter Name="ServiceBusConnectionString" Value="[ServiceBusConnectionString]" />
             <Parameter Name="TopicName" Value="[TopicName]" />
             <Parameter Name="SubscriptionName" Value="[SubscriptionName]" />
             <Parameter Name="JobStatusQueueName" Value="[JobStatusQueueName]" />

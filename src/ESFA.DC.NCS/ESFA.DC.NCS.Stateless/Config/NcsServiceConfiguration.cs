@@ -4,11 +4,7 @@ namespace ESFA.DC.NCS.Stateless.Config
 {
     public class NcsServiceConfiguration : INcsServiceConfiguration
     {
-        public string DssServiceBusConnectionString { get; set; }
-
-        public string DssSubscriptionQueueName { get; set; }
-
-        public string DssPublishQueueName { get; set; }
+        public string ServiceBusConnectionString { get; set; }
 
         public string TopicName { get; set; }
 

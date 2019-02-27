@@ -2,11 +2,7 @@
 {
     public interface INcsServiceConfiguration
     {
-        string DssServiceBusConnectionString { get; }
-
-        string DssSubscriptionQueueName { get; }
-
-        string DssPublishQueueName { get; }
+        string ServiceBusConnectionString { get; }
 
         string TopicName { get; }
 
