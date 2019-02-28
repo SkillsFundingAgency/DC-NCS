@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Fabric;
 using System.Threading;
 using System.Threading.Tasks;
-using ESFA.DC.CrossLoad.Dto;
+using ESFA.DC.JobContextManager.Interface;
+using ESFA.DC.JobContextManager.Model;
 using ESFA.DC.Logging.Interfaces;
-using ESFA.DC.NCS.Interfaces;
-using ESFA.DC.Queueing.Interface;
 using Microsoft.ServiceFabric.Services.Runtime;
 
 namespace ESFA.DC.NCS.Stateless
@@ -15,20 +15,14 @@ namespace ESFA.DC.NCS.Stateless
     /// </summary>
     public class Stateless : StatelessService
     {
+        private readonly IJobContextManager<JobContextMessage> _jobContextManager;
         private readonly ILogger _logger;
-        private readonly IMessageHandler _messageHandler;
-        private readonly IQueueSubscriptionService<MessageCrossLoadDcftToDctDto> _queueSubscriptionService;
 
-        public Stateless(
-            StatelessServiceContext context,
-            ILogger logger,
-            IMessageHandler messageHandler,
-            IQueueSubscriptionService<MessageCrossLoadDcftToDctDto> queueSubscriptionService)
+        public Stateless(StatelessServiceContext context, IJobContextManager<JobContextMessage> jobContextManager, ILogger logger)
             : base(context)
         {
+            _jobContextManager = jobContextManager;
             _logger = logger;
-            _messageHandler = messageHandler;
-            _queueSubscriptionService = queueSubscriptionService;
         }
 
         /// <summary>
@@ -42,13 +36,16 @@ namespace ESFA.DC.NCS.Stateless
             {
                 _logger.LogInfo("NCS Stateless Service Started");
 
-                _queueSubscriptionService.Subscribe(_messageHandler.Callback, cancellationToken);
+                _jobContextManager.OpenAsync(cancellationToken);
+
+                Debug.WriteLine("Started");
 
                 initialised = true;
                 await Task.Delay(Timeout.Infinite, cancellationToken);
             }
             catch (Exception exception) when (!(exception is TaskCanceledException))
             {
+                Debug.WriteLine(exception.Message);
                 // Ignore, as an exception is only really thrown on cancellation of the token.
                 _logger.LogError("NCS Stateless Service Exception", exception);
             }
@@ -56,7 +53,7 @@ namespace ESFA.DC.NCS.Stateless
             {
                 if (initialised)
                 {
-                    await _queueSubscriptionService.UnsubscribeAsync();
+                    await _jobContextManager.CloseAsync();
                     _logger.LogInfo("NCS Stateless Service Ended");
                 }
             }

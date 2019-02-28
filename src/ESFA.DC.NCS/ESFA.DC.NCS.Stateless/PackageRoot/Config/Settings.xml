@@ -7,9 +7,7 @@
   </Section>
   -->
   <Section Name="NcsServiceConfiguration">
-    <Parameter Name="DssServiceBusConnectionString" Value="" />
-    <Parameter Name="DssSubscriptionQueueName" Value="" />
-    <Parameter Name="DssPublishQueueName" Value="" />
+    <Parameter Name="ServiceBusConnectionString" Value="" />
     <Parameter Name="TopicName" Value="" />
     <Parameter Name="SubscriptionName" Value=""/>
     <Parameter Name="JobStatusQueueName" Value="" />
