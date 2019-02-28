@@ -275,7 +275,6 @@
     <Compile Include="Stateless.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ServiceEventSource.cs" />
-    <Compile Include="TopicPublishServiceStub.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ESFA.DC.NCS.Stateless.ruleset" />
@@ -300,6 +299,10 @@
     <ProjectReference Include="..\ESFA.DC.NCS.Models\ESFA.DC.NCS.Models.csproj">
       <Project>{fc76116e-539f-4ba3-9c68-f17087bb5b6e}</Project>
       <Name>ESFA.DC.NCS.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ESFA.DC.NCS.Service\ESFA.DC.NCS.Service.csproj">
+      <Project>{cc5cac8a-b862-48e0-b6a0-910e90140848}</Project>
+      <Name>ESFA.DC.NCS.Service</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

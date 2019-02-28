@@ -14,6 +14,8 @@ using ESFA.DC.Logging.Config.Interfaces;
 using ESFA.DC.Logging.Enums;
 using ESFA.DC.Logging.Interfaces;
 using ESFA.DC.Mapping.Interface;
+using ESFA.DC.NCS.Interfaces;
+using ESFA.DC.NCS.Service.Tasks;
 using ESFA.DC.NCS.Stateless.Config;
 using ESFA.DC.NCS.Stateless.Config.Interfaces;
 using ESFA.DC.Queueing;
@@ -36,7 +38,8 @@ namespace ESFA.DC.NCS.Stateless
                 .RegisterLogger(loggerConfiguration)
                 .RegisterSerializers()
                 .RegisterJobContextManagementServices()
-                .RegisterQueuesAndTopics(ncsConfiguration);
+                .RegisterQueuesAndTopics(ncsConfiguration)
+                .RegisterNcsService();
         }
 
         private static ContainerBuilder RegisterLogger(this ContainerBuilder containerBuilder, ILoggerConfiguration loggerConfiguration)
@@ -99,8 +102,6 @@ namespace ESFA.DC.NCS.Stateless
                 c.Resolve<IJsonSerializationService>(),
                 c.Resolve<ILogger>())).As<ITopicSubscriptionService<JobContextDto>>();
 
-            //containerBuilder.RegisterType<TopicPublishServiceStub<JobContextDto>>().As<ITopicPublishService<JobContextDto>>();
-
             containerBuilder.Register(c =>
             {
                 var topicPublishService =
@@ -127,6 +128,15 @@ namespace ESFA.DC.NCS.Stateless
                     jobStatusPublishConfig,
                     c.Resolve<IJsonSerializationService>());
             }).As<IQueuePublishService<JobStatusDto>>();
+
+            return containerBuilder;
+        }
+
+        private static ContainerBuilder RegisterNcsService(this ContainerBuilder containerBuilder)
+        {
+            containerBuilder.RegisterType<FundingCalcTask>().As<INcsDataTask>();
+            containerBuilder.RegisterType<ReportingTask>().As<INcsDataTask>();
+            containerBuilder.RegisterType<StorageTask>().As<INcsDataTask>();
 
             return containerBuilder;
         }
