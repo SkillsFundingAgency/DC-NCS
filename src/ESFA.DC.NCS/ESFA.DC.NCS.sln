@@ -11,7 +11,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESFA.DC.NCS.Console", "ESFA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ESFA.DC.NCS.Interfaces", "ESFA.DC.NCS.Interfaces\ESFA.DC.NCS.Interfaces.csproj", "{A057EAA2-4CC2-4C5F-A3B1-F56C1EC93430}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESFA.DC.NCS.Models", "ESFA.DC.NCS.Models\ESFA.DC.NCS.Models.csproj", "{FC76116E-539F-4BA3-9C68-F17087BB5B6E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ESFA.DC.NCS.Models", "ESFA.DC.NCS.Models\ESFA.DC.NCS.Models.csproj", "{FC76116E-539F-4BA3-9C68-F17087BB5B6E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESFA.DC.NCS.Service", "ESFA.DC.NCS.Service\ESFA.DC.NCS.Service.csproj", "{CC5CAC8A-B862-48E0-B6A0-910E90140848}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,6 +61,14 @@ Global
 		{FC76116E-539F-4BA3-9C68-F17087BB5B6E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FC76116E-539F-4BA3-9C68-F17087BB5B6E}.Release|x64.ActiveCfg = Release|Any CPU
 		{FC76116E-539F-4BA3-9C68-F17087BB5B6E}.Release|x64.Build.0 = Release|Any CPU
+		{CC5CAC8A-B862-48E0-B6A0-910E90140848}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC5CAC8A-B862-48E0-B6A0-910E90140848}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC5CAC8A-B862-48E0-B6A0-910E90140848}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{CC5CAC8A-B862-48E0-B6A0-910E90140848}.Debug|x64.Build.0 = Debug|Any CPU
+		{CC5CAC8A-B862-48E0-B6A0-910E90140848}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC5CAC8A-B862-48E0-B6A0-910E90140848}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC5CAC8A-B862-48E0-B6A0-910E90140848}.Release|x64.ActiveCfg = Release|Any CPU
+		{CC5CAC8A-B862-48E0-B6A0-910E90140848}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
