@@ -8,16 +8,16 @@ using ESFA.DC.NCS.Interfaces.Service;
 
 namespace ESFA.DC.NCS.Service.Tasks
 {
-    public class ReportingTask : INcsDataTask
+    public class FundingTask : INcsDataTask
     {
         private readonly ILogger _logger;
 
-        public ReportingTask(ILogger logger)
+        public FundingTask(ILogger logger)
         {
             _logger = logger;
         }
 
-        public string TaskName => TaskNameConstants.ReportingTaskName;
+        public string TaskName => TaskNameConstants.FundingTaskName;
 
         public async Task ExecuteAsync(INcsJobContextMessage ncsJobContextMessage, CancellationToken cancellationToken)
         {
@@ -26,7 +26,7 @@ namespace ESFA.DC.NCS.Service.Tasks
                 return;
             }
 
-            Debug.WriteLine("Entered Reporting Task");
+            Debug.WriteLine("Entered Funding Task");
         }
     }
 }

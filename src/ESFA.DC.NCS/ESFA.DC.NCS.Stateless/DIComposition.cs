@@ -14,7 +14,8 @@ using ESFA.DC.Logging.Config.Interfaces;
 using ESFA.DC.Logging.Enums;
 using ESFA.DC.Logging.Interfaces;
 using ESFA.DC.Mapping.Interface;
-using ESFA.DC.NCS.Interfaces;
+using ESFA.DC.NCS.Interfaces.Service;
+using ESFA.DC.NCS.Service;
 using ESFA.DC.NCS.Service.Tasks;
 using ESFA.DC.NCS.Stateless.Config;
 using ESFA.DC.NCS.Stateless.Config.Interfaces;
@@ -134,9 +135,10 @@ namespace ESFA.DC.NCS.Stateless
 
         private static ContainerBuilder RegisterNcsService(this ContainerBuilder containerBuilder)
         {
-            containerBuilder.RegisterType<FundingCalcTask>().As<INcsDataTask>();
+            containerBuilder.RegisterType<FundingTask>().As<INcsDataTask>();
             containerBuilder.RegisterType<ReportingTask>().As<INcsDataTask>();
             containerBuilder.RegisterType<StorageTask>().As<INcsDataTask>();
+            containerBuilder.RegisterType<EntryPoint>().As<IEntryPoint>();
 
             return containerBuilder;
         }

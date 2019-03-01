@@ -2,7 +2,7 @@
 {
     public static class TaskNameConstants
     {
-        public const string FundingCalcTaskName = "Funding";
+        public const string FundingTaskName = "Funding";
 
         public const string StorageTaskName = "Storage";
 
