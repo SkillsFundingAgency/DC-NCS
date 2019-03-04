@@ -13,7 +13,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Messages\" />
+    <Compile Remove="Messages\**" />
+    <EmbeddedResource Remove="Messages\**" />
+    <None Remove="Messages\**" />
   </ItemGroup>
 
 </Project>
