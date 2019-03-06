@@ -2,10 +2,8 @@
 
 namespace ESFA.DC.NCS.Stateless.Config
 {
-    public class DatabaseConfiguration : IDatabaseConfiguration
+    public class DssServiceConfiguration : IDssServiceConfiguration
     {
         public string DssDbConnectionString { get; set; }
-
-        public string NcsDbConnectionString { get; set; }
     }
 }

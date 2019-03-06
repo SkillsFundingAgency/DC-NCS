@@ -53,6 +53,9 @@
     <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <HintPath>..\packages\Castle.Core.4.3.1\lib\net45\Castle.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Dapper, Version=1.50.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dapper.1.50.7\lib\net451\Dapper.dll</HintPath>
+    </Reference>
     <Reference Include="ESFA.DC.Auditing, Version=0.1.9.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ESFA.DC.Auditing.0.1.9-beta0001\lib\netstandard2.0\ESFA.DC.Auditing.dll</HintPath>
     </Reference>
@@ -208,6 +211,9 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.SqlClient, Version=4.5.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SqlClient.4.6.0\lib\net461\System.Data.SqlClient.dll</HintPath>
+    </Reference>
     <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.2.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.4.1\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
     </Reference>
@@ -269,8 +275,8 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Config\DatabaseConfiguration.cs" />
-    <Compile Include="Config\Interfaces\IDatabaseConfiguration.cs" />
+    <Compile Include="Config\DssServiceConfiguration.cs" />
+    <Compile Include="Config\Interfaces\IDssServiceConfiguration.cs" />
     <Compile Include="Config\Interfaces\ILoggerConfiguration.cs" />
     <Compile Include="Config\Interfaces\INcsServiceConfiguration.cs" />
     <Compile Include="Config\LoggerConfiguration.cs" />
@@ -299,6 +305,10 @@
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ESFA.DC.NCS.DataService\ESFA.DC.NCS.DataService.csproj">
+      <Project>{8a9abbeb-b1cd-415c-b09b-7659a91cb5da}</Project>
+      <Name>ESFA.DC.NCS.DataService</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ESFA.DC.NCS.Interfaces\ESFA.DC.NCS.Interfaces.csproj">
       <Project>{a057eaa2-4cc2-4c5f-a3b1-f56c1ec93430}</Project>
       <Name>ESFA.DC.NCS.Interfaces</Name>

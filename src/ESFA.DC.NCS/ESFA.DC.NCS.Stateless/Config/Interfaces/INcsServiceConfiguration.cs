@@ -11,5 +11,7 @@
         string JobStatusQueueName { get; }
 
         string AuditQueueName { get; }
+
+        string NcsDbConnectionString { get; }
     }
 }

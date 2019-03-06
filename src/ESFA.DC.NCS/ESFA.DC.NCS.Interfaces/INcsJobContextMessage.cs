@@ -8,7 +8,7 @@ namespace ESFA.DC.NCS.Interfaces
 
         string Username { get; }
 
-        Guid DssJobId { get; }
+        //Guid DssJobId { get; }
 
         string TouchpointId { get; }
 

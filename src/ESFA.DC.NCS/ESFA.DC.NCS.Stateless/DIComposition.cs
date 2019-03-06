@@ -14,8 +14,13 @@ using ESFA.DC.Logging.Config.Interfaces;
 using ESFA.DC.Logging.Enums;
 using ESFA.DC.Logging.Interfaces;
 using ESFA.DC.Mapping.Interface;
+using ESFA.DC.NCS.DataService;
+using ESFA.DC.NCS.Interfaces.DataService;
 using ESFA.DC.NCS.Interfaces.Service;
+using ESFA.DC.NCS.Models.Config;
+using ESFA.DC.NCS.Models.Interfaces;
 using ESFA.DC.NCS.Service;
+using ESFA.DC.NCS.Service.Helpers;
 using ESFA.DC.NCS.Service.Tasks;
 using ESFA.DC.NCS.Stateless.Config;
 using ESFA.DC.NCS.Stateless.Config.Interfaces;
@@ -32,15 +37,16 @@ namespace ESFA.DC.NCS.Stateless
         public static ContainerBuilder BuildContainer()
         {
             var ncsConfiguration = GetNcsConfiguration();
+            var dssConfiguration = GetDssConfiguration();
             var loggerConfiguration = GetLoggerConfiguration();
-            var databaseConfiguration = GetDatabaseConfiguration();
 
             return new ContainerBuilder()
                 .RegisterLogger(loggerConfiguration)
                 .RegisterSerializers()
                 .RegisterJobContextManagementServices()
                 .RegisterQueuesAndTopics(ncsConfiguration)
-                .RegisterNcsService();
+                .RegisterNcsService()
+                .RegisterDssService(dssConfiguration);
         }
 
         private static ContainerBuilder RegisterLogger(this ContainerBuilder containerBuilder, ILoggerConfiguration loggerConfiguration)
@@ -139,6 +145,23 @@ namespace ESFA.DC.NCS.Stateless
             containerBuilder.RegisterType<ReportingTask>().As<INcsDataTask>();
             containerBuilder.RegisterType<StorageTask>().As<INcsDataTask>();
             containerBuilder.RegisterType<EntryPoint>().As<IEntryPoint>();
+            containerBuilder.RegisterType<MessageHelper>().As<IMessageHelper>();
+
+            return containerBuilder;
+        }
+
+        private static ContainerBuilder RegisterDssService(this ContainerBuilder containerBuilder, IDssServiceConfiguration dssServiceConfiguration)
+        {
+            containerBuilder.Register(c => new DssConfig(dssServiceConfiguration.DssDbConnectionString)).As<IDssConfig>().InstancePerDependency();
+
+            containerBuilder.Register(c =>
+            {
+                var dssDataRetrievalService = new DssDataRetrievalService(
+                    c.Resolve<ILogger>(),
+                    c.Resolve<IDssConfig>());
+
+                return dssDataRetrievalService;
+            }).As<IDssDataRetrievalService>().InstancePerDependency();
 
             return containerBuilder;
         }
@@ -150,18 +173,18 @@ namespace ESFA.DC.NCS.Stateless
             return configHelper.GetSectionValues<NcsServiceConfiguration>("NcsServiceConfiguration");
         }
 
+        private static IDssServiceConfiguration GetDssConfiguration()
+        {
+            var configHelper = new ConfigurationHelper();
+
+            return configHelper.GetSectionValues<DssServiceConfiguration>("DssServiceConfiguration");
+        }
+
         private static ILoggerConfiguration GetLoggerConfiguration()
         {
             var configHelper = new ConfigurationHelper();
 
             return configHelper.GetSectionValues<LoggerConfiguration>("LoggerConfiguration");
-        }
-
-        private static IDatabaseConfiguration GetDatabaseConfiguration()
-        {
-            var configHelper = new ConfigurationHelper();
-
-            return configHelper.GetSectionValues<DatabaseConfiguration>("DatabaseConfiguration");
         }
     }
 }
