@@ -152,7 +152,7 @@ namespace ESFA.DC.NCS.Stateless
 
         private static ContainerBuilder RegisterDssService(this ContainerBuilder containerBuilder, IDssServiceConfiguration dssServiceConfiguration)
         {
-            containerBuilder.Register(c => new DssConfig(dssServiceConfiguration.DssDbConnectionString)).As<IDssConfig>().InstancePerDependency();
+            containerBuilder.Register(c => new DssConfig(dssServiceConfiguration.DssDbConnectionString)).As<IDssConfig>().SingleInstance();
 
             containerBuilder.Register(c =>
             {
