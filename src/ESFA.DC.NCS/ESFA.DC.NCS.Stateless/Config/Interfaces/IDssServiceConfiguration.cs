@@ -1,9 +1,7 @@
 ﻿namespace ESFA.DC.NCS.Stateless.Config.Interfaces
 {
-    public interface IDatabaseConfiguration
+    public interface IDssServiceConfiguration
     {
         string DssDbConnectionString { get; }
-
-        string NcsDbConnectionString { get; }
     }
 }

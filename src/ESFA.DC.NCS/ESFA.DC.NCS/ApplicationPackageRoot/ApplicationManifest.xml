@@ -25,13 +25,13 @@
             <Parameter Name="SubscriptionName" Value="[SubscriptionName]" />
             <Parameter Name="JobStatusQueueName" Value="[JobStatusQueueName]" />
             <Parameter Name="AuditQueueName" Value="[AuditQueueName]" />
+            <Parameter Name="NcsDbConnectionString" Value="[NcsDbConnectionString]" />
           </Section>
           <Section Name="LoggerConfiguration">
             <Parameter Name="LoggerConnectionString" Value="[LoggerConnectionString]" />
           </Section>
-          <Section Name="DatabaseConfiguration">
+          <Section Name="DssServiceConfiguration">
             <Parameter Name="DssDbConnectionString" Value="[DssDbConnectionString]" />
-            <Parameter Name="NcsDbConnectionString" Value="[NcsDbConnectionString]" />
           </Section>
         </Settings>
       </ConfigOverride>

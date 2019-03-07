@@ -13,5 +13,7 @@ namespace ESFA.DC.NCS.Stateless.Config
         public string JobStatusQueueName { get; set; }
 
         public string AuditQueueName { get; set; }
+
+        public string NcsDbConnectionString { get; set; }
     }
 }
