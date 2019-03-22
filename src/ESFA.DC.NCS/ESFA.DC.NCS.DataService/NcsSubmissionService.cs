@@ -37,10 +37,7 @@ namespace ESFA.DC.NCS.DataService
                         await context.Database.ExecuteSqlCommandAsync(commandText, touchPointId);
 
                         // Insert new values
-                        foreach (var submission in ncsSubmissions)
-                        {
-                            context.NcsSubmissions.AddRange(submission);
-                        }
+                        context.NcsSubmissions.AddRange(ncsSubmissions);
 
                         await context.SaveChangesAsync(cancellationToken);
                         transaction.Commit();
