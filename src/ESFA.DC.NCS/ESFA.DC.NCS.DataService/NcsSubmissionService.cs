@@ -39,7 +39,7 @@ namespace ESFA.DC.NCS.DataService
                         // Insert new values
                         foreach (var submission in ncsSubmissions)
                         {
-                            context.NcsSubmissions.Add(submission);
+                            context.NcsSubmissions.AddRange(submission);
                         }
 
                         await context.SaveChangesAsync(cancellationToken);
