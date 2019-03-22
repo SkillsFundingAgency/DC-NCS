@@ -1,0 +1,2 @@
+﻿dotnet.exe ef dbcontext scaffold "Server=.\;Database=NCS;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -c NcsContext --schema dbo --force --startup-project . --project ..\ESFA.DC.NCS.EF --verbose
+pause

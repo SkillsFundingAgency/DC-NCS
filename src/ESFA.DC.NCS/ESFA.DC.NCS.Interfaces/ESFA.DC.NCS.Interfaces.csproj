@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ESFA.DC.NCS.EF\ESFA.DC.NCS.EF.csproj" />
     <ProjectReference Include="..\ESFA.DC.NCS.Models\ESFA.DC.NCS.Models.csproj" />
   </ItemGroup>
 

@@ -27,8 +27,4 @@
     <ProjectReference Include="..\ESFA.DC.NCS.Interfaces\ESFA.DC.NCS.Interfaces.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
-
 </Project>
