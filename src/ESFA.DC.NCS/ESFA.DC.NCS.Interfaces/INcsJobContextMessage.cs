@@ -8,7 +8,7 @@ namespace ESFA.DC.NCS.Interfaces
 
         string Username { get; }
 
-        //Guid DssJobId { get; }
+        Guid DssJobId { get; }
 
         string TouchpointId { get; }
 
@@ -17,5 +17,11 @@ namespace ESFA.DC.NCS.Interfaces
         string DssContainer { get; }
 
         string ReportFileName { get; }
+
+        string CollectionName { get; }
+
+        int ReturnPeriod { get; }
+
+        int CollectionYear { get; }
     }
 }

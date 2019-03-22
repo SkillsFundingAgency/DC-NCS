@@ -7,6 +7,7 @@ using ESFA.DC.NCS.Interfaces;
 using ESFA.DC.NCS.Interfaces.Constants;
 using ESFA.DC.NCS.Interfaces.DataService;
 using ESFA.DC.NCS.Interfaces.Service;
+using ESFA.DC.NCS.Service.Helpers;
 
 namespace ESFA.DC.NCS.Service.Tasks
 {
@@ -15,12 +16,16 @@ namespace ESFA.DC.NCS.Service.Tasks
         private readonly ILogger _logger;
         private readonly IMessageHelper _messageHelper;
         private readonly IDssDataRetrievalService _dssDataRetrievalService;
+        private readonly IFundingService _fundingService;
+        private readonly INcsSubmissionService _ncsSubmissionService;
 
-        public FundingTask(ILogger logger, IMessageHelper messageHelper, IDssDataRetrievalService dssDataRetrievalService)
+        public FundingTask(ILogger logger, IMessageHelper messageHelper, IDssDataRetrievalService dssDataRetrievalService, IFundingService fundingService, INcsSubmissionService ncsSubmissionService)
         {
             _logger = logger;
             _messageHelper = messageHelper;
             _dssDataRetrievalService = dssDataRetrievalService;
+            _fundingService = fundingService;
+            _ncsSubmissionService = ncsSubmissionService;
         }
 
         public string TaskName => TaskNameConstants.FundingTaskName;
@@ -42,7 +47,11 @@ namespace ESFA.DC.NCS.Service.Tasks
             {
                 _logger.LogInfo($"Retrieved {dssData.Count()} records from DSS for TouchpointId {ncsJobContextMessage.TouchpointId}");
 
-                // TODO: Funding calc and persist
+                var ncsSubmission = ModelBuilder.BuildNcsSubmission(dssData, ncsJobContextMessage);
+
+                // TODO: Funding Calc
+
+                await _ncsSubmissionService.PersistAsync(ncsSubmission, ncsJobContextMessage, cancellationToken);
             }
             else
             {

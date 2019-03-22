@@ -15,12 +15,15 @@ using ESFA.DC.Logging.Enums;
 using ESFA.DC.Logging.Interfaces;
 using ESFA.DC.Mapping.Interface;
 using ESFA.DC.NCS.DataService;
+using ESFA.DC.NCS.EF;
+using ESFA.DC.NCS.EF.Interfaces;
 using ESFA.DC.NCS.Interfaces.DataService;
 using ESFA.DC.NCS.Interfaces.Service;
 using ESFA.DC.NCS.Models.Config;
 using ESFA.DC.NCS.Models.Interfaces;
 using ESFA.DC.NCS.Service;
 using ESFA.DC.NCS.Service.Helpers;
+using ESFA.DC.NCS.Service.Services;
 using ESFA.DC.NCS.Service.Tasks;
 using ESFA.DC.NCS.Stateless.Config;
 using ESFA.DC.NCS.Stateless.Config.Interfaces;
@@ -29,6 +32,7 @@ using ESFA.DC.Queueing.Interface;
 using ESFA.DC.Serialization.Interfaces;
 using ESFA.DC.Serialization.Json;
 using ESFA.DC.ServiceFabric.Helpers;
+using Microsoft.EntityFrameworkCore;
 
 namespace ESFA.DC.NCS.Stateless
 {
@@ -45,7 +49,7 @@ namespace ESFA.DC.NCS.Stateless
                 .RegisterSerializers()
                 .RegisterJobContextManagementServices()
                 .RegisterQueuesAndTopics(ncsConfiguration)
-                .RegisterNcsService()
+                .RegisterNcsService(ncsConfiguration)
                 .RegisterDssService(dssConfiguration);
         }
 
@@ -139,13 +143,21 @@ namespace ESFA.DC.NCS.Stateless
             return containerBuilder;
         }
 
-        private static ContainerBuilder RegisterNcsService(this ContainerBuilder containerBuilder)
+        private static ContainerBuilder RegisterNcsService(this ContainerBuilder containerBuilder, INcsServiceConfiguration ncsServiceConfiguration)
         {
             containerBuilder.RegisterType<FundingTask>().As<INcsDataTask>();
             containerBuilder.RegisterType<ReportingTask>().As<INcsDataTask>();
             containerBuilder.RegisterType<StorageTask>().As<INcsDataTask>();
             containerBuilder.RegisterType<EntryPoint>().As<IEntryPoint>();
             containerBuilder.RegisterType<MessageHelper>().As<IMessageHelper>();
+            containerBuilder.RegisterType<FundingService>().As<IFundingService>();
+
+            containerBuilder.RegisterType<NcsContext>().As<INcsContext>();
+            containerBuilder.Register(container => new DbContextOptionsBuilder<NcsContext>()
+                .UseSqlServer(ncsServiceConfiguration.NcsDbConnectionString)
+                .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking).Options).As<DbContextOptions<NcsContext>>().SingleInstance();
+
+            containerBuilder.RegisterType<NcsSubmissionService>().As<INcsSubmissionService>();
 
             return containerBuilder;
         }

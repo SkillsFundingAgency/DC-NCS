@@ -18,7 +18,7 @@ namespace ESFA.DC.NCS.Stateless.Context
 
         public string Username => _jobContextMessage.KeyValuePairs[JobContextMessageKey.Username].ToString();
 
-        //public Guid DssJobId => Guid.Parse(_jobContextMessage.KeyValuePairs["ExternalJobId"].ToString());
+        public Guid DssJobId => Guid.Parse(_jobContextMessage.KeyValuePairs["ExternalJobId"].ToString());
 
         public string TouchpointId => _jobContextMessage.KeyValuePairs["TouchpointId"].ToString();
 
@@ -27,5 +27,11 @@ namespace ESFA.DC.NCS.Stateless.Context
         public string DssContainer => _jobContextMessage.KeyValuePairs[JobContextMessageKey.Container].ToString();
 
         public string ReportFileName => _jobContextMessage.KeyValuePairs[JobContextMessageKey.Filename].ToString();
+
+        public string CollectionName => _jobContextMessage.KeyValuePairs["CollectionName"].ToString();
+
+        public int ReturnPeriod => int.Parse(_jobContextMessage.KeyValuePairs["ReturnPeriod"].ToString());
+
+        public int CollectionYear => int.Parse(_jobContextMessage.KeyValuePairs["CollectionYear"].ToString());
     }
 }
