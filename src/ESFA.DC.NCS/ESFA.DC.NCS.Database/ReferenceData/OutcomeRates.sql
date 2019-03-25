@@ -1,4 +1,4 @@
-﻿DECLARE @SummaryOfChanges_OutcomeRates TABLE ([Id] INT, [OutcomePriorityCustomer] INT, [CustomerSatisfaction] INT, [CareerManagement] INT, [JobsAndLearning] INT, [EffectiveFrom] DATE, [EffectiveTo] DATE, [Delivery] VARCHAR(50));
+﻿DECLARE @SummaryOfChanges_OutcomeRates TABLE ([Id] INT, [Action] VARCHAR(100));
 
 MERGE INTO [OutcomeRates] AS Target
 USING (VALUES		
@@ -39,7 +39,7 @@ USING (VALUES
 	WHEN NOT MATCHED BY TARGET THEN INSERT([Id], [OutcomePriorityCustomer], [CustomerSatisfaction], [CareerManagement], [JobsAndLearning], [EffectiveFrom], [EffectiveTo], [Delivery]) 
 		VALUES ([Id], [OutcomePriorityCustomer], [CustomerSatisfaction], [CareerManagement], [JobsAndLearning], [EffectiveFrom], [EffectiveTo], [Delivery])
 	WHEN NOT MATCHED BY SOURCE THEN DELETE
-	OUTPUT Inserted.[Id],$action INTO @SummaryOfChanges_OutcomeRates([Id], [OutcomePriorityCustomer], [CustomerSatisfaction], [CareerManagement], [JobsAndLearning], [EffectiveFrom], [EffectiveTo], [Delivery])
+	OUTPUT isnull(deleted.Id,Inserted.[Id]),$action INTO @SummaryOfChanges_OutcomeRates	([Id], [Action])
 ;
 
 	DECLARE @AddCount_OutcomeRates INT, @UpdateCount_OutcomeRates INT, @DeleteCount_OutcomeRates INT

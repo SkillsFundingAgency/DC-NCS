@@ -1,0 +1,6 @@
+﻿
+CREATE USER [NCS_RW_User]
+    WITH PASSWORD = N'$(RWUserPassword)';
+GO
+  GRANT CONNECT TO [NCS_RW_User]
+GO
