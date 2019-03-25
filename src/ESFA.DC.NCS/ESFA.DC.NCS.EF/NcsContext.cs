@@ -15,6 +15,7 @@ namespace ESFA.DC.NCS.EF
         {
         }
 
+        public virtual DbSet<FundingValue> FundingValues { get; set; }
         public virtual DbSet<NcsSubmission> NcsSubmissions { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -30,9 +31,35 @@ namespace ESFA.DC.NCS.EF
         {
             modelBuilder.HasAnnotation("ProductVersion", "2.2.0-rtm-35687");
 
+            modelBuilder.Entity<FundingValue>(entity =>
+            {
+                entity.HasKey(e => new { e.Ukprn, e.TouchpointId, e.CustomerId, e.ActionPlanId, e.OutcomeId });
+
+                entity.Property(e => e.Ukprn).HasColumnName("UKPRN");
+
+                entity.Property(e => e.TouchpointId)
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.OutcomeEffectiveDate).HasColumnType("date");
+
+                entity.Property(e => e.Period)
+                    .IsRequired()
+                    .HasMaxLength(12)
+                    .IsUnicode(false);
+            });
+
             modelBuilder.Entity<NcsSubmission>(entity =>
             {
+                entity.HasKey(e => new { e.Ukprn, e.TouchpointId, e.CustomerId, e.ActionPlanId, e.OutcomeId });
+
                 entity.ToTable("NcsSubmission");
+
+                entity.Property(e => e.Ukprn).HasColumnName("UKPRN");
+
+                entity.Property(e => e.TouchpointId)
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.AdviserName)
                     .HasMaxLength(50)
@@ -41,8 +68,6 @@ namespace ESFA.DC.NCS.EF
                 entity.Property(e => e.CreatedOn)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
 
                 entity.Property(e => e.DateOfBirth).HasColumnType("date");
 
@@ -59,13 +84,6 @@ namespace ESFA.DC.NCS.EF
                 entity.Property(e => e.SubContractorId)
                     .HasMaxLength(50)
                     .IsUnicode(false);
-
-                entity.Property(e => e.TouchpointId)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Ukprn).HasColumnName("UKPRN");
             });
         }
     }

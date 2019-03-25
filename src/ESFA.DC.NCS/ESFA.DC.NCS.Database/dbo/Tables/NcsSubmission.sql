@@ -1,9 +1,8 @@
 ﻿CREATE TABLE [dbo].[NcsSubmission]
 (
-	[Id] INT NOT NULL IDENTITY,
 	[UKPRN] INT NOT NULL,
-	[TouchpointId] VARCHAR(50) NOT NULL,
-	[CustomerID] UNIQUEIDENTIFIER NOT NULL,
+	[TouchpointId] VARCHAR(10) NOT NULL,
+	[CustomerId] UNIQUEIDENTIFIER NOT NULL,
 	[DateOfBirth] DATE NOT NULL,
 	[HomePostCode] VARCHAR(50),
 	[ActionPlanId] UNIQUEIDENTIFIER NOT NULL,
@@ -19,5 +18,5 @@
 	[DssJobId] UNIQUEIDENTIFIER NOT NULL,
 	[DssTimestamp] DATETIME NOT NULL,
 	[CreatedOn] DATETIME DEFAULT (GETDATE()) NOT NULL
-	CONSTRAINT [PK_NcsSubmission] PRIMARY KEY CLUSTERED ([Id] ASC )
+	CONSTRAINT [PK_NcsSubmission] PRIMARY KEY CLUSTERED ([UKPRN] ASC, [TouchpointId] ASC, [CustomerId] ASC, [ActionPlanId] ASC, [OutcomeId] ASC )
 )
