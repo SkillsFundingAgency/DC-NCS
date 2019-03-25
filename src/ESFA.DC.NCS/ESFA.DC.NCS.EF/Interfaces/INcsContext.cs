@@ -12,6 +12,8 @@ namespace ESFA.DC.NCS.EF.Interfaces
     {
         DbSet<NcsSubmission> NcsSubmissions { get; set; }
 
+        DbSet<FundingValue> FundingValues { get; set; }
+
         DatabaseFacade Database { get; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
