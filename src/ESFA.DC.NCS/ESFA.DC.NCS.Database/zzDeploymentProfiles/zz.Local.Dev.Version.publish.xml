@@ -14,7 +14,7 @@
     <SqlCmdVariable Include="BUILD_BUILDNUMBER">
       <Value>0.0.0</Value>
     </SqlCmdVariable>
-    <SqlCmdVariable Include="DSCIUserPassword">
+    <SqlCmdVariable Include="DsciUserPassword">
       <Value>NotUseLocally##</Value>
     </SqlCmdVariable>
     <SqlCmdVariable Include="RELEASE_RELEASENAME">
