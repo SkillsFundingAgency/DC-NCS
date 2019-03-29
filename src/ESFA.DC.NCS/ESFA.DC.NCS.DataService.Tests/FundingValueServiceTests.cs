@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using ESFA.DC.Logging.Interfaces;
 using ESFA.DC.NCS.EF;
 using ESFA.DC.NCS.Interfaces;
 using FluentAssertions;
@@ -19,8 +18,6 @@ namespace ESFA.DC.NCS.DataService.Tests
         [Fact]
         public async Task PersistAsync_SuccessSingle()
         {
-            var options = GetOptions();
-
             var fundingValues = new List<FundingValue>
             {
                 new FundingValue()
@@ -37,6 +34,10 @@ namespace ESFA.DC.NCS.DataService.Tests
                     Period = "April"
                 }
             };
+
+            var options = new DbContextOptionsBuilder<NcsContext>()
+                .UseInMemoryDatabase(databaseName: "PersistAsync_SuccessSingle_FundingValues")
+                .Options;
 
             using (var context = new NcsContext(options))
             {
@@ -63,8 +64,6 @@ namespace ESFA.DC.NCS.DataService.Tests
         [Fact]
         public async Task PersistAsync_SuccessMultiple()
         {
-            var options = GetOptions();
-
             var fundingValues = new List<FundingValue>
             {
                 new FundingValue()
@@ -95,6 +94,10 @@ namespace ESFA.DC.NCS.DataService.Tests
                 }
             };
 
+            var options = new DbContextOptionsBuilder<NcsContext>()
+                .UseInMemoryDatabase(databaseName: "PersistAsync_SuccessMultiple_FundingValues")
+                .Options;
+
             using (var context = new NcsContext(options))
             {
                 await NewService().PersistAsync(context, fundingValues, CancellationToken.None);
@@ -110,7 +113,6 @@ namespace ESFA.DC.NCS.DataService.Tests
         [Fact]
         public async Task DeleteByTouchpointAsync_SuccessSingle()
         {
-            var options = GetOptions();
             var touchpointId = "9999999999";
 
             var fundingValues = new List<FundingValue>
@@ -133,6 +135,10 @@ namespace ESFA.DC.NCS.DataService.Tests
             var ncsJobContextMessage = new Mock<INcsJobContextMessage>();
             ncsJobContextMessage.Setup(m => m.TouchpointId).Returns(touchpointId);
 
+            var options = new DbContextOptionsBuilder<NcsContext>()
+                .UseInMemoryDatabase(databaseName: "DeleteByTouchpointAsync_SuccessSingle_FundingValues")
+                .Options;
+
             using (var context = new NcsContext(options))
             {
                 await NewService().PersistAsync(context, fundingValues, CancellationToken.None);
@@ -152,7 +158,6 @@ namespace ESFA.DC.NCS.DataService.Tests
         [Fact]
         public async Task DeleteByTouchpointAsync_NoMatch()
         {
-            var options = GetOptions();
             var touchpointId = "9999999999";
 
             var fundingValues = new List<FundingValue>
@@ -175,6 +180,10 @@ namespace ESFA.DC.NCS.DataService.Tests
             var ncsJobContextMessage = new Mock<INcsJobContextMessage>();
             ncsJobContextMessage.Setup(m => m.TouchpointId).Returns(touchpointId);
 
+            var options = new DbContextOptionsBuilder<NcsContext>()
+                .UseInMemoryDatabase(databaseName: "DeleteByTouchpointAsync_NoMatch_FundingValues")
+                .Options;
+
             using (var context = new NcsContext(options))
             {
                 await NewService().PersistAsync(context, fundingValues, CancellationToken.None);
@@ -191,16 +200,9 @@ namespace ESFA.DC.NCS.DataService.Tests
             }
         }
 
-        private DbContextOptions<NcsContext> GetOptions()
+        private FundingValueService NewService()
         {
-            return new DbContextOptionsBuilder<NcsContext>()
-                .UseInMemoryDatabase(databaseName: "NCS")
-                .Options;
-        }
-
-        private FundingValueService NewService(ILogger logger = null)
-        {
-            return new FundingValueService(logger);
+            return new FundingValueService();
         }
     }
 }
