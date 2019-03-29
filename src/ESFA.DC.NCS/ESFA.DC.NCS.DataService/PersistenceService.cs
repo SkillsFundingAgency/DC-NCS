@@ -34,10 +34,10 @@ namespace ESFA.DC.NCS.DataService
                     try
                     {
                         await _ncsSubmissionService.DeleteByTouchpointAsync(context, ncsJobContextMessage, cancellationToken);
-                        await _ncsSubmissionService.PersistAsync(context, ncsSubmissions, ncsJobContextMessage, cancellationToken);
+                        await _ncsSubmissionService.PersistAsync(context, ncsSubmissions, cancellationToken);
 
                         await _fundingValueService.DeleteByTouchpointAsync(context, ncsJobContextMessage, cancellationToken);
-                        await _fundingValueService.PersistAsync(context, fundingValues, ncsJobContextMessage, cancellationToken);
+                        await _fundingValueService.PersistAsync(context, fundingValues, cancellationToken);
 
                         transaction.Commit();
 

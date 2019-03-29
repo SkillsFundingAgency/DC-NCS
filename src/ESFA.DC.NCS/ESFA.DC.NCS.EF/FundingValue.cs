@@ -15,5 +15,6 @@ namespace ESFA.DC.NCS.EF
         public int OutcomePriorityCustomer { get; set; }
         public int Value { get; set; }
         public string Period { get; set; }
+        public DateTime CreatedOn { get; set; }
     }
 }

@@ -8,7 +8,7 @@ namespace ESFA.DC.NCS.Interfaces.DataService
 {
     public interface IFundingValueService
     {
-        Task PersistAsync(INcsContext ncsContext, IEnumerable<FundingValue> fundingValues, INcsJobContextMessage ncsJobContextMessage, CancellationToken cancellationToken);
+        Task PersistAsync(INcsContext ncsContext, IEnumerable<FundingValue> fundingValues, CancellationToken cancellationToken);
 
         Task DeleteByTouchpointAsync(INcsContext ncsContext, INcsJobContextMessage ncsJobContextMessage, CancellationToken cancellationToken);
     }

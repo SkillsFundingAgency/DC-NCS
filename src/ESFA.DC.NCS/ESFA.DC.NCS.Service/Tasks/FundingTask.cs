@@ -17,16 +17,14 @@ namespace ESFA.DC.NCS.Service.Tasks
         private readonly IMessageHelper _messageHelper;
         private readonly IDssDataRetrievalService _dssDataRetrievalService;
         private readonly IFundingService _fundingService;
-        private readonly INcsSubmissionService _ncsSubmissionService;
         private readonly IPersistenceService _persistenceService;
 
-        public FundingTask(ILogger logger, IMessageHelper messageHelper, IDssDataRetrievalService dssDataRetrievalService, IFundingService fundingService, INcsSubmissionService ncsSubmissionService, IPersistenceService persistenceService)
+        public FundingTask(ILogger logger, IMessageHelper messageHelper, IDssDataRetrievalService dssDataRetrievalService, IFundingService fundingService, IPersistenceService persistenceService)
         {
             _logger = logger;
             _messageHelper = messageHelper;
             _dssDataRetrievalService = dssDataRetrievalService;
             _fundingService = fundingService;
-            _ncsSubmissionService = ncsSubmissionService;
             _persistenceService = persistenceService;
         }
 

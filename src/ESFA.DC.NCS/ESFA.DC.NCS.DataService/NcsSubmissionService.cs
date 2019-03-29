@@ -21,7 +21,7 @@ namespace ESFA.DC.NCS.DataService
             _logger = logger;
         }
 
-        public async Task PersistAsync(INcsContext ncsContext, IEnumerable<NcsSubmission> ncsSubmissions, INcsJobContextMessage ncsJobContextMessage, CancellationToken cancellationToken)
+        public async Task PersistAsync(INcsContext ncsContext, IEnumerable<NcsSubmission> ncsSubmissions, CancellationToken cancellationToken)
         {
                 ncsContext.NcsSubmissions.AddRange(ncsSubmissions);
                 await ncsContext.SaveChangesAsync(cancellationToken);

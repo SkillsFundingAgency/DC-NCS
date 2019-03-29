@@ -18,7 +18,6 @@ namespace ESFA.DC.NCS.EF
         public int OutcomeType { get; set; }
         public DateTime OutcomeEffectiveDate { get; set; }
         public int OutcomePriorityCustomer { get; set; }
-        public int ReturnPeriod { get; set; }
         public int CollectionYear { get; set; }
         public Guid DssJobId { get; set; }
         public DateTime DssTimestamp { get; set; }

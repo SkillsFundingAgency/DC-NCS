@@ -42,6 +42,10 @@ namespace ESFA.DC.NCS.EF
                     .HasMaxLength(10)
                     .IsUnicode(false);
 
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
                 entity.Property(e => e.OutcomeEffectiveDate).HasColumnType("date");
 
                 entity.Property(e => e.Period)

@@ -8,7 +8,7 @@ namespace ESFA.DC.NCS.Interfaces.DataService
 {
     public interface INcsSubmissionService
     {
-        Task PersistAsync(INcsContext ncsContext, IEnumerable<NcsSubmission> ncsData, INcsJobContextMessage ncsJobContextMessage, CancellationToken cancellationToken);
+        Task PersistAsync(INcsContext ncsContext, IEnumerable<NcsSubmission> ncsData, CancellationToken cancellationToken);
 
         Task DeleteByTouchpointAsync(INcsContext ncsContext, INcsJobContextMessage ncsJobContextMessage, CancellationToken cancellationToken);
     }

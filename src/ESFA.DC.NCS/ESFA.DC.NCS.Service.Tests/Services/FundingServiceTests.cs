@@ -46,7 +46,6 @@ namespace ESFA.DC.NCS.Service.Tests.Services
                     TouchpointId = "000000001",
                     DssJobId = new Guid("0d2c8ffe-0b54-4e44-b67c-e1d7915257ab"),
                     DssTimestamp = new DateTime(2019, 04, 01),
-                    ReturnPeriod = 1,
                     CollectionYear = 1819
                 }
             };
@@ -99,7 +98,6 @@ namespace ESFA.DC.NCS.Service.Tests.Services
                     TouchpointId = "000000001",
                     DssJobId = new Guid("0d2c8ffe-0b54-4e44-b67c-e1d7915257ab"),
                     DssTimestamp = new DateTime(2019, 04, 01),
-                    ReturnPeriod = 1,
                     CollectionYear = 1819
                 }
             };
@@ -149,7 +147,6 @@ namespace ESFA.DC.NCS.Service.Tests.Services
                     TouchpointId = "000000001",
                     DssJobId = new Guid("0d2c8ffe-0b54-4e44-b67c-e1d7915257ab"),
                     DssTimestamp = new DateTime(2019, 04, 01),
-                    ReturnPeriod = 1,
                     CollectionYear = 1819
                 }
             };
@@ -199,7 +196,6 @@ namespace ESFA.DC.NCS.Service.Tests.Services
                     TouchpointId = "000000001",
                     DssJobId = new Guid("0d2c8ffe-0b54-4e44-b67c-e1d7915257ab"),
                     DssTimestamp = new DateTime(2019, 04, 01),
-                    ReturnPeriod = 1,
                     CollectionYear = 1819
                 }
             };
@@ -261,7 +257,6 @@ namespace ESFA.DC.NCS.Service.Tests.Services
                     TouchpointId = "000000001",
                     DssJobId = new Guid("0d2c8ffe-0b54-4e44-b67c-e1d7915257ab"),
                     DssTimestamp = new DateTime(2019, 04, 01),
-                    ReturnPeriod = 1,
                     CollectionYear = 1819
                 }
             };
