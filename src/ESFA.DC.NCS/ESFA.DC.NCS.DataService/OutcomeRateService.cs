@@ -47,7 +47,7 @@ namespace ESFA.DC.NCS.DataService
                 throw new Exception($"OutcomeRates table contains more than one rate for the values: OutcomePriorityCustomer-{priorityGroup}, Delivery-{delivery} and date-{date}");
             }
 
-            return outcomeRates.FirstOrDefault();
+            return outcomeRates.Single();
         }
     }
 }
