@@ -18,14 +18,16 @@ namespace ESFA.DC.NCS.Service.Tasks
         private readonly IDssDataRetrievalService _dssDataRetrievalService;
         private readonly IFundingService _fundingService;
         private readonly INcsSubmissionService _ncsSubmissionService;
+        private readonly IPersistenceService _persistenceService;
 
-        public FundingTask(ILogger logger, IMessageHelper messageHelper, IDssDataRetrievalService dssDataRetrievalService, IFundingService fundingService, INcsSubmissionService ncsSubmissionService)
+        public FundingTask(ILogger logger, IMessageHelper messageHelper, IDssDataRetrievalService dssDataRetrievalService, IFundingService fundingService, INcsSubmissionService ncsSubmissionService, IPersistenceService persistenceService)
         {
             _logger = logger;
             _messageHelper = messageHelper;
             _dssDataRetrievalService = dssDataRetrievalService;
             _fundingService = fundingService;
             _ncsSubmissionService = ncsSubmissionService;
+            _persistenceService = persistenceService;
         }
 
         public string TaskName => TaskNameConstants.FundingTaskName;
@@ -40,7 +42,6 @@ namespace ESFA.DC.NCS.Service.Tasks
             Debug.WriteLine("Entered Funding Task");
 
             var fundingYearStartDate = _messageHelper.CalculateFundingYearStart(ncsJobContextMessage.DssTimeStamp);
-
             var dssData = await _dssDataRetrievalService.GetDataForTouchpoint(ncsJobContextMessage.TouchpointId, ncsJobContextMessage.DssTimeStamp, fundingYearStartDate);
 
             if (dssData.Any())
@@ -48,10 +49,9 @@ namespace ESFA.DC.NCS.Service.Tasks
                 _logger.LogInfo($"Retrieved {dssData.Count()} records from DSS for TouchpointId {ncsJobContextMessage.TouchpointId}");
 
                 var ncsSubmission = ModelBuilder.BuildNcsSubmission(dssData, ncsJobContextMessage);
+                var fundingValues = await _fundingService.CalculateFunding(ncsSubmission, ncsJobContextMessage, cancellationToken);
 
-                // TODO: Funding Calc
-
-                await _ncsSubmissionService.PersistAsync(ncsSubmission, ncsJobContextMessage, cancellationToken);
+                await _persistenceService.PersistSubmissionAndFundingValuesAsync(ncsSubmission, fundingValues, ncsJobContextMessage, cancellationToken);
             }
             else
             {
