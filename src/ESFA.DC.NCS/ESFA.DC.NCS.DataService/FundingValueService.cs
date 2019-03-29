@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,13 +16,6 @@ namespace ESFA.DC.NCS.DataService
 {
     public class FundingValueService : IFundingValueService
     {
-        private readonly ILogger _logger;
-
-        public FundingValueService(ILogger logger)
-        {
-            _logger = logger;
-        }
-
         public async Task PersistAsync(INcsContext ncsContext, IEnumerable<FundingValue> fundingValues, CancellationToken cancellationToken)
         {
             ncsContext.FundingValues.AddRange(fundingValues);
@@ -30,9 +24,8 @@ namespace ESFA.DC.NCS.DataService
 
         public async Task DeleteByTouchpointAsync(INcsContext ncsContext, INcsJobContextMessage ncsJobContextMessage, CancellationToken cancellationToken)
         {
-            SqlParameter touchPointId = new SqlParameter("@TouchpointId", ncsJobContextMessage.TouchpointId);
-            string commandText = "DELETE FROM [NCS].[dbo].[FundingValues] WHERE [TouchpointId] = @TouchpointId";
-            await ncsContext.Database.ExecuteSqlCommandAsync(commandText, touchPointId);
+            ncsContext.FundingValues.RemoveRange(ncsContext.FundingValues.Where(fv => fv.TouchpointId.Equals(ncsJobContextMessage.TouchpointId)));
+            await ncsContext.SaveChangesAsync(cancellationToken);
         }
     }
 }
