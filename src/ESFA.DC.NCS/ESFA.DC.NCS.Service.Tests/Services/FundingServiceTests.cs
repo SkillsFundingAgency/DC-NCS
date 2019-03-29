@@ -10,7 +10,6 @@ using ESFA.DC.NCS.Interfaces;
 using ESFA.DC.NCS.Interfaces.Constants;
 using ESFA.DC.NCS.Interfaces.DataService;
 using ESFA.DC.NCS.Service.Services;
-using ESFA.DC.NCS.Stateless.Context;
 using FluentAssertions;
 using Moq;
 using Xunit;
