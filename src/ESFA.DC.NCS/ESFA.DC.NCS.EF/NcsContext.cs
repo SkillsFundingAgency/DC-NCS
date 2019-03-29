@@ -17,6 +17,7 @@ namespace ESFA.DC.NCS.EF
 
         public virtual DbSet<FundingValue> FundingValues { get; set; }
         public virtual DbSet<NcsSubmission> NcsSubmissions { get; set; }
+        public virtual DbSet<OutcomeRate> OutcomeRates { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -40,6 +41,10 @@ namespace ESFA.DC.NCS.EF
                 entity.Property(e => e.TouchpointId)
                     .HasMaxLength(10)
                     .IsUnicode(false);
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.OutcomeEffectiveDate).HasColumnType("date");
 
@@ -84,6 +89,20 @@ namespace ESFA.DC.NCS.EF
                 entity.Property(e => e.SubContractorId)
                     .HasMaxLength(50)
                     .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<OutcomeRate>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.Delivery)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.EffectiveFrom).HasColumnType("date");
+
+                entity.Property(e => e.EffectiveTo).HasColumnType("date");
             });
         }
     }

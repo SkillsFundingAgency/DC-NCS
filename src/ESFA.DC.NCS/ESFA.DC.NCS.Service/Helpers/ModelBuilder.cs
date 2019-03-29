@@ -30,7 +30,6 @@ namespace ESFA.DC.NCS.Service.Helpers
                     TouchpointId = ncsJobContextMessage.TouchpointId,
                     DssJobId = ncsJobContextMessage.DssJobId,
                     DssTimestamp = ncsJobContextMessage.DssTimeStamp,
-                    ReturnPeriod = ncsJobContextMessage.ReturnPeriod,
                     CollectionYear = ncsJobContextMessage.CollectionYear
                 };
 

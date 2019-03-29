@@ -6,9 +6,9 @@ using ESFA.DC.NCS.EF.Interfaces;
 
 namespace ESFA.DC.NCS.Interfaces.DataService
 {
-    public interface INcsSubmissionService
+    public interface IFundingValueService
     {
-        Task PersistAsync(INcsContext ncsContext, IEnumerable<NcsSubmission> ncsData, CancellationToken cancellationToken);
+        Task PersistAsync(INcsContext ncsContext, IEnumerable<FundingValue> fundingValues, CancellationToken cancellationToken);
 
         Task DeleteByTouchpointAsync(INcsContext ncsContext, INcsJobContextMessage ncsJobContextMessage, CancellationToken cancellationToken);
     }

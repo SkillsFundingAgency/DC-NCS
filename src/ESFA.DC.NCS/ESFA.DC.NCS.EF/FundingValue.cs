@@ -12,8 +12,9 @@ namespace ESFA.DC.NCS.EF
         public Guid OutcomeId { get; set; }
         public int OutcomeType { get; set; }
         public DateTime OutcomeEffectiveDate { get; set; }
-        public int OutcomePriorityGroup { get; set; }
+        public int OutcomePriorityCustomer { get; set; }
         public int Value { get; set; }
         public string Period { get; set; }
+        public DateTime CreatedOn { get; set; }
     }
 }

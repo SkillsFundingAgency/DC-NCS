@@ -158,6 +158,9 @@ namespace ESFA.DC.NCS.Stateless
                 .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking).Options).As<DbContextOptions<NcsContext>>().SingleInstance();
 
             containerBuilder.RegisterType<NcsSubmissionService>().As<INcsSubmissionService>();
+            containerBuilder.RegisterType<FundingValueService>().As<IFundingValueService>();
+            containerBuilder.RegisterType<OutcomeRateService>().As<IOutcomeRateService>();
+            containerBuilder.RegisterType<PersistenceService>().As<IPersistenceService>();
 
             return containerBuilder;
         }

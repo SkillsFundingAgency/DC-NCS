@@ -13,7 +13,6 @@
 	[OutcomeType] INT NOT NULL,
 	[OutcomeEffectiveDate] DATE NOT NULL,
 	[OutcomePriorityCustomer] INT NOT NULL,
-	[ReturnPeriod] INT NOT NULL,
 	[CollectionYear] INT NOT NULL,
 	[DssJobId] UNIQUEIDENTIFIER NOT NULL,
 	[DssTimestamp] DATETIME NOT NULL,
