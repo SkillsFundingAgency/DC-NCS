@@ -18,9 +18,11 @@ using ESFA.DC.NCS.DataService;
 using ESFA.DC.NCS.EF;
 using ESFA.DC.NCS.EF.Interfaces;
 using ESFA.DC.NCS.Interfaces.DataService;
+using ESFA.DC.NCS.Interfaces.ReportingService;
 using ESFA.DC.NCS.Interfaces.Service;
 using ESFA.DC.NCS.Models.Config;
 using ESFA.DC.NCS.Models.Interfaces;
+using ESFA.DC.NCS.ReportingService;
 using ESFA.DC.NCS.Service;
 using ESFA.DC.NCS.Service.Helpers;
 using ESFA.DC.NCS.Service.Services;
@@ -161,6 +163,7 @@ namespace ESFA.DC.NCS.Stateless
             containerBuilder.RegisterType<FundingValueService>().As<IFundingValueService>();
             containerBuilder.RegisterType<OutcomeRateService>().As<IOutcomeRateService>();
             containerBuilder.RegisterType<PersistenceService>().As<IPersistenceService>();
+            containerBuilder.RegisterType<ReportingController>().As<IReportingController>();
 
             return containerBuilder;
         }
