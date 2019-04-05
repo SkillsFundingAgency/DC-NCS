@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using ESFA.DC.DateTimeProvider.Interface;
 using ESFA.DC.Logging.Interfaces;
 using ESFA.DC.NCS.EF;
 using ESFA.DC.NCS.Interfaces;
@@ -55,7 +56,7 @@ namespace ESFA.DC.NCS.Service.Tests.Services
             var ncsJobContextMessage = new Mock<INcsJobContextMessage>();
             ncsJobContextMessage.Setup(m => m.DssTimeStamp).Returns(new DateTime(2019, 04, 01));
 
-            var outcomeRateServiceMock = new Mock<IOutcomeRateService>();
+            var outcomeRateServiceMock = new Mock<IOutcomeRateQueryService>();
 
             outcomeRateServiceMock.Setup(orsm => orsm.GetOutcomeRateByPriorityAndDeliveryAsync(OutcomeRatesConstants.Priority, OutcomeRatesConstants.Community, It.IsAny<DateTime>(), CancellationToken.None))
                 .ReturnsAsync(priorityOutcome);
@@ -63,7 +64,10 @@ namespace ESFA.DC.NCS.Service.Tests.Services
             outcomeRateServiceMock.Setup(orsm => orsm.GetOutcomeRateByPriorityAndDeliveryAsync(OutcomeRatesConstants.NonPriority, OutcomeRatesConstants.Community, It.IsAny<DateTime>(), CancellationToken.None))
                 .ReturnsAsync(nonPriorityOutcome);
 
-            var fundingValues = NewService(outcomeRateServiceMock.Object).CalculateFunding(submissions, ncsJobContextMessage.Object, CancellationToken.None).Result;
+            var dateTimeProviderServiceMock = new Mock<IDateTimeProvider>();
+            dateTimeProviderServiceMock.Setup(x => x.GetNowUtc()).Returns(new DateTime(2000, 01, 01));
+
+            var fundingValues = NewService(outcomeRateServiceMock.Object, dateTimeProviderServiceMock.Object).CalculateFunding(submissions, ncsJobContextMessage.Object, CancellationToken.None).Result;
 
             fundingValues.Should().NotBeEmpty();
             fundingValues.Should().ContainSingle();
@@ -107,7 +111,7 @@ namespace ESFA.DC.NCS.Service.Tests.Services
             var ncsJobContextMessage = new Mock<INcsJobContextMessage>();
             ncsJobContextMessage.Setup(m => m.DssTimeStamp).Returns(new DateTime(2019, 04, 01));
 
-            var outcomeRateServiceMock = new Mock<IOutcomeRateService>();
+            var outcomeRateServiceMock = new Mock<IOutcomeRateQueryService>();
 
             outcomeRateServiceMock.Setup(orsm => orsm.GetOutcomeRateByPriorityAndDeliveryAsync(OutcomeRatesConstants.Priority, OutcomeRatesConstants.Community, It.IsAny<DateTime>(), CancellationToken.None))
                 .ReturnsAsync(priorityOutcome);
@@ -115,7 +119,10 @@ namespace ESFA.DC.NCS.Service.Tests.Services
             outcomeRateServiceMock.Setup(orsm => orsm.GetOutcomeRateByPriorityAndDeliveryAsync(OutcomeRatesConstants.NonPriority, OutcomeRatesConstants.Community, It.IsAny<DateTime>(), CancellationToken.None))
                 .ReturnsAsync(nonPriorityOutcome);
 
-            var fundingValues = NewService(outcomeRateServiceMock.Object).CalculateFunding(submissions, ncsJobContextMessage.Object, CancellationToken.None).Result;
+            var dateTimeProviderServiceMock = new Mock<IDateTimeProvider>();
+            dateTimeProviderServiceMock.Setup(x => x.GetNowUtc()).Returns(new DateTime(2000, 01, 01));
+
+            var fundingValues = NewService(outcomeRateServiceMock.Object, dateTimeProviderServiceMock.Object).CalculateFunding(submissions, ncsJobContextMessage.Object, CancellationToken.None).Result;
 
             fundingValues.Should().NotBeEmpty();
             fundingValues.Should().ContainSingle();
@@ -156,7 +163,7 @@ namespace ESFA.DC.NCS.Service.Tests.Services
             var ncsJobContextMessage = new Mock<INcsJobContextMessage>();
             ncsJobContextMessage.Setup(m => m.DssTimeStamp).Returns(new DateTime(2019, 04, 01));
 
-            var outcomeRateServiceMock = new Mock<IOutcomeRateService>();
+            var outcomeRateServiceMock = new Mock<IOutcomeRateQueryService>();
 
             outcomeRateServiceMock.Setup(orsm => orsm.GetOutcomeRateByPriorityAndDeliveryAsync(OutcomeRatesConstants.Priority, OutcomeRatesConstants.Community, It.IsAny<DateTime>(), CancellationToken.None))
                 .ReturnsAsync(priorityOutcome);
@@ -164,7 +171,10 @@ namespace ESFA.DC.NCS.Service.Tests.Services
             outcomeRateServiceMock.Setup(orsm => orsm.GetOutcomeRateByPriorityAndDeliveryAsync(OutcomeRatesConstants.NonPriority, OutcomeRatesConstants.Community, It.IsAny<DateTime>(), CancellationToken.None))
                 .ReturnsAsync(nonPriorityOutcome);
 
-            Func<Task> act = async () => await NewService(outcomeRateServiceMock.Object).CalculateFunding(submissions, ncsJobContextMessage.Object, CancellationToken.None);
+            var dateTimeProviderServiceMock = new Mock<IDateTimeProvider>();
+            dateTimeProviderServiceMock.Setup(x => x.GetNowUtc()).Returns(new DateTime(2000, 01, 01));
+
+            Func<Task> act = async () => await NewService(outcomeRateServiceMock.Object, dateTimeProviderServiceMock.Object).CalculateFunding(submissions, ncsJobContextMessage.Object, CancellationToken.None);
 
             act.Should()
                 .Throw<Exception>()
@@ -205,7 +215,7 @@ namespace ESFA.DC.NCS.Service.Tests.Services
             var ncsJobContextMessage = new Mock<INcsJobContextMessage>();
             ncsJobContextMessage.Setup(m => m.DssTimeStamp).Returns(new DateTime(2019, 04, 01));
 
-            var outcomeRateServiceMock = new Mock<IOutcomeRateService>();
+            var outcomeRateServiceMock = new Mock<IOutcomeRateQueryService>();
 
             outcomeRateServiceMock.Setup(orsm => orsm.GetOutcomeRateByPriorityAndDeliveryAsync(OutcomeRatesConstants.Priority, OutcomeRatesConstants.Community, It.IsAny<DateTime>(), CancellationToken.None))
                 .ReturnsAsync(priorityOutcome);
@@ -213,7 +223,10 @@ namespace ESFA.DC.NCS.Service.Tests.Services
             outcomeRateServiceMock.Setup(orsm => orsm.GetOutcomeRateByPriorityAndDeliveryAsync(OutcomeRatesConstants.NonPriority, OutcomeRatesConstants.Community, It.IsAny<DateTime>(), CancellationToken.None))
                 .ReturnsAsync(nonPriorityOutcome);
 
-            Func<Task> act = async () => await NewService(outcomeRateServiceMock.Object).CalculateFunding(submissions, ncsJobContextMessage.Object, CancellationToken.None);
+            var dateTimeProviderServiceMock = new Mock<IDateTimeProvider>();
+            dateTimeProviderServiceMock.Setup(x => x.GetNowUtc()).Returns(new DateTime(2000, 01, 01));
+
+            Func<Task> act = async () => await NewService(outcomeRateServiceMock.Object, dateTimeProviderServiceMock.Object).CalculateFunding(submissions, ncsJobContextMessage.Object, CancellationToken.None);
 
             act.Should()
                 .Throw<Exception>()
@@ -266,7 +279,7 @@ namespace ESFA.DC.NCS.Service.Tests.Services
             var ncsJobContextMessage = new Mock<INcsJobContextMessage>();
             ncsJobContextMessage.Setup(m => m.DssTimeStamp).Returns(new DateTime(2019, 04, 01));
 
-            var outcomeRateServiceMock = new Mock<IOutcomeRateService>();
+            var outcomeRateServiceMock = new Mock<IOutcomeRateQueryService>();
 
             outcomeRateServiceMock.Setup(orsm => orsm.GetOutcomeRateByPriorityAndDeliveryAsync(OutcomeRatesConstants.Priority, OutcomeRatesConstants.Community, It.IsAny<DateTime>(), CancellationToken.None))
                 .ReturnsAsync(priorityOutcome);
@@ -274,7 +287,10 @@ namespace ESFA.DC.NCS.Service.Tests.Services
             outcomeRateServiceMock.Setup(orsm => orsm.GetOutcomeRateByPriorityAndDeliveryAsync(OutcomeRatesConstants.NonPriority, OutcomeRatesConstants.Community, It.IsAny<DateTime>(), CancellationToken.None))
                 .ReturnsAsync(nonPriorityOutcome);
 
-            var fundingValues = NewService(outcomeRateServiceMock.Object).CalculateFunding(submissions, ncsJobContextMessage.Object, CancellationToken.None).Result;
+            var dateTimeProviderServiceMock = new Mock<IDateTimeProvider>();
+            dateTimeProviderServiceMock.Setup(x => x.GetNowUtc()).Returns(new DateTime(2000, 01, 01));
+
+            var fundingValues = NewService(outcomeRateServiceMock.Object, dateTimeProviderServiceMock.Object).CalculateFunding(submissions, ncsJobContextMessage.Object, CancellationToken.None).Result;
 
             fundingValues.Should().NotBeEmpty();
             fundingValues.Should().ContainSingle();
@@ -305,9 +321,9 @@ namespace ESFA.DC.NCS.Service.Tests.Services
             };
         }
 
-        private FundingService NewService(IOutcomeRateService outcomeRateService = null, ILogger logger = null)
+        private FundingService NewService(IOutcomeRateQueryService outcomeRateService = null, IDateTimeProvider dateTimeProvider = null, ILogger logger = null)
         {
-            return new FundingService(outcomeRateService, logger);
+            return new FundingService(outcomeRateService, dateTimeProvider, logger);
         }
     }
 }

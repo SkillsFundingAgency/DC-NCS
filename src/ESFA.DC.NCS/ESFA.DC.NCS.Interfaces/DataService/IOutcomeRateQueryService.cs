@@ -7,7 +7,7 @@ using ESFA.DC.NCS.EF;
 
 namespace ESFA.DC.NCS.Interfaces.DataService
 {
-    public interface IOutcomeRateService
+    public interface IOutcomeRateQueryService
     {
         Task<OutcomeRate> GetOutcomeRateByPriorityAndDeliveryAsync(int priorityGroup, string delivery, DateTime date, CancellationToken cancellationToken);
     }

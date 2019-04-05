@@ -12,12 +12,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ESFA.DC.NCS.DataService
 {
-    public class OutcomeRateService : IOutcomeRateService
+    public class OutcomeRateQueryService : IOutcomeRateQueryService
     {
         private readonly ILogger _logger;
         private readonly Func<INcsContext> _ncsContext;
 
-        public OutcomeRateService(ILogger logger, Func<INcsContext> ncsContext)
+        public OutcomeRateQueryService(ILogger logger, Func<INcsContext> ncsContext)
         {
             _logger = logger;
             _ncsContext = ncsContext;

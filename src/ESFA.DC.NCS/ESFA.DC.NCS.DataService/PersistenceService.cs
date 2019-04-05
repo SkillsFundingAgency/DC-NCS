@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ESFA.DC.Logging.Interfaces;
@@ -13,15 +14,11 @@ namespace ESFA.DC.NCS.DataService
     public class PersistenceService : IPersistenceService
     {
         private readonly Func<INcsContext> _ncsContext;
-        private readonly INcsSubmissionPersistenceService _ncsSubmissionPersistenceService;
-        private readonly IFundingValuePersistenceService _fundingValuePersistenceService;
         private readonly ILogger _logger;
 
-        public PersistenceService(Func<INcsContext> ncsContext, INcsSubmissionPersistenceService ncsSubmissionPersistenceService, IFundingValuePersistenceService fundingValuePersistenceService, ILogger logger)
+        public PersistenceService(Func<INcsContext> ncsContext, ILogger logger)
         {
             _ncsContext = ncsContext;
-            _ncsSubmissionPersistenceService = ncsSubmissionPersistenceService;
-            _fundingValuePersistenceService = fundingValuePersistenceService;
             _logger = logger;
         }
 
@@ -29,27 +26,21 @@ namespace ESFA.DC.NCS.DataService
         {
             using (var context = _ncsContext())
             {
-                using (var transaction = context.Database.BeginTransaction())
+                try
                 {
-                    try
-                    {
-                        await _ncsSubmissionPersistenceService.DeleteByTouchpointAsync(context, ncsJobContextMessage, cancellationToken);
-                        await _ncsSubmissionPersistenceService.PersistAsync(context, ncsSubmissions, cancellationToken);
+                    context.NcsSubmissions.RemoveRange(context.NcsSubmissions.Where(fv => fv.TouchpointId.Equals(ncsJobContextMessage.TouchpointId)));
+                    context.NcsSubmissions.AddRange(ncsSubmissions);
 
-                        await _fundingValuePersistenceService.DeleteByTouchpointAsync(context, ncsJobContextMessage, cancellationToken);
-                        await _fundingValuePersistenceService.PersistAsync(context, fundingValues, cancellationToken);
+                    context.FundingValues.RemoveRange(context.FundingValues.Where(fv => fv.TouchpointId.Equals(ncsJobContextMessage.TouchpointId)));
+                    context.FundingValues.AddRange(fundingValues);
 
-                        transaction.Commit();
-
-                        _logger.LogInfo("NCS Submission and funding data persisted Successfully.");
-                    }
-                    catch (Exception exception)
-                    {
-                        _logger.LogError("NCS Submission and funding data persist Failed", exception);
-
-                        transaction.Rollback();
-                        throw;
-                    }
+                    await context.SaveChangesAsync(cancellationToken);
+                    _logger.LogInfo("NCS Submission and funding data persisted Successfully.");
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError("NCS Submission and funding data persist Failed", ex);
+                    throw;
                 }
             }
         }

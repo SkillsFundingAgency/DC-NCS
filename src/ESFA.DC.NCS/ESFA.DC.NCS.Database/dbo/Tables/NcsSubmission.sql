@@ -16,6 +16,6 @@
 	[CollectionYear] INT NOT NULL,
 	[DssJobId] UNIQUEIDENTIFIER NOT NULL,
 	[DssTimestamp] DATETIME NOT NULL,
-	[CreatedOn] DATETIME DEFAULT (GETDATE()) NOT NULL
+	[CreatedOn] DATETIME NOT NULL
 	CONSTRAINT [PK_NcsSubmission] PRIMARY KEY CLUSTERED ([UKPRN] ASC, [TouchpointId] ASC, [CustomerId] ASC, [ActionPlanId] ASC, [OutcomeId] ASC )
 )

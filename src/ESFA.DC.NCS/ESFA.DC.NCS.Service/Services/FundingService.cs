@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ESFA.DC.DateTimeProvider.Interface;
 using ESFA.DC.Logging.Interfaces;
 using ESFA.DC.NCS.EF;
 using ESFA.DC.NCS.Interfaces;
@@ -14,12 +15,14 @@ namespace ESFA.DC.NCS.Service.Services
 {
     public class FundingService : IFundingService
     {
-        private readonly IOutcomeRateService _outcomeRateService;
+        private readonly IOutcomeRateQueryService _outcomeRateService;
+        private readonly IDateTimeProvider _dateTimeProvider;
         private readonly ILogger _logger;
 
-        public FundingService(IOutcomeRateService outcomeRateService, ILogger logger)
+        public FundingService(IOutcomeRateQueryService outcomeRateService, IDateTimeProvider dateTimeProvider, ILogger logger)
         {
             _outcomeRateService = outcomeRateService;
+            _dateTimeProvider = dateTimeProvider;
             _logger = logger;
         }
 
@@ -65,7 +68,8 @@ namespace ESFA.DC.NCS.Service.Services
                 OutcomeEffectiveDate = submission.OutcomeEffectiveDate,
                 OutcomePriorityCustomer = submission.OutcomePriorityCustomer,
                 Value = CalculateValue(submission.OutcomeType, outcomeRate),
-                Period = submission.OutcomeEffectiveDate.ToString("MMMM")
+                Period = submission.OutcomeEffectiveDate.ToString("MMMM"),
+                CreatedOn = _dateTimeProvider.GetNowUtc()
             };
         }
 

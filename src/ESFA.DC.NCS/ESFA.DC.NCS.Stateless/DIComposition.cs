@@ -36,6 +36,7 @@ using ESFA.DC.Serialization.Interfaces;
 using ESFA.DC.Serialization.Json;
 using ESFA.DC.ServiceFabric.Helpers;
 using Microsoft.EntityFrameworkCore;
+using ModelBuilder = ESFA.DC.NCS.Service.Helpers.ModelBuilder;
 
 namespace ESFA.DC.NCS.Stateless
 {
@@ -154,6 +155,7 @@ namespace ESFA.DC.NCS.Stateless
             containerBuilder.RegisterType<StorageTask>().As<INcsDataTask>();
             containerBuilder.RegisterType<EntryPoint>().As<IEntryPoint>();
             containerBuilder.RegisterType<MessageHelper>().As<IMessageHelper>();
+            containerBuilder.RegisterType<ModelBuilder>().As<IModelBuilder>();
             containerBuilder.RegisterType<FundingService>().As<IFundingService>();
 
             containerBuilder.RegisterType<NcsContext>().As<INcsContext>();
@@ -161,9 +163,7 @@ namespace ESFA.DC.NCS.Stateless
                 .UseSqlServer(ncsServiceConfiguration.NcsDbConnectionString)
                 .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking).Options).As<DbContextOptions<NcsContext>>().SingleInstance();
 
-            containerBuilder.RegisterType<NcsSubmissionPersistenceService>().As<INcsSubmissionPersistenceService>();
-            containerBuilder.RegisterType<FundingValuePersistenceService>().As<IFundingValuePersistenceService>();
-            containerBuilder.RegisterType<OutcomeRateService>().As<IOutcomeRateService>();
+            containerBuilder.RegisterType<OutcomeRateQueryService>().As<IOutcomeRateQueryService>();
             containerBuilder.RegisterType<PersistenceService>().As<IPersistenceService>();
             containerBuilder.RegisterType<ReportingController>().As<IReportingController>();
             containerBuilder.RegisterType<NcsSubmissionQueryService>().As<INcsSubmissionQueryService>();
