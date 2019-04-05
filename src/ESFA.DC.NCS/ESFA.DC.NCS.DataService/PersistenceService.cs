@@ -13,15 +13,15 @@ namespace ESFA.DC.NCS.DataService
     public class PersistenceService : IPersistenceService
     {
         private readonly Func<INcsContext> _ncsContext;
-        private readonly INcsSubmissionService _ncsSubmissionService;
-        private readonly IFundingValueService _fundingValueService;
+        private readonly INcsSubmissionPersistenceService _ncsSubmissionPersistenceService;
+        private readonly IFundingValuePersistenceService _fundingValuePersistenceService;
         private readonly ILogger _logger;
 
-        public PersistenceService(Func<INcsContext> ncsContext, INcsSubmissionService ncsSubmissionService, IFundingValueService fundingValueService, ILogger logger)
+        public PersistenceService(Func<INcsContext> ncsContext, INcsSubmissionPersistenceService ncsSubmissionPersistenceService, IFundingValuePersistenceService fundingValuePersistenceService, ILogger logger)
         {
             _ncsContext = ncsContext;
-            _ncsSubmissionService = ncsSubmissionService;
-            _fundingValueService = fundingValueService;
+            _ncsSubmissionPersistenceService = ncsSubmissionPersistenceService;
+            _fundingValuePersistenceService = fundingValuePersistenceService;
             _logger = logger;
         }
 
@@ -33,11 +33,11 @@ namespace ESFA.DC.NCS.DataService
                 {
                     try
                     {
-                        await _ncsSubmissionService.DeleteByTouchpointAsync(context, ncsJobContextMessage, cancellationToken);
-                        await _ncsSubmissionService.PersistAsync(context, ncsSubmissions, cancellationToken);
+                        await _ncsSubmissionPersistenceService.DeleteByTouchpointAsync(context, ncsJobContextMessage, cancellationToken);
+                        await _ncsSubmissionPersistenceService.PersistAsync(context, ncsSubmissions, cancellationToken);
 
-                        await _fundingValueService.DeleteByTouchpointAsync(context, ncsJobContextMessage, cancellationToken);
-                        await _fundingValueService.PersistAsync(context, fundingValues, cancellationToken);
+                        await _fundingValuePersistenceService.DeleteByTouchpointAsync(context, ncsJobContextMessage, cancellationToken);
+                        await _fundingValuePersistenceService.PersistAsync(context, fundingValues, cancellationToken);
 
                         transaction.Commit();
 

@@ -18,9 +18,12 @@ using ESFA.DC.NCS.DataService;
 using ESFA.DC.NCS.EF;
 using ESFA.DC.NCS.EF.Interfaces;
 using ESFA.DC.NCS.Interfaces.DataService;
+using ESFA.DC.NCS.Interfaces.ReportingService;
 using ESFA.DC.NCS.Interfaces.Service;
 using ESFA.DC.NCS.Models.Config;
 using ESFA.DC.NCS.Models.Interfaces;
+using ESFA.DC.NCS.ReportingService;
+using ESFA.DC.NCS.ReportingService.Reports;
 using ESFA.DC.NCS.Service;
 using ESFA.DC.NCS.Service.Helpers;
 using ESFA.DC.NCS.Service.Services;
@@ -50,7 +53,8 @@ namespace ESFA.DC.NCS.Stateless
                 .RegisterJobContextManagementServices()
                 .RegisterQueuesAndTopics(ncsConfiguration)
                 .RegisterNcsService(ncsConfiguration)
-                .RegisterDssService(dssConfiguration);
+                .RegisterDssService(dssConfiguration)
+                .RegisterReports();
         }
 
         private static ContainerBuilder RegisterLogger(this ContainerBuilder containerBuilder, ILoggerConfiguration loggerConfiguration)
@@ -157,10 +161,13 @@ namespace ESFA.DC.NCS.Stateless
                 .UseSqlServer(ncsServiceConfiguration.NcsDbConnectionString)
                 .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking).Options).As<DbContextOptions<NcsContext>>().SingleInstance();
 
-            containerBuilder.RegisterType<NcsSubmissionService>().As<INcsSubmissionService>();
-            containerBuilder.RegisterType<FundingValueService>().As<IFundingValueService>();
+            containerBuilder.RegisterType<NcsSubmissionPersistenceService>().As<INcsSubmissionPersistenceService>();
+            containerBuilder.RegisterType<FundingValuePersistenceService>().As<IFundingValuePersistenceService>();
             containerBuilder.RegisterType<OutcomeRateService>().As<IOutcomeRateService>();
             containerBuilder.RegisterType<PersistenceService>().As<IPersistenceService>();
+            containerBuilder.RegisterType<ReportingController>().As<IReportingController>();
+            containerBuilder.RegisterType<NcsSubmissionQueryService>().As<INcsSubmissionQueryService>();
+            containerBuilder.RegisterType<FundingValueQueryService>().As<IFundingValueQueryService>();
 
             return containerBuilder;
         }
@@ -177,6 +184,14 @@ namespace ESFA.DC.NCS.Stateless
 
                 return dssDataRetrievalService;
             }).As<IDssDataRetrievalService>().InstancePerDependency();
+
+            return containerBuilder;
+        }
+
+        private static ContainerBuilder RegisterReports(this ContainerBuilder containerBuilder)
+        {
+            containerBuilder.RegisterType<OccupancyReport>().As<IModelReport>();
+            containerBuilder.RegisterType<FundingSummaryReport>().As<IModelReport>();
 
             return containerBuilder;
         }

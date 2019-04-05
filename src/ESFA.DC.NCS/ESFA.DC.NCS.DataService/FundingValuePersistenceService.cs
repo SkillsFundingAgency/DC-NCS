@@ -14,7 +14,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ESFA.DC.NCS.DataService
 {
-    public class FundingValueService : IFundingValueService
+    public class FundingValuePersistenceService : IFundingValuePersistenceService
     {
         public async Task PersistAsync(INcsContext ncsContext, IEnumerable<FundingValue> fundingValues, CancellationToken cancellationToken)
         {

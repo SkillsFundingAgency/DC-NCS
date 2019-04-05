@@ -184,8 +184,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FundingValueServiceTests.cs" />
-    <Compile Include="NcsSubmissionServiceTests.cs" />
+    <Compile Include="FundingValuePersistenceServiceTests.cs" />
+    <Compile Include="NcsSubmissionPersistenceServiceTests.cs" />
     <Compile Include="OutcomeRateServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

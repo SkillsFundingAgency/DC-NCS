@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using ESFA.DC.Logging.Interfaces;
 using ESFA.DC.NCS.EF;
 using ESFA.DC.NCS.EF.Interfaces;
 using ESFA.DC.NCS.Interfaces;
@@ -13,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ESFA.DC.NCS.DataService
 {
-    public class NcsSubmissionService : INcsSubmissionService
+    public class NcsSubmissionPersistenceService : INcsSubmissionPersistenceService
     {
         public async Task PersistAsync(INcsContext ncsContext, IEnumerable<NcsSubmission> ncsSubmissions, CancellationToken cancellationToken)
         {
