@@ -7,7 +7,6 @@ using ESFA.DC.NCS.Interfaces;
 using ESFA.DC.NCS.Interfaces.Constants;
 using ESFA.DC.NCS.Interfaces.DataService;
 using ESFA.DC.NCS.Interfaces.Service;
-using ESFA.DC.NCS.Service.Helpers;
 
 namespace ESFA.DC.NCS.Service.Tasks
 {
@@ -18,14 +17,16 @@ namespace ESFA.DC.NCS.Service.Tasks
         private readonly IDssDataRetrievalService _dssDataRetrievalService;
         private readonly IFundingService _fundingService;
         private readonly IPersistenceService _persistenceService;
+        private readonly IModelBuilder _modelBuilder;
 
-        public FundingTask(ILogger logger, IMessageHelper messageHelper, IDssDataRetrievalService dssDataRetrievalService, IFundingService fundingService, IPersistenceService persistenceService)
+        public FundingTask(ILogger logger, IMessageHelper messageHelper, IDssDataRetrievalService dssDataRetrievalService, IFundingService fundingService, IPersistenceService persistenceService, IModelBuilder modelBuilder)
         {
             _logger = logger;
             _messageHelper = messageHelper;
             _dssDataRetrievalService = dssDataRetrievalService;
             _fundingService = fundingService;
             _persistenceService = persistenceService;
+            _modelBuilder = modelBuilder;
         }
 
         public string TaskName => TaskNameConstants.FundingTaskName;
@@ -46,7 +47,7 @@ namespace ESFA.DC.NCS.Service.Tasks
             {
                 _logger.LogInfo($"Retrieved {dssData.Count()} records from DSS for TouchpointId {ncsJobContextMessage.TouchpointId}");
 
-                var ncsSubmission = ModelBuilder.BuildNcsSubmission(dssData, ncsJobContextMessage);
+                var ncsSubmission = _modelBuilder.BuildNcsSubmission(dssData, ncsJobContextMessage);
                 var fundingValues = await _fundingService.CalculateFunding(ncsSubmission, ncsJobContextMessage, cancellationToken);
 
                 await _persistenceService.PersistSubmissionAndFundingValuesAsync(ncsSubmission, fundingValues, ncsJobContextMessage, cancellationToken);

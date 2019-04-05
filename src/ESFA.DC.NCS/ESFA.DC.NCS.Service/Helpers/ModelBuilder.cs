@@ -1,13 +1,22 @@
 ﻿using System.Collections.Generic;
+using ESFA.DC.DateTimeProvider.Interface;
 using ESFA.DC.NCS.EF;
 using ESFA.DC.NCS.Interfaces;
+using ESFA.DC.NCS.Interfaces.Service;
 using ESFA.DC.NCS.Models;
 
 namespace ESFA.DC.NCS.Service.Helpers
 {
-    public static class ModelBuilder
+    public class ModelBuilder : IModelBuilder
     {
-        public static IEnumerable<NcsSubmission> BuildNcsSubmission(IEnumerable<DssDataModel> dssData, INcsJobContextMessage ncsJobContextMessage)
+        private readonly IDateTimeProvider _dateTimeProvider;
+
+        public ModelBuilder(IDateTimeProvider dateTimeProvider)
+        {
+            _dateTimeProvider = dateTimeProvider;
+        }
+
+        public IEnumerable<NcsSubmission> BuildNcsSubmission(IEnumerable<DssDataModel> dssData, INcsJobContextMessage ncsJobContextMessage)
         {
             var submissions = new List<NcsSubmission>();
 
@@ -30,7 +39,8 @@ namespace ESFA.DC.NCS.Service.Helpers
                     TouchpointId = ncsJobContextMessage.TouchpointId,
                     DssJobId = ncsJobContextMessage.DssJobId,
                     DssTimestamp = ncsJobContextMessage.DssTimeStamp,
-                    CollectionYear = ncsJobContextMessage.CollectionYear
+                    CollectionYear = ncsJobContextMessage.CollectionYear,
+                    CreatedOn = _dateTimeProvider.GetNowUtc()
                 };
 
                 submissions.Add(ncsSubmission);

@@ -233,9 +233,9 @@ namespace ESFA.DC.NCS.DataService.Tests
                 .WithMessage($"OutcomeRates table contains more than one rate for the values: OutcomePriorityCustomer-{priorityGroup}, Delivery-{delivery} and date-{submissionDate}");
         }
 
-        private OutcomeRateService NewService(ILogger logger = null, Func<INcsContext> ncsContext = null)
+        private OutcomeRateQueryService NewService(ILogger logger = null, Func<INcsContext> ncsContext = null)
         {
-            return new OutcomeRateService(logger, ncsContext);
+            return new OutcomeRateQueryService(logger, ncsContext);
         }
     }
 }
