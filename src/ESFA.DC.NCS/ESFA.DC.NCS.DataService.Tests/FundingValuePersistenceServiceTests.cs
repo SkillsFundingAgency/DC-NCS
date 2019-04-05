@@ -13,7 +13,7 @@ using Xunit;
 
 namespace ESFA.DC.NCS.DataService.Tests
 {
-    public class FundingValueServiceTests
+    public class FundingValuePersistenceServiceTests
     {
         [Fact]
         public async Task PersistAsync_SuccessSingle()
@@ -200,9 +200,9 @@ namespace ESFA.DC.NCS.DataService.Tests
             }
         }
 
-        private FundingValueService NewService()
+        private FundingValuePersistenceService NewService()
         {
-            return new FundingValueService();
+            return new FundingValuePersistenceService();
         }
     }
 }

@@ -6,7 +6,7 @@ using ESFA.DC.NCS.EF.Interfaces;
 
 namespace ESFA.DC.NCS.Interfaces.DataService
 {
-    public interface IFundingValueService
+    public interface IFundingValuePersistenceService
     {
         Task PersistAsync(INcsContext ncsContext, IEnumerable<FundingValue> fundingValues, CancellationToken cancellationToken);
 

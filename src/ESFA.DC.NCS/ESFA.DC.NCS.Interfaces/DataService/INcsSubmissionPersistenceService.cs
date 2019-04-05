@@ -6,7 +6,7 @@ using ESFA.DC.NCS.EF.Interfaces;
 
 namespace ESFA.DC.NCS.Interfaces.DataService
 {
-    public interface INcsSubmissionService
+    public interface INcsSubmissionPersistenceService
     {
         Task PersistAsync(INcsContext ncsContext, IEnumerable<NcsSubmission> ncsData, CancellationToken cancellationToken);
 

@@ -13,7 +13,7 @@ using Xunit;
 
 namespace ESFA.DC.NCS.DataService.Tests
 {
-    public class NcsSubmissionServiceTests
+    public class NcsSubmissionPersistenceServiceTests
     {
         [Fact]
         public async Task PersistAsync_SuccessSingle()
@@ -236,9 +236,9 @@ namespace ESFA.DC.NCS.DataService.Tests
             }
         }
 
-        private NcsSubmissionService NewService()
+        private NcsSubmissionPersistenceService NewService()
         {
-            return new NcsSubmissionService();
+            return new NcsSubmissionPersistenceService();
         }
     }
 }
