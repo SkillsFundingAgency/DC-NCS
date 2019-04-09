@@ -28,8 +28,8 @@ namespace ESFA.DC.NCS.Service.Services
 
         public async Task<IEnumerable<FundingValue>> CalculateFunding(IEnumerable<NcsSubmission> ncsSubmissions, INcsJobContextMessage ncsJobContextMessage, CancellationToken cancellationToken)
         {
-            var priorityCommunityRate = _outcomeRateService.GetOutcomeRateByPriorityAndDeliveryAsync(OutcomeRatesConstants.Priority, OutcomeRatesConstants.Community, ncsJobContextMessage.DssTimeStamp, cancellationToken).Result;
-            var nonPriorityCommunityRate = _outcomeRateService.GetOutcomeRateByPriorityAndDeliveryAsync(OutcomeRatesConstants.NonPriority, OutcomeRatesConstants.Community, ncsJobContextMessage.DssTimeStamp, cancellationToken).Result;
+            var priorityCommunityRate = await _outcomeRateService.GetOutcomeRateByPriorityAndDeliveryAsync(OutcomeRatesConstants.Priority, OutcomeRatesConstants.Community, ncsJobContextMessage.DssTimeStamp, cancellationToken);
+            var nonPriorityCommunityRate = await _outcomeRateService.GetOutcomeRateByPriorityAndDeliveryAsync(OutcomeRatesConstants.NonPriority, OutcomeRatesConstants.Community, ncsJobContextMessage.DssTimeStamp, cancellationToken);
 
             var fundingValues = new List<FundingValue>();
 
