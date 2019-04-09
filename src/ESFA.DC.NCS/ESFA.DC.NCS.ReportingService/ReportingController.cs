@@ -38,6 +38,7 @@ namespace ESFA.DC.NCS.ReportingService
                     cancellationToken.ThrowIfCancellationRequested();
                 }
 
+                // TODO: write out to storage
                 using (var fileStream = new FileStream($"C:\\tmp\\{ncsJobContextMessage.ReportFileName}.zip", FileMode.Create))
                 {
                     memoryStream.Seek(0, SeekOrigin.Begin);

@@ -45,33 +45,9 @@ namespace ESFA.DC.NCS.ReportingService
                 csvWriter.Configuration.RegisterClassMap(mapperOverride);
             }
 
-            csvWriter.WriteHeader<TModel>();
-
-            csvWriter.NextRecord();
             csvWriter.WriteRecords(records);
 
             csvWriter.Configuration.UnregisterClassMap();
-        }
-
-        /// <summary>
-        /// Writes the data to the zip file with the specified filename.
-        /// </summary>
-        /// <param name="archive">Archive to write to.</param>
-        /// <param name="filename">Filename to use in zip file.</param>
-        /// <param name="data">Data to write.</param>
-        /// <returns>Awaitable task.</returns>
-        protected async Task WriteZipEntry(ZipArchive archive, string filename, string data)
-        {
-            if (archive == null)
-            {
-                return;
-            }
-
-            ZipArchiveEntry archivedFile = archive.CreateEntry(filename, CompressionLevel.Optimal);
-            using (StreamWriter sw = new StreamWriter(archivedFile.Open()))
-            {
-                await sw.WriteAsync(data);
-            }
         }
     }
 }

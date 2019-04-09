@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
-using System.Text;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CsvHelper;
 using ESFA.DC.Logging.Interfaces;
 using ESFA.DC.NCS.Interfaces;
+using ESFA.DC.NCS.Interfaces.IO;
 using ESFA.DC.NCS.Interfaces.ReportingService;
 using ESFA.DC.NCS.Models.Reports;
 using ESFA.DC.NCS.ReportingService.Mappers;
@@ -17,10 +17,12 @@ namespace ESFA.DC.NCS.ReportingService.Reports
 {
     public class OccupancyReport : AbstractReportBuilder, IModelReport
     {
+        private readonly IStreamProviderService _streamProviderService;
         private readonly ILogger _logger;
 
-        public OccupancyReport(ILogger logger)
+        public OccupancyReport(IStreamProviderService streamProviderService, ILogger logger)
         {
+            _streamProviderService = streamProviderService;
             _logger = logger;
             ReportFileName = "NCS Occupancy Report";
         }
@@ -33,68 +35,50 @@ namespace ESFA.DC.NCS.ReportingService.Reports
 
             var fileName = GetFilename(ncsJobContextMessage.DssTimeStamp);
 
-            var reportData = GetOccupancyReportModel(data);
+            var reportData = GetOccupancyReportModel(data, ncsJobContextMessage.DssTimeStamp);
 
-            string csv = GetCsv(reportData, cancellationToken);
-
-            if (string.IsNullOrWhiteSpace(csv))
+            using (var stream = _streamProviderService.GetStream(archive, $"{fileName}.csv"))
             {
-                _logger.LogInfo("Occupancy Report not generated, no data available");
-                return;
+                CreateCsv(reportData, stream, cancellationToken);
             }
 
-            await WriteZipEntry(archive, $"{fileName}.csv", csv);
             _logger.LogInfo("Occupancy Report generated");
         }
 
-        public string GetCsv(IEnumerable<OccupancyReportModel> reportData, CancellationToken cancellationToken)
+        private void CreateCsv(IEnumerable<OccupancyReportModel> reportData, Stream stream, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            using (var ms = new MemoryStream())
+            using (var textWriter = new StreamWriter(stream))
+            using (var csvWriter = new CsvWriter(textWriter))
             {
-                var utF8Encoding = new UTF8Encoding(true, true);
-                using (var textWriter = new StreamWriter(ms, utF8Encoding))
-                {
-                    using (var csvWriter = new CsvWriter(textWriter))
-                    {
-                        WriteCsvRecords<OccupancyReportMapper, OccupancyReportModel>(csvWriter, reportData);
-
-                        csvWriter.Flush();
-                        textWriter.Flush();
-                        return Encoding.UTF8.GetString(ms.ToArray());
-                    }
-                }
+                WriteCsvRecords<OccupancyReportMapper, OccupancyReportModel>(csvWriter, reportData);
             }
         }
 
-        private IEnumerable<OccupancyReportModel> GetOccupancyReportModel(IEnumerable<ReportDataModel> data)
+        private IEnumerable<OccupancyReportModel> GetOccupancyReportModel(IEnumerable<ReportDataModel> data, DateTime submissionDate)
         {
-            var occupancyReportData = new List<OccupancyReportModel>();
-
-            foreach (var item in data)
-            {
-                var reportData = new OccupancyReportModel()
-                {
-                    CustomerId = item.CustomerId,
-                    DateOfBirth = item.DateOfBirth,
-                    HomePostCode = item.HomePostCode,
-                    ActionPlanId = item.ActionPlanId,
-                    SessionDate = item.SessionDate,
-                    SubContractorId = item.SubContractorId,
-                    AdviserName = item.AdviserName,
-                    OutcomeId = item.OutcomeId,
-                    OutcomeType = item.OutcomeType,
-                    OutcomeEffectiveDate = item.OutcomeEffectiveDate,
-                    OutcomePriorityCustomer = item.OutcomePriorityCustomer,
-                    Period = item.Period,
-                    Value = item.Value
-                };
-
-                occupancyReportData.Add(reportData);
-            }
-
-            return occupancyReportData;
+            return data
+                    .Where(d => d.OutcomeEffectiveDate.Month <= submissionDate.Month)
+                    .OrderBy(d => d.CustomerId)
+                    .ThenBy(d => d.ActionPlanId)
+                    .ThenBy(d => d.OutcomeId)
+                    .Select(d => new OccupancyReportModel()
+                    {
+                        CustomerId = d.CustomerId,
+                        DateOfBirth = d.DateOfBirth,
+                        HomePostCode = d.HomePostCode,
+                        ActionPlanId = d.ActionPlanId,
+                        SessionDate = d.SessionDate,
+                        SubContractorId = d.SubContractorId,
+                        AdviserName = d.AdviserName,
+                        OutcomeId = d.OutcomeId,
+                        OutcomeType = d.OutcomeType,
+                        OutcomeEffectiveDate = d.OutcomeEffectiveDate,
+                        OutcomePriorityCustomer = d.OutcomePriorityCustomer,
+                        Period = d.Period,
+                        Value = d.Value
+                    });
         }
     }
 }
