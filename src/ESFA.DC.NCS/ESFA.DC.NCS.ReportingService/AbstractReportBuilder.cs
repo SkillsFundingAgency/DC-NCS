@@ -5,6 +5,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Aspose.Cells;
 using CsvHelper;
 using CsvHelper.Configuration;
 
@@ -48,6 +49,29 @@ namespace ESFA.DC.NCS.ReportingService
             csvWriter.WriteRecords(records);
 
             csvWriter.Configuration.UnregisterClassMap();
+        }
+
+        /// <summary>
+        /// Inserts row data for a given Excel worksheet.
+        /// </summary>
+        /// <typeparam name="TModel">The data model.</typeparam>
+        /// <param name="sheet">The worksheet to write to.</param>
+        /// <param name="rows">The records to persist.</param>
+        /// <param name="columns">The columns to use from the given model.</param>
+        /// <param name="firstRow">The row to begin inserting data at.</param>
+        protected void WriteExcelRows<TModel>(Worksheet sheet, IEnumerable<TModel> rows, string[] columns, int firstRow)
+            where TModel : class
+        {
+            sheet.Cells.ImportCustomObjects(
+                rows.ToList(),
+                columns,
+                false,
+                firstRow,
+                0,
+                rows.Count(),
+                true,
+                "dd/mm/yyyy",
+                false);
         }
     }
 }

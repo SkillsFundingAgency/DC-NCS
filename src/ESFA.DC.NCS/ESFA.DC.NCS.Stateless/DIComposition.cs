@@ -24,6 +24,7 @@ using ESFA.DC.NCS.Interfaces.Service;
 using ESFA.DC.NCS.Models.Config;
 using ESFA.DC.NCS.Models.Interfaces;
 using ESFA.DC.NCS.ReportingService;
+using ESFA.DC.NCS.ReportingService.Builders;
 using ESFA.DC.NCS.ReportingService.IO;
 using ESFA.DC.NCS.ReportingService.Reports;
 using ESFA.DC.NCS.Service;
@@ -171,6 +172,7 @@ namespace ESFA.DC.NCS.Stateless
             containerBuilder.RegisterType<NcsSubmissionQueryService>().As<INcsSubmissionQueryService>();
             containerBuilder.RegisterType<FundingValueQueryService>().As<IFundingValueQueryService>();
             containerBuilder.RegisterType<StreamProviderService>().As<IStreamProviderService>();
+            containerBuilder.RegisterType<FundingSummaryReportBuilder>().As<IFundingSummaryReportBuilder>();
 
             return containerBuilder;
         }
