@@ -15,6 +15,7 @@ using ESFA.DC.Logging.Enums;
 using ESFA.DC.Logging.Interfaces;
 using ESFA.DC.Mapping.Interface;
 using ESFA.DC.NCS.DataService;
+using ESFA.DC.NCS.DataService.Org;
 using ESFA.DC.NCS.EF;
 using ESFA.DC.NCS.EF.Interfaces;
 using ESFA.DC.NCS.Interfaces.DataService;
@@ -35,6 +36,8 @@ using ESFA.DC.NCS.Stateless.Config;
 using ESFA.DC.NCS.Stateless.Config.Interfaces;
 using ESFA.DC.Queueing;
 using ESFA.DC.Queueing.Interface;
+using ESFA.DC.ReferenceData.Organisations.Model;
+using ESFA.DC.ReferenceData.Organisations.Model.Interface;
 using ESFA.DC.Serialization.Interfaces;
 using ESFA.DC.Serialization.Json;
 using ESFA.DC.ServiceFabric.Helpers;
@@ -50,6 +53,7 @@ namespace ESFA.DC.NCS.Stateless
             var ncsConfiguration = GetNcsConfiguration();
             var dssConfiguration = GetDssConfiguration();
             var loggerConfiguration = GetLoggerConfiguration();
+            var referenceDataConfiguration = GetReferenceDataConfiguration();
 
             return new ContainerBuilder()
                 .RegisterLogger(loggerConfiguration)
@@ -58,7 +62,8 @@ namespace ESFA.DC.NCS.Stateless
                 .RegisterQueuesAndTopics(ncsConfiguration)
                 .RegisterNcsService(ncsConfiguration)
                 .RegisterDssService(dssConfiguration)
-                .RegisterReports();
+                .RegisterReports()
+                .RegisterReferenceData(referenceDataConfiguration);
         }
 
         private static ContainerBuilder RegisterLogger(this ContainerBuilder containerBuilder, ILoggerConfiguration loggerConfiguration)
@@ -201,6 +206,18 @@ namespace ESFA.DC.NCS.Stateless
             return containerBuilder;
         }
 
+        private static ContainerBuilder RegisterReferenceData(this ContainerBuilder containerBuilder, IReferenceDataConfiguration referenceDataConfiguration)
+        {
+            containerBuilder.RegisterType<OrganisationsContext>().As<IOrganisationsContext>();
+            containerBuilder.Register(container => new DbContextOptionsBuilder<OrganisationsContext>()
+                .UseSqlServer(referenceDataConfiguration.OrgDbConnectionString)
+                .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking).Options).As<DbContextOptions<OrganisationsContext>>().SingleInstance();
+
+            containerBuilder.RegisterType<OrgDataService>().As<IOrgDataService>();
+
+            return containerBuilder;
+        }
+
         private static INcsServiceConfiguration GetNcsConfiguration()
         {
             var configHelper = new ConfigurationHelper();
@@ -220,6 +237,13 @@ namespace ESFA.DC.NCS.Stateless
             var configHelper = new ConfigurationHelper();
 
             return configHelper.GetSectionValues<LoggerConfiguration>("LoggerConfiguration");
+        }
+
+        private static IReferenceDataConfiguration GetReferenceDataConfiguration()
+        {
+            var configHelper = new ConfigurationHelper();
+
+            return configHelper.GetSectionValues<ReferenceDataConfiguration>("ReferenceDataConfiguration");
         }
     }
 }

@@ -1,14 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using ESFA.DC.NCS.Interfaces;
 using ESFA.DC.NCS.Interfaces.Constants;
+using ESFA.DC.NCS.Interfaces.DataService;
 using ESFA.DC.NCS.Interfaces.ReportingService;
 using ESFA.DC.NCS.Models.Reports;
+using ESFA.DC.NCS.Models.Reports.FundingSummaryReport;
 
 namespace ESFA.DC.NCS.ReportingService.Builders
 {
     public class FundingSummaryReportBuilder : IFundingSummaryReportBuilder
     {
+        private readonly IOrgDataService _orgDataService;
+
+        public FundingSummaryReportBuilder(IOrgDataService orgDataService)
+        {
+            _orgDataService = orgDataService;
+        }
+
+        public FundingSummaryReportHeaderModel BuildHeaderData(INcsJobContextMessage ncsJobContextMessage, CancellationToken cancellationToken)
+        {
+            return new FundingSummaryReportHeaderModel
+            {
+                ProviderName = _orgDataService.GetProviderName(ncsJobContextMessage.Ukprn, cancellationToken),
+                TouchpointId = ncsJobContextMessage.TouchpointId,
+                LastNcsUpdate = new DateTime(2000, 01, 01)
+            };
+        }
+
         public IEnumerable<FundingSummaryReportModel> BuildPriorityGroupRows(IEnumerable<ReportDataModel> data)
         {
             var priorityGroupRecords = data.Where(d => d.OutcomePriorityCustomer.Equals(OutcomeRatesConstants.Priority)).ToList();
