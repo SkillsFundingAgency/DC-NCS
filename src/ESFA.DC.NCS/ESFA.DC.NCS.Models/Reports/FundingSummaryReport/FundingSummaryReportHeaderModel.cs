@@ -8,7 +8,7 @@ namespace ESFA.DC.NCS.Models.Reports.FundingSummaryReport
 
         public string TouchpointId { get; set; }
 
-        public DateTime LastNcsUpdate { get; set; }
+        public string LastNcsUpdate { get; set; }
 
         public string SecurityClassification => "OFFICIAL-SENSITIVE";
     }

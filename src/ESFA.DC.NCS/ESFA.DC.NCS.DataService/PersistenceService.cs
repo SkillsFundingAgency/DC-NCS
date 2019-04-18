@@ -44,5 +44,24 @@ namespace ESFA.DC.NCS.DataService
                 }
             }
         }
+
+        public async Task PersistSourceDataAsync(Source sourceData, CancellationToken cancellationToken)
+        {
+            using (var context = _ncsContext())
+            {
+                try
+                {
+                    context.Sources.Add(sourceData);
+
+                    await context.SaveChangesAsync(cancellationToken);
+                    _logger.LogInfo("NCS Source data persisted Successfully.");
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError("NCS Source data persist Failed", ex);
+                    throw;
+                }
+            }
+        }
     }
 }

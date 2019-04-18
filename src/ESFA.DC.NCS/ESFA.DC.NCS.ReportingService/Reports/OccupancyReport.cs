@@ -58,8 +58,9 @@ namespace ESFA.DC.NCS.ReportingService.Reports
 
         private IEnumerable<OccupancyReportModel> GetOccupancyReportModel(IEnumerable<ReportDataModel> data, DateTime submissionDate)
         {
+            // TODO: Need clarification on the date to filter on - waiting for collection dates
             return data
-                    .Where(d => d.OutcomeEffectiveDate.Month <= submissionDate.Month)
+                    .Where(d => d.OutcomeEffectiveDate <= submissionDate)
                     .OrderBy(d => d.CustomerId)
                     .ThenBy(d => d.ActionPlanId)
                     .ThenBy(d => d.OutcomeId)

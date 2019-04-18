@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO.Compression;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Aspose.Cells;
@@ -44,9 +45,10 @@ namespace ESFA.DC.NCS.ReportingService.Reports
 
             var fileName = GetFilename(ncsJobContextMessage.DssTimeStamp);
             var manifestResourceStream = _streamProviderService.GetStreamFromTemplate(ReportTemplateConstants.FundingSummaryReport);
+            var reportData = GetReportData(data, ncsJobContextMessage);
 
             Workbook workbook = new Workbook(manifestResourceStream);
-            PopulateWorkbook(workbook, ncsJobContextMessage, data, cancellationToken);
+            PopulateWorkbook(workbook, ncsJobContextMessage, reportData, cancellationToken);
 
             using (var stream = _streamProviderService.GetStream(archive, $"{fileName}.xlsx"))
             {
@@ -56,7 +58,7 @@ namespace ESFA.DC.NCS.ReportingService.Reports
             _logger.LogInfo("Funding Summary Report generated");
         }
 
-        private Workbook PopulateWorkbook(Workbook workbook, INcsJobContextMessage ncsJobContextMessage, IEnumerable<ReportDataModel> data, CancellationToken cancellationToken)
+        private void PopulateWorkbook(Workbook workbook, INcsJobContextMessage ncsJobContextMessage, IEnumerable<ReportDataModel> data, CancellationToken cancellationToken)
         {
             var headerData = _builder.BuildHeaderData(ncsJobContextMessage, cancellationToken);
             var priorityGroupRows = _builder.BuildPriorityGroupRows(data);
@@ -83,8 +85,6 @@ namespace ESFA.DC.NCS.ReportingService.Reports
             var dateTimeNowUk = _dateTimeProvider.ConvertUtcToUk(dateTimeNowUtc).ToString("dd/MM/yyyy hh:mm:ss");
 
             cells[ReportGeneratedAtCell].PutValue(dateTimeNowUk);
-
-            return workbook;
         }
 
         private void CleanUp(Cells cells)
@@ -93,6 +93,12 @@ namespace ESFA.DC.NCS.ReportingService.Reports
             cells.DeleteRow(20);
             cells.DeleteRow(12);
             cells.DeleteRow(18);
+        }
+
+        private IEnumerable<ReportDataModel> GetReportData(IEnumerable<ReportDataModel> data, INcsJobContextMessage ncsJobContextMessage)
+        {
+            // TODO: Need clarification on the date to filter on - waiting for collection dates
+            return data.Where(d => d.OutcomeEffectiveDate <= ncsJobContextMessage.DssTimeStamp);
         }
     }
 }

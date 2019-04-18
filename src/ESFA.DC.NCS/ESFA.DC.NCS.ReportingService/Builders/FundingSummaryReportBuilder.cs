@@ -14,19 +14,25 @@ namespace ESFA.DC.NCS.ReportingService.Builders
     public class FundingSummaryReportBuilder : IFundingSummaryReportBuilder
     {
         private readonly IOrgDataService _orgDataService;
+        private readonly ISourceQueryService _sourceQueryService;
 
-        public FundingSummaryReportBuilder(IOrgDataService orgDataService)
+        public FundingSummaryReportBuilder(IOrgDataService orgDataService, ISourceQueryService sourceQueryService)
         {
             _orgDataService = orgDataService;
+            _sourceQueryService = sourceQueryService;
         }
 
         public FundingSummaryReportHeaderModel BuildHeaderData(INcsJobContextMessage ncsJobContextMessage, CancellationToken cancellationToken)
         {
+            var lastNcsSubmissionDate = _sourceQueryService.GetLastNcsSubmissionDate(ncsJobContextMessage, cancellationToken);
+
             return new FundingSummaryReportHeaderModel
             {
                 ProviderName = _orgDataService.GetProviderName(ncsJobContextMessage.Ukprn, cancellationToken),
                 TouchpointId = ncsJobContextMessage.TouchpointId,
-                LastNcsUpdate = new DateTime(2000, 01, 01)
+                LastNcsUpdate = lastNcsSubmissionDate != null
+                                ? lastNcsSubmissionDate.Value.ToString("dd/MM/yyyy hh:mm:ss")
+                                : "Unknown"
             };
         }
 

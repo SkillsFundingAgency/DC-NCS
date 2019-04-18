@@ -158,26 +158,32 @@ namespace ESFA.DC.NCS.Stateless
 
         private static ContainerBuilder RegisterNcsService(this ContainerBuilder containerBuilder, INcsServiceConfiguration ncsServiceConfiguration)
         {
+            // Tasks
             containerBuilder.RegisterType<FundingTask>().As<INcsDataTask>();
             containerBuilder.RegisterType<ReportingTask>().As<INcsDataTask>();
             containerBuilder.RegisterType<StorageTask>().As<INcsDataTask>();
             containerBuilder.RegisterType<EntryPoint>().As<IEntryPoint>();
+
+            // Helpers
             containerBuilder.RegisterType<MessageHelper>().As<IMessageHelper>();
             containerBuilder.RegisterType<ModelBuilder>().As<IModelBuilder>();
-            containerBuilder.RegisterType<FundingService>().As<IFundingService>();
 
+            // Services
+            containerBuilder.RegisterType<FundingService>().As<IFundingService>();
+            containerBuilder.RegisterType<StreamProviderService>().As<IStreamProviderService>();
+
+            // Ncs database
             containerBuilder.RegisterType<NcsContext>().As<INcsContext>();
             containerBuilder.Register(container => new DbContextOptionsBuilder<NcsContext>()
                 .UseSqlServer(ncsServiceConfiguration.NcsDbConnectionString)
                 .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking).Options).As<DbContextOptions<NcsContext>>().SingleInstance();
 
-            containerBuilder.RegisterType<OutcomeRateQueryService>().As<IOutcomeRateQueryService>();
+            // Data services
             containerBuilder.RegisterType<PersistenceService>().As<IPersistenceService>();
-            containerBuilder.RegisterType<ReportingController>().As<IReportingController>();
+            containerBuilder.RegisterType<OutcomeRateQueryService>().As<IOutcomeRateQueryService>();
             containerBuilder.RegisterType<NcsSubmissionQueryService>().As<INcsSubmissionQueryService>();
             containerBuilder.RegisterType<FundingValueQueryService>().As<IFundingValueQueryService>();
-            containerBuilder.RegisterType<StreamProviderService>().As<IStreamProviderService>();
-            containerBuilder.RegisterType<FundingSummaryReportBuilder>().As<IFundingSummaryReportBuilder>();
+            containerBuilder.RegisterType<SourceQueryService>().As<ISourceQueryService>();
 
             return containerBuilder;
         }
@@ -200,8 +206,10 @@ namespace ESFA.DC.NCS.Stateless
 
         private static ContainerBuilder RegisterReports(this ContainerBuilder containerBuilder)
         {
+            containerBuilder.RegisterType<ReportingController>().As<IReportingController>();
             containerBuilder.RegisterType<OccupancyReport>().As<IModelReport>();
             containerBuilder.RegisterType<FundingSummaryReport>().As<IModelReport>();
+            containerBuilder.RegisterType<FundingSummaryReportBuilder>().As<IFundingSummaryReportBuilder>();
 
             return containerBuilder;
         }

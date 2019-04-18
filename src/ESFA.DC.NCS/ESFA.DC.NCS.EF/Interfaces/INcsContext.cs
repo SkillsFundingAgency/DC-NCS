@@ -16,6 +16,8 @@ namespace ESFA.DC.NCS.EF.Interfaces
 
         DbSet<OutcomeRate> OutcomeRates { get; set; }
 
+        DbSet<Source> Sources { get; set; }
+
         DatabaseFacade Database { get; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
