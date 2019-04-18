@@ -64,37 +64,39 @@ namespace ESFA.DC.NCS.ReportingService.Builders
             };
         }
 
-        private static FundingSummaryReportModel BuildRow(IList<ReportDataModel> data, int outcomeType, string outcomeName)
+        private static FundingSummaryReportModel BuildRow(IEnumerable<ReportDataModel> data, int outcomeType, string outcomeName)
         {
+            var outcomeData = data.Where(d => d.OutcomeType.Equals(outcomeType)).ToList();
+
             return new FundingSummaryReportModel
             {
                 OutcomeName = outcomeName,
-                AprilNumbers = data.Count(d => d.OutcomeType.Equals(outcomeType) && d.Period.Equals(MonthsConstants.April)),
-                AprilFunding = data.Where(d => d.OutcomeType.Equals(outcomeType) && d.Period.Equals(MonthsConstants.April)).Sum(d => d.Value),
-                MayNumbers = data.Count(d => d.OutcomeType.Equals(outcomeType) && d.Period.Equals(MonthsConstants.May)),
-                MayFunding = data.Where(d => d.OutcomeType.Equals(outcomeType) && d.Period.Equals(MonthsConstants.May)).Sum(d => d.Value),
-                JuneNumbers = data.Count(d => d.OutcomeType.Equals(outcomeType) && d.Period.Equals(MonthsConstants.June)),
-                JuneFunding = data.Where(d => d.OutcomeType.Equals(outcomeType) && d.Period.Equals(MonthsConstants.June)).Sum(d => d.Value),
-                JulyNumbers = data.Count(d => d.OutcomeType.Equals(outcomeType) && d.Period.Equals(MonthsConstants.July)),
-                JulyFunding = data.Where(d => d.OutcomeType.Equals(outcomeType) && d.Period.Equals(MonthsConstants.July)).Sum(d => d.Value),
-                AugustNumbers = data.Count(d => d.OutcomeType.Equals(outcomeType) && d.Period.Equals(MonthsConstants.August)),
-                AugustFunding = data.Where(d => d.OutcomeType.Equals(outcomeType) && d.Period.Equals(MonthsConstants.August)).Sum(d => d.Value),
-                SeptemberNumbers = data.Count(d => d.OutcomeType.Equals(outcomeType) && d.Period.Equals(MonthsConstants.September)),
-                SeptemberFunding = data.Where(d => d.OutcomeType.Equals(outcomeType) && d.Period.Equals(MonthsConstants.September)).Sum(d => d.Value),
-                OctoberNumbers = data.Count(d => d.OutcomeType.Equals(outcomeType) && d.Period.Equals(MonthsConstants.October)),
-                OctoberFunding = data.Where(d => d.OutcomeType.Equals(outcomeType) && d.Period.Equals(MonthsConstants.October)).Sum(d => d.Value),
-                NovemberNumbers = data.Count(d => d.OutcomeType.Equals(outcomeType) && d.Period.Equals(MonthsConstants.November)),
-                NovemberFunding = data.Where(d => d.OutcomeType.Equals(outcomeType) && d.Period.Equals(MonthsConstants.November)).Sum(d => d.Value),
-                DecemberNumbers = data.Count(d => d.OutcomeType.Equals(outcomeType) && d.Period.Equals(MonthsConstants.December)),
-                DecemberFunding = data.Where(d => d.OutcomeType.Equals(outcomeType) && d.Period.Equals(MonthsConstants.December)).Sum(d => d.Value),
-                JanuaryNumbers = data.Count(d => d.OutcomeType.Equals(outcomeType) && d.Period.Equals(MonthsConstants.January)),
-                JanuaryFunding = data.Where(d => d.OutcomeType.Equals(outcomeType) && d.Period.Equals(MonthsConstants.January)).Sum(d => d.Value),
-                FebruaryNumbers = data.Count(d => d.OutcomeType.Equals(outcomeType) && d.Period.Equals(MonthsConstants.February)),
-                FebruaryFunding = data.Where(d => d.OutcomeType.Equals(outcomeType) && d.Period.Equals(MonthsConstants.February)).Sum(d => d.Value),
-                MarchNumbers = data.Count(d => d.OutcomeType.Equals(outcomeType) && d.Period.Equals(MonthsConstants.March)),
-                MarchFunding = data.Where(d => d.OutcomeType.Equals(outcomeType) && d.Period.Equals(MonthsConstants.March)).Sum(d => d.Value),
-                TotalNumbers = data.Count(d => d.OutcomeType.Equals(outcomeType)),
-                TotalFunding = data.Where(d => d.OutcomeType.Equals(outcomeType)).Sum(d => d.Value)
+                AprilNumbers = outcomeData.Count(d => d.Period.Equals(MonthsConstants.April)),
+                AprilFunding = outcomeData.Where(d => d.Period.Equals(MonthsConstants.April)).Sum(d => d.Value),
+                MayNumbers = outcomeData.Count(d => d.Period.Equals(MonthsConstants.May)),
+                MayFunding = outcomeData.Where(d => d.Period.Equals(MonthsConstants.May)).Sum(d => d.Value),
+                JuneNumbers = outcomeData.Count(d => d.Period.Equals(MonthsConstants.June)),
+                JuneFunding = outcomeData.Where(d => d.Period.Equals(MonthsConstants.June)).Sum(d => d.Value),
+                JulyNumbers = outcomeData.Count(d => d.Period.Equals(MonthsConstants.July)),
+                JulyFunding = outcomeData.Where(d => d.Period.Equals(MonthsConstants.July)).Sum(d => d.Value),
+                AugustNumbers = outcomeData.Count(d => d.Period.Equals(MonthsConstants.August)),
+                AugustFunding = outcomeData.Where(d => d.Period.Equals(MonthsConstants.August)).Sum(d => d.Value),
+                SeptemberNumbers = outcomeData.Count(d => d.Period.Equals(MonthsConstants.September)),
+                SeptemberFunding = outcomeData.Where(d => d.Period.Equals(MonthsConstants.September)).Sum(d => d.Value),
+                OctoberNumbers = outcomeData.Count(d => d.Period.Equals(MonthsConstants.October)),
+                OctoberFunding = outcomeData.Where(d => d.Period.Equals(MonthsConstants.October)).Sum(d => d.Value),
+                NovemberNumbers = outcomeData.Count(d => d.Period.Equals(MonthsConstants.November)),
+                NovemberFunding = outcomeData.Where(d => d.Period.Equals(MonthsConstants.November)).Sum(d => d.Value),
+                DecemberNumbers = outcomeData.Count(d => d.Period.Equals(MonthsConstants.December)),
+                DecemberFunding = outcomeData.Where(d => d.Period.Equals(MonthsConstants.December)).Sum(d => d.Value),
+                JanuaryNumbers = outcomeData.Count(d => d.Period.Equals(MonthsConstants.January)),
+                JanuaryFunding = outcomeData.Where(d => d.Period.Equals(MonthsConstants.January)).Sum(d => d.Value),
+                FebruaryNumbers = outcomeData.Count(d => d.Period.Equals(MonthsConstants.February)),
+                FebruaryFunding = outcomeData.Where(d => d.Period.Equals(MonthsConstants.February)).Sum(d => d.Value),
+                MarchNumbers = outcomeData.Count(d => d.Period.Equals(MonthsConstants.March)),
+                MarchFunding = outcomeData.Where(d => d.Period.Equals(MonthsConstants.March)).Sum(d => d.Value),
+                TotalNumbers = outcomeData.Count,
+                TotalFunding = outcomeData.Sum(d => d.Value)
             };
         }
     }
