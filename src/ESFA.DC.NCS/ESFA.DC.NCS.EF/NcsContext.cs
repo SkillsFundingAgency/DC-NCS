@@ -18,6 +18,7 @@ namespace ESFA.DC.NCS.EF
         public virtual DbSet<FundingValue> FundingValues { get; set; }
         public virtual DbSet<NcsSubmission> NcsSubmissions { get; set; }
         public virtual DbSet<OutcomeRate> OutcomeRates { get; set; }
+        public virtual DbSet<Source> Sources { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -42,9 +43,7 @@ namespace ESFA.DC.NCS.EF
                     .HasMaxLength(10)
                     .IsUnicode(false);
 
-                entity.Property(e => e.CreatedOn)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.CreatedOn).HasColumnType("datetime");
 
                 entity.Property(e => e.OutcomeEffectiveDate).HasColumnType("date");
 
@@ -70,9 +69,7 @@ namespace ESFA.DC.NCS.EF
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.CreatedOn)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.CreatedOn).HasColumnType("datetime");
 
                 entity.Property(e => e.DateOfBirth).HasColumnType("date");
 
@@ -103,6 +100,22 @@ namespace ESFA.DC.NCS.EF
                 entity.Property(e => e.EffectiveFrom).HasColumnType("date");
 
                 entity.Property(e => e.EffectiveTo).HasColumnType("date");
+            });
+
+            modelBuilder.Entity<Source>(entity =>
+            {
+                entity.ToTable("Source");
+
+                entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+
+                entity.Property(e => e.SubmissionDate).HasColumnType("datetime");
+
+                entity.Property(e => e.TouchpointId)
+                    .IsRequired()
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Ukprn).HasColumnName("UKPRN");
             });
         }
     }

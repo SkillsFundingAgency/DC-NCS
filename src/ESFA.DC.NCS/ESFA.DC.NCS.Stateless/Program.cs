@@ -1,7 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
+using System.Text;
 using System.Threading;
 using Autofac.Integration.ServiceFabric;
+using ESFA.DC.NCS.Stateless.Config;
+using ESFA.DC.ServiceFabric.Helpers;
+using ESFA.DC.ServiceFabric.Helpers.Interfaces;
 
 namespace ESFA.DC.NCS.Stateless
 {
@@ -14,6 +19,18 @@ namespace ESFA.DC.NCS.Stateless
         {
             try
             {
+                IConfigurationHelper configHelper = new ConfigurationHelper();
+
+                // License Aspose.Cells
+                SoftwareLicenceSection softwareLicenceSection = configHelper.GetSectionValues<SoftwareLicenceSection>(nameof(SoftwareLicenceSection));
+                if (!string.IsNullOrEmpty(softwareLicenceSection.AsposeLicence))
+                {
+                    using (MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(softwareLicenceSection.AsposeLicence.Replace("&lt;", "<").Replace("&gt;", ">"))))
+                    {
+                        new Aspose.Cells.License().SetLicense(ms);
+                    }
+                }
+
                 // The ServiceManifest.XML file defines one or more service type names.
                 // Registering a service maps a service type name to a .NET type.
                 // When Service Fabric creates an instance of this service type,

@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using ESFA.DC.DateTimeProvider.Interface;
 using ESFA.DC.NCS.EF;
 using ESFA.DC.NCS.Interfaces;
 using ESFA.DC.NCS.Interfaces.Service;
 using ESFA.DC.NCS.Models;
+using ESFA.DC.NCS.Models.Reports;
 
 namespace ESFA.DC.NCS.Service.Helpers
 {
@@ -18,11 +20,7 @@ namespace ESFA.DC.NCS.Service.Helpers
 
         public IEnumerable<NcsSubmission> BuildNcsSubmission(IEnumerable<DssDataModel> dssData, INcsJobContextMessage ncsJobContextMessage)
         {
-            var submissions = new List<NcsSubmission>();
-
-            foreach (var item in dssData)
-            {
-                var ncsSubmission = new NcsSubmission
+            return dssData.Select(item => new NcsSubmission
                 {
                     ActionPlanId = item.ActionPlanId,
                     AdviserName = item.AdviserName,
@@ -41,12 +39,50 @@ namespace ESFA.DC.NCS.Service.Helpers
                     DssTimestamp = ncsJobContextMessage.DssTimeStamp,
                     CollectionYear = ncsJobContextMessage.CollectionYear,
                     CreatedOn = _dateTimeProvider.GetNowUtc()
-                };
+                });
+        }
 
-                submissions.Add(ncsSubmission);
-            }
+        public IEnumerable<ReportDataModel> BuildReportData(IEnumerable<NcsSubmission> submissionData, IEnumerable<FundingValue> fundingValue)
+        {
+            return submissionData
+                .Join(
+                    fundingValue,
+                    sd => new { sd.TouchpointId, sd.ActionPlanId, sd.CustomerId, sd.OutcomeId },
+                    fv => new { fv.TouchpointId, fv.ActionPlanId, fv.CustomerId, fv.OutcomeId },
+                    (sd, fv) => new ReportDataModel
+                    {
+                        Ukprn = sd.Ukprn,
+                        TouchpointId = sd.TouchpointId,
+                        CustomerId = sd.CustomerId,
+                        DateOfBirth = sd.DateOfBirth,
+                        HomePostCode = sd.HomePostCode,
+                        ActionPlanId = sd.ActionPlanId,
+                        SessionDate = sd.SessionDate,
+                        SubContractorId = sd.SubContractorId,
+                        AdviserName = sd.AdviserName,
+                        OutcomeId = sd.OutcomeId,
+                        OutcomeType = sd.OutcomeType,
+                        OutcomeEffectiveDate = sd.OutcomeEffectiveDate,
+                        OutcomePriorityCustomer = sd.OutcomePriorityCustomer,
+                        CollectionYear = sd.CollectionYear,
+                        DssJobId = sd.DssJobId,
+                        DssTimestamp = sd.DssTimestamp,
+                        CreatedOn = sd.CreatedOn,
+                        Value = fv.Value,
+                        Period = fv.Period
+                    });
+        }
 
-            return submissions;
+        public Source BuildSourceData(INcsJobContextMessage ncsJobContextMessage)
+        {
+            return new Source()
+            {
+                Ukprn = ncsJobContextMessage.Ukprn,
+                TouchpointId = ncsJobContextMessage.TouchpointId,
+                SubmissionDate = ncsJobContextMessage.DssTimeStamp,
+                DssJobId = ncsJobContextMessage.DssJobId,
+                CreatedOn = _dateTimeProvider.GetNowUtc()
+            };
         }
     }
 }

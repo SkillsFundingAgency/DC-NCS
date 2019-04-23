@@ -21,4 +21,10 @@
   <Section Name="DssServiceConfiguration">
     <Parameter Name="DssDbConnectionString" Value="" />
   </Section>
+  <Section Name="ReferenceDataConfiguration">
+    <Parameter Name="OrgDbConnectionString" Value="" />
+  </Section>
+  <Section Name="SoftwareLicenceSection">
+    <Parameter Name="AsposeLicence" Value="" />
+  </Section>
 </Settings>

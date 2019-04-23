@@ -15,6 +15,7 @@ using ESFA.DC.Logging.Enums;
 using ESFA.DC.Logging.Interfaces;
 using ESFA.DC.Mapping.Interface;
 using ESFA.DC.NCS.DataService;
+using ESFA.DC.NCS.DataService.Org;
 using ESFA.DC.NCS.EF;
 using ESFA.DC.NCS.EF.Interfaces;
 using ESFA.DC.NCS.Interfaces.DataService;
@@ -24,6 +25,7 @@ using ESFA.DC.NCS.Interfaces.Service;
 using ESFA.DC.NCS.Models.Config;
 using ESFA.DC.NCS.Models.Interfaces;
 using ESFA.DC.NCS.ReportingService;
+using ESFA.DC.NCS.ReportingService.Builders;
 using ESFA.DC.NCS.ReportingService.IO;
 using ESFA.DC.NCS.ReportingService.Reports;
 using ESFA.DC.NCS.Service;
@@ -34,6 +36,8 @@ using ESFA.DC.NCS.Stateless.Config;
 using ESFA.DC.NCS.Stateless.Config.Interfaces;
 using ESFA.DC.Queueing;
 using ESFA.DC.Queueing.Interface;
+using ESFA.DC.ReferenceData.Organisations.Model;
+using ESFA.DC.ReferenceData.Organisations.Model.Interface;
 using ESFA.DC.Serialization.Interfaces;
 using ESFA.DC.Serialization.Json;
 using ESFA.DC.ServiceFabric.Helpers;
@@ -49,6 +53,7 @@ namespace ESFA.DC.NCS.Stateless
             var ncsConfiguration = GetNcsConfiguration();
             var dssConfiguration = GetDssConfiguration();
             var loggerConfiguration = GetLoggerConfiguration();
+            var referenceDataConfiguration = GetReferenceDataConfiguration();
 
             return new ContainerBuilder()
                 .RegisterLogger(loggerConfiguration)
@@ -57,7 +62,8 @@ namespace ESFA.DC.NCS.Stateless
                 .RegisterQueuesAndTopics(ncsConfiguration)
                 .RegisterNcsService(ncsConfiguration)
                 .RegisterDssService(dssConfiguration)
-                .RegisterReports();
+                .RegisterReports()
+                .RegisterReferenceData(referenceDataConfiguration);
         }
 
         private static ContainerBuilder RegisterLogger(this ContainerBuilder containerBuilder, ILoggerConfiguration loggerConfiguration)
@@ -152,25 +158,32 @@ namespace ESFA.DC.NCS.Stateless
 
         private static ContainerBuilder RegisterNcsService(this ContainerBuilder containerBuilder, INcsServiceConfiguration ncsServiceConfiguration)
         {
+            // Tasks
             containerBuilder.RegisterType<FundingTask>().As<INcsDataTask>();
             containerBuilder.RegisterType<ReportingTask>().As<INcsDataTask>();
             containerBuilder.RegisterType<StorageTask>().As<INcsDataTask>();
             containerBuilder.RegisterType<EntryPoint>().As<IEntryPoint>();
+
+            // Helpers
             containerBuilder.RegisterType<MessageHelper>().As<IMessageHelper>();
             containerBuilder.RegisterType<ModelBuilder>().As<IModelBuilder>();
-            containerBuilder.RegisterType<FundingService>().As<IFundingService>();
 
+            // Services
+            containerBuilder.RegisterType<FundingService>().As<IFundingService>();
+            containerBuilder.RegisterType<StreamProviderService>().As<IStreamProviderService>();
+
+            // Ncs database
             containerBuilder.RegisterType<NcsContext>().As<INcsContext>();
             containerBuilder.Register(container => new DbContextOptionsBuilder<NcsContext>()
                 .UseSqlServer(ncsServiceConfiguration.NcsDbConnectionString)
                 .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking).Options).As<DbContextOptions<NcsContext>>().SingleInstance();
 
-            containerBuilder.RegisterType<OutcomeRateQueryService>().As<IOutcomeRateQueryService>();
+            // Data services
             containerBuilder.RegisterType<PersistenceService>().As<IPersistenceService>();
-            containerBuilder.RegisterType<ReportingController>().As<IReportingController>();
+            containerBuilder.RegisterType<OutcomeRateQueryService>().As<IOutcomeRateQueryService>();
             containerBuilder.RegisterType<NcsSubmissionQueryService>().As<INcsSubmissionQueryService>();
             containerBuilder.RegisterType<FundingValueQueryService>().As<IFundingValueQueryService>();
-            containerBuilder.RegisterType<StreamProviderService>().As<IStreamProviderService>();
+            containerBuilder.RegisterType<SourceQueryService>().As<ISourceQueryService>();
 
             return containerBuilder;
         }
@@ -193,8 +206,22 @@ namespace ESFA.DC.NCS.Stateless
 
         private static ContainerBuilder RegisterReports(this ContainerBuilder containerBuilder)
         {
+            containerBuilder.RegisterType<ReportingController>().As<IReportingController>();
             containerBuilder.RegisterType<OccupancyReport>().As<IModelReport>();
             containerBuilder.RegisterType<FundingSummaryReport>().As<IModelReport>();
+            containerBuilder.RegisterType<FundingSummaryReportBuilder>().As<IFundingSummaryReportBuilder>();
+
+            return containerBuilder;
+        }
+
+        private static ContainerBuilder RegisterReferenceData(this ContainerBuilder containerBuilder, IReferenceDataConfiguration referenceDataConfiguration)
+        {
+            containerBuilder.RegisterType<OrganisationsContext>().As<IOrganisationsContext>();
+            containerBuilder.Register(container => new DbContextOptionsBuilder<OrganisationsContext>()
+                .UseSqlServer(referenceDataConfiguration.OrgDbConnectionString)
+                .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking).Options).As<DbContextOptions<OrganisationsContext>>().SingleInstance();
+
+            containerBuilder.RegisterType<OrgDataService>().As<IOrgDataService>();
 
             return containerBuilder;
         }
@@ -218,6 +245,13 @@ namespace ESFA.DC.NCS.Stateless
             var configHelper = new ConfigurationHelper();
 
             return configHelper.GetSectionValues<LoggerConfiguration>("LoggerConfiguration");
+        }
+
+        private static IReferenceDataConfiguration GetReferenceDataConfiguration()
+        {
+            var configHelper = new ConfigurationHelper();
+
+            return configHelper.GetSectionValues<ReferenceDataConfiguration>("ReferenceDataConfiguration");
         }
     }
 }

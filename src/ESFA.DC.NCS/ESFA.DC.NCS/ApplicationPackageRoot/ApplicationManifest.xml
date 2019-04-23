@@ -10,6 +10,8 @@
     <Parameter Name="LoggerConnectionString" DefaultValue="loggerConnectionString" />
     <Parameter Name="DssDbConnectionString" DefaultValue="DssDbConnectionString" />
     <Parameter Name="NcsDbConnectionString" DefaultValue="NcsDbConnectionString" />
+    <Parameter Name="OrgDbConnectionString" DefaultValue="OrgDbConnectionString" />
+    <Parameter Name="AsposeLicence" DefaultValue="AsposeLicence" />
   </Parameters>
   <!-- Import the ServiceManifest from the ServicePackage. The ServiceManifestName and ServiceManifestVersion 
        should match the Name and Version attributes of the ServiceManifest element defined in the 
@@ -32,6 +34,12 @@
           </Section>
           <Section Name="DssServiceConfiguration">
             <Parameter Name="DssDbConnectionString" Value="[DssDbConnectionString]" />
+          </Section>
+          <Section Name="ReferenceDataConfiguration">
+            <Parameter Name="OrgDbConnectionString" Value="[OrgDbConnectionString]" />
+          </Section>
+          <Section Name="SoftwareLicenceSection">
+            <Parameter Name="AsposeLicence" Value="[AsposeLicence]" />
           </Section>
         </Settings>
       </ConfigOverride>
