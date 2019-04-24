@@ -29,7 +29,7 @@ namespace ESFA.DC.NCS.DataService
             using (var context = _ncsContext())
             {
                 return await context.NcsSubmissions
-                    .Where(fv => fv.TouchpointId.Equals(ncsJobContextMessage.TouchpointId))
+                    .Where(ns => ns.TouchpointId.Equals(ncsJobContextMessage.TouchpointId) && ns.CollectionYear.Equals(ncsJobContextMessage.CollectionYear))
                     .ToListAsync(cancellationToken);
             }
         }

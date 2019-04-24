@@ -10,6 +10,7 @@
 	[OutcomePriorityCustomer] INT NOT NULL,
 	[Value]  INT NOT NULL,
 	[Period]  VARCHAR(12) NOT NULL,
+	[CollectionYear] INT NOT NULL,
 	[CreatedOn] DATETIME NOT NULL
 	CONSTRAINT [PK_FundingValues] PRIMARY KEY CLUSTERED ([UKPRN] ASC, [TouchpointId] ASC, [CustomerId] ASC, [ActionPlanId] ASC, [OutcomeId] ASC)
 )
