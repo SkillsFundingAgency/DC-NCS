@@ -26,10 +26,10 @@ namespace ESFA.DC.NCS.DataService
         {
             using (var context = _ncsContext())
             {
-                context.NcsSubmissions.RemoveRange(context.NcsSubmissions.Where(fv => fv.TouchpointId.Equals(ncsJobContextMessage.TouchpointId)));
+                context.NcsSubmissions.RemoveRange(context.NcsSubmissions.Where(ns => ns.TouchpointId.Equals(ncsJobContextMessage.TouchpointId) && ns.CollectionYear.Equals(ncsJobContextMessage.CollectionYear)));
                 context.NcsSubmissions.AddRange(ncsSubmissions);
 
-                context.FundingValues.RemoveRange(context.FundingValues.Where(fv => fv.TouchpointId.Equals(ncsJobContextMessage.TouchpointId)));
+                context.FundingValues.RemoveRange(context.FundingValues.Where(fv => fv.TouchpointId.Equals(ncsJobContextMessage.TouchpointId) && fv.CollectionYear.Equals(ncsJobContextMessage.CollectionYear)));
                 context.FundingValues.AddRange(fundingValues);
 
                 await context.SaveChangesAsync(cancellationToken);
