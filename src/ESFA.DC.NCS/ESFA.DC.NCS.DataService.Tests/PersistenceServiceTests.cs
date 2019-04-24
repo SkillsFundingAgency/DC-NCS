@@ -93,6 +93,7 @@ namespace ESFA.DC.NCS.DataService.Tests
 
             var ncsJobContextMessage = new Mock<INcsJobContextMessage>();
             ncsJobContextMessage.Setup(m => m.TouchpointId).Returns(touchpointId);
+            ncsJobContextMessage.Setup(m => m.CollectionYear).Returns(1819);
 
             var loggerMock = new Mock<ILogger>();
 
@@ -230,7 +231,8 @@ namespace ESFA.DC.NCS.DataService.Tests
                     OutcomeEffectiveDate = new DateTime(2019, 04, 01),
                     OutcomePriorityCustomer = 1,
                     Value = 10,
-                    Period = "April"
+                    Period = "April",
+                    CollectionYear = 1819
                 }
             };
         }
@@ -250,7 +252,8 @@ namespace ESFA.DC.NCS.DataService.Tests
                     OutcomeEffectiveDate = new DateTime(2019, 04, 01),
                     OutcomePriorityCustomer = 1,
                     Value = 50,
-                    Period = "April"
+                    Period = "April",
+                    CollectionYear = 1819
                 }
             };
         }
