@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using ESFA.DC.Logging.Interfaces;
@@ -16,12 +15,10 @@ namespace ESFA.DC.NCS.DataService
     public class NcsSubmissionQueryService : INcsSubmissionQueryService
     {
         private readonly Func<INcsContext> _ncsContext;
-        private readonly ILogger _logger;
 
-        public NcsSubmissionQueryService(Func<INcsContext> ncsContext, ILogger logger)
+        public NcsSubmissionQueryService(Func<INcsContext> ncsContext)
         {
             _ncsContext = ncsContext;
-            _logger = logger;
         }
 
         public async Task<IEnumerable<NcsSubmission>> GetNcsSubmissionsAsync(INcsJobContextMessage ncsJobContextMessage, CancellationToken cancellationToken)

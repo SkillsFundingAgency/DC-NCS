@@ -6,6 +6,8 @@ namespace ESFA.DC.NCS.Interfaces
     {
         int Ukprn { get; }
 
+        int JobId { get; }
+
         string Username { get; }
 
         Guid DssJobId { get; }

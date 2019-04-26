@@ -12,5 +12,9 @@
     <Parameter Name="NcsDbConnectionString" Value="__NcsDbConnectionString__" />
     <Parameter Name="OrgDbConnectionString" Value="__OrgDbConnectionString__" />
     <Parameter Name="AsposeLicence" Value="__AsposeLicence__" />
+    <Parameter Name="DctAzureBlobConnectionString" Value="__DctAzureBlobConnectionString__" />
+    <Parameter Name="DctAzureBlobContainerName" Value="__DctAzureBlobContainerName__" />
+    <Parameter Name="NcsAzureBlobConnectionString" Value="__NcsAzureBlobConnectionString__" />
+    <Parameter Name="NcsAzureBlobContainerName" Value="__NcsAzureBlobContainerName__" />
   </Parameters>
 </Application>

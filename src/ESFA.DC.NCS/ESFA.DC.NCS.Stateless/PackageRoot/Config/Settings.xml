@@ -27,4 +27,10 @@
   <Section Name="SoftwareLicenceSection">
     <Parameter Name="AsposeLicence" Value="" />
   </Section>
+  <Section Name="AzureStorageOptions">
+    <Parameter Name="DctAzureBlobConnectionString" Value="" />
+    <Parameter Name="DctAzureBlobContainerName" Value="" />
+    <Parameter Name="NcsAzureBlobConnectionString" Value="" />
+    <Parameter Name="NcsAzureBlobContainerName" Value="" />
+  </Section>
 </Settings>

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using ESFA.DC.Logging.Interfaces;
@@ -16,12 +15,10 @@ namespace ESFA.DC.NCS.DataService
     public class FundingValueQueryService : IFundingValueQueryService
     {
         private readonly Func<INcsContext> _ncsContext;
-        private readonly ILogger _logger;
 
-        public FundingValueQueryService(Func<INcsContext> ncsContext, ILogger logger)
+        public FundingValueQueryService(Func<INcsContext> ncsContext)
         {
             _ncsContext = ncsContext;
-            _logger = logger;
         }
 
         public async Task<IEnumerable<FundingValue>> GetFundingValuesAsync(INcsJobContextMessage ncsJobContextMessage, CancellationToken cancellationToken)
