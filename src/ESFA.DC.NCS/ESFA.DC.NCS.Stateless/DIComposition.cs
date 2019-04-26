@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using Autofac;
+using Autofac.Features.AttributeFilters;
 using ESFA.DC.Auditing.Interface;
 using ESFA.DC.DateTimeProvider.Interface;
+using ESFA.DC.IO.AzureStorage;
+using ESFA.DC.IO.Interfaces;
 using ESFA.DC.JobContext.Interface;
 using ESFA.DC.JobContextManager;
 using ESFA.DC.JobContextManager.Interface;
@@ -18,6 +21,7 @@ using ESFA.DC.NCS.DataService;
 using ESFA.DC.NCS.DataService.Org;
 using ESFA.DC.NCS.EF;
 using ESFA.DC.NCS.EF.Interfaces;
+using ESFA.DC.NCS.Interfaces;
 using ESFA.DC.NCS.Interfaces.DataService;
 using ESFA.DC.NCS.Interfaces.IO;
 using ESFA.DC.NCS.Interfaces.ReportingService;
@@ -54,6 +58,7 @@ namespace ESFA.DC.NCS.Stateless
             var dssConfiguration = GetDssConfiguration();
             var loggerConfiguration = GetLoggerConfiguration();
             var referenceDataConfiguration = GetReferenceDataConfiguration();
+            var azureStorageOptions = GetAzureStorageOptions();
 
             return new ContainerBuilder()
                 .RegisterLogger(loggerConfiguration)
@@ -63,7 +68,8 @@ namespace ESFA.DC.NCS.Stateless
                 .RegisterNcsService(ncsConfiguration)
                 .RegisterDssService(dssConfiguration)
                 .RegisterReports()
-                .RegisterReferenceData(referenceDataConfiguration);
+                .RegisterReferenceData(referenceDataConfiguration)
+                .RegisterAzureStorage(azureStorageOptions);
         }
 
         private static ContainerBuilder RegisterLogger(this ContainerBuilder containerBuilder, ILoggerConfiguration loggerConfiguration)
@@ -206,7 +212,7 @@ namespace ESFA.DC.NCS.Stateless
 
         private static ContainerBuilder RegisterReports(this ContainerBuilder containerBuilder)
         {
-            containerBuilder.RegisterType<ReportingController>().As<IReportingController>();
+            containerBuilder.RegisterType<ReportingController>().As<IReportingController>().WithAttributeFiltering();
             containerBuilder.RegisterType<OccupancyReport>().As<IModelReport>();
             containerBuilder.RegisterType<FundingSummaryReport>().As<IModelReport>();
             containerBuilder.RegisterType<FundingSummaryReportBuilder>().As<IFundingSummaryReportBuilder>();
@@ -222,6 +228,29 @@ namespace ESFA.DC.NCS.Stateless
                 .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking).Options).As<DbContextOptions<OrganisationsContext>>().SingleInstance();
 
             containerBuilder.RegisterType<OrgDataService>().As<IOrgDataService>();
+
+            return containerBuilder;
+        }
+
+        private static ContainerBuilder RegisterAzureStorage(this ContainerBuilder containerBuilder, IAzureStorageOptions azureStorageOptions)
+        {
+            containerBuilder.Register(c =>
+                    new AzureStorageKeyValuePersistenceService(
+                        new AzureStorageKeyValuePersistenceConfig(
+                            azureStorageOptions.DctAzureBlobConnectionString,
+                            azureStorageOptions.DctAzureBlobContainerName)))
+                .As<IStreamableKeyValuePersistenceService>()
+                .Keyed<IStreamableKeyValuePersistenceService>(PersistenceStorageKeys.DctAzureStorage)
+                .SingleInstance();
+
+            containerBuilder.Register(c =>
+                    new AzureStorageKeyValuePersistenceService(
+                        new AzureStorageKeyValuePersistenceConfig(
+                            azureStorageOptions.NcsAzureBlobConnectionString,
+                            azureStorageOptions.NcsAzureBlobContainerName)))
+                .As<IStreamableKeyValuePersistenceService>()
+                .Keyed<IStreamableKeyValuePersistenceService>(PersistenceStorageKeys.NcsAzureStorage)
+                .SingleInstance();
 
             return containerBuilder;
         }
@@ -252,6 +281,13 @@ namespace ESFA.DC.NCS.Stateless
             var configHelper = new ConfigurationHelper();
 
             return configHelper.GetSectionValues<ReferenceDataConfiguration>("ReferenceDataConfiguration");
+        }
+
+        private static IAzureStorageOptions GetAzureStorageOptions()
+        {
+            var configHelper = new ConfigurationHelper();
+
+            return configHelper.GetSectionValues<AzureStorageOptions>("AzureStorageOptions");
         }
     }
 }

@@ -16,6 +16,8 @@ namespace ESFA.DC.NCS.Stateless.Context
 
         public int Ukprn => int.Parse(_jobContextMessage.KeyValuePairs[JobContextMessageKey.UkPrn].ToString());
 
+        public int JobId => int.Parse(_jobContextMessage.JobId.ToString());
+
         public string Username => _jobContextMessage.KeyValuePairs[JobContextMessageKey.Username].ToString();
 
         public Guid DssJobId => Guid.Parse(_jobContextMessage.KeyValuePairs["ExternalJobId"].ToString());
