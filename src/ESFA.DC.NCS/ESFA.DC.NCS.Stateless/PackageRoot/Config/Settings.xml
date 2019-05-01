@@ -20,6 +20,8 @@
   </Section>
   <Section Name="DssServiceConfiguration">
     <Parameter Name="DssDbConnectionString" Value="" />
+    <Parameter Name="DssQueueConnectionString" Value="" />
+    <Parameter Name="DssQueueName" Value="" />
   </Section>
   <Section Name="ReferenceDataConfiguration">
     <Parameter Name="OrgDbConnectionString" Value="" />

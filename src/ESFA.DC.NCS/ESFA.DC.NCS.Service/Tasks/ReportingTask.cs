@@ -20,7 +20,13 @@ namespace ESFA.DC.NCS.Service.Tasks
         private readonly IReportingController _reportingController;
         private readonly IPersistenceService _persistenceService;
 
-        public ReportingTask(ILogger logger, IModelBuilder modelBuilder, IFundingValueQueryService fundingValueQueryService, INcsSubmissionQueryService ncsSubmissionQueryService, IReportingController reportingController, IPersistenceService persistenceService)
+        public ReportingTask(
+            ILogger logger,
+            IModelBuilder modelBuilder,
+            IFundingValueQueryService fundingValueQueryService,
+            INcsSubmissionQueryService ncsSubmissionQueryService,
+            IReportingController reportingController,
+            IPersistenceService persistenceService)
         {
             _logger = logger;
             _modelBuilder = modelBuilder;
@@ -40,8 +46,6 @@ namespace ESFA.DC.NCS.Service.Tasks
 
             try
             {
-                _logger.LogInfo("Reporting Task Started");
-
                 var submissionData = await _ncsSubmissionQueryService.GetNcsSubmissionsAsync(ncsJobContextMessage, cancellationToken);
                 var fundingData = await _fundingValueQueryService.GetFundingValuesAsync(ncsJobContextMessage, cancellationToken);
 

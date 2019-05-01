@@ -3,5 +3,9 @@
     public interface IDssServiceConfiguration
     {
         string DssDbConnectionString { get; }
+
+        string DssQueueConnectionString { get; }
+
+        string DssQueueName { get; }
     }
 }

@@ -9,6 +9,8 @@
     <Parameter Name="AuditQueueName" DefaultValue="AuditQueue" />
     <Parameter Name="LoggerConnectionString" DefaultValue="loggerConnectionString" />
     <Parameter Name="DssDbConnectionString" DefaultValue="DssDbConnectionString" />
+    <Parameter Name="DssQueueConnectionString" DefaultValue="DssQueueConnectionString" />
+    <Parameter Name="DssQueueName" DefaultValue="DssQueueName" />
     <Parameter Name="NcsDbConnectionString" DefaultValue="NcsDbConnectionString" />
     <Parameter Name="OrgDbConnectionString" DefaultValue="OrgDbConnectionString" />
     <Parameter Name="AsposeLicence" DefaultValue="AsposeLicence" />
@@ -38,6 +40,8 @@
           </Section>
           <Section Name="DssServiceConfiguration">
             <Parameter Name="DssDbConnectionString" Value="[DssDbConnectionString]" />
+            <Parameter Name="DssQueueConnectionString" Value="[DssQueueConnectionString]" />
+            <Parameter Name="DssQueueName" Value="[DssQueueName]" />
           </Section>
           <Section Name="ReferenceDataConfiguration">
             <Parameter Name="OrgDbConnectionString" Value="[OrgDbConnectionString]" />

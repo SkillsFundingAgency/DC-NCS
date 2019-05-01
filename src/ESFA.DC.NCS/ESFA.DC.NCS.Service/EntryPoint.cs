@@ -11,10 +11,12 @@ namespace ESFA.DC.NCS.Service
     public class EntryPoint : IEntryPoint
     {
         private readonly ILogger _logger;
+        private readonly IMessageService _messageService;
 
-        public EntryPoint(ILogger logger)
+        public EntryPoint(ILogger logger, IMessageService messageService)
         {
             _logger = logger;
+            _messageService = messageService;
         }
 
         public async Task<bool> CallbackAsync(IEnumerable<INcsDataTask> ncsTasks, INcsJobContextMessage ncsJobContextMessage, CancellationToken cancellationToken)
@@ -28,6 +30,8 @@ namespace ESFA.DC.NCS.Service
                 await task.ExecuteAsync(ncsJobContextMessage, cancellationToken);
                 _logger.LogInfo($"NCS Service Task : {task.TaskName} Finished");
             }
+
+            await _messageService.PublishNcsSuccessMessage(ncsJobContextMessage, cancellationToken);
 
             return true;
         }
