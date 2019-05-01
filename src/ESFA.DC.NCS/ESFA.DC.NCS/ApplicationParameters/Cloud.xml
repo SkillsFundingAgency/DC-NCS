@@ -9,6 +9,8 @@
     <Parameter Name="AuditQueueName" Value="__AuditQueue__" />
     <Parameter Name="LoggerConnectionString" Value="__loggerConnectionString__" />
     <Parameter Name="DssDbConnectionString" Value="__DssDbConnectionString__" />
+    <Parameter Name="DssQueueConnectionString" Value="__DssQueueConnectionString__" />
+    <Parameter Name="DssQueueName" Value="__DssQueueName__" />
     <Parameter Name="NcsDbConnectionString" Value="__NcsDbConnectionString__" />
     <Parameter Name="OrgDbConnectionString" Value="__OrgDbConnectionString__" />
     <Parameter Name="AsposeLicence" Value="__AsposeLicence__" />

@@ -26,6 +26,7 @@ using ESFA.DC.NCS.Interfaces.DataService;
 using ESFA.DC.NCS.Interfaces.IO;
 using ESFA.DC.NCS.Interfaces.ReportingService;
 using ESFA.DC.NCS.Interfaces.Service;
+using ESFA.DC.NCS.Models;
 using ESFA.DC.NCS.Models.Config;
 using ESFA.DC.NCS.Models.Interfaces;
 using ESFA.DC.NCS.ReportingService;
@@ -40,6 +41,7 @@ using ESFA.DC.NCS.Stateless.Config;
 using ESFA.DC.NCS.Stateless.Config.Interfaces;
 using ESFA.DC.Queueing;
 using ESFA.DC.Queueing.Interface;
+using ESFA.DC.Queueing.Interface.Configuration;
 using ESFA.DC.ReferenceData.Organisations.Model;
 using ESFA.DC.ReferenceData.Organisations.Model.Interface;
 using ESFA.DC.Serialization.Interfaces;
@@ -167,7 +169,6 @@ namespace ESFA.DC.NCS.Stateless
             // Tasks
             containerBuilder.RegisterType<FundingTask>().As<INcsDataTask>();
             containerBuilder.RegisterType<ReportingTask>().As<INcsDataTask>();
-            containerBuilder.RegisterType<StorageTask>().As<INcsDataTask>();
             containerBuilder.RegisterType<EntryPoint>().As<IEntryPoint>();
 
             // Helpers
@@ -176,6 +177,7 @@ namespace ESFA.DC.NCS.Stateless
 
             // Services
             containerBuilder.RegisterType<FundingService>().As<IFundingService>();
+            containerBuilder.RegisterType<MessageService>().As<IMessageService>();
             containerBuilder.RegisterType<StreamProviderService>().As<IStreamProviderService>();
 
             // Ncs database
@@ -206,6 +208,15 @@ namespace ESFA.DC.NCS.Stateless
 
                 return dssDataRetrievalService;
             }).As<IDssDataRetrievalService>().InstancePerDependency();
+
+            IQueueConfiguration dssPublishQueueConfiguration = new QueueConfiguration(
+                dssServiceConfiguration.DssQueueConnectionString,
+                dssServiceConfiguration.DssQueueName,
+                1);
+
+            containerBuilder.Register(c => new QueuePublishService<DssPublishMessageModel>(
+                dssPublishQueueConfiguration,
+                c.Resolve<IJsonSerializationService>())).As<IQueuePublishService<DssPublishMessageModel>>();
 
             return containerBuilder;
         }
