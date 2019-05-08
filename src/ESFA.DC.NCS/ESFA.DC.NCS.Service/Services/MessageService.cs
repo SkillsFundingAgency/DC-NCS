@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using ESFA.DC.Logging.Interfaces;
 using ESFA.DC.NCS.Interfaces;
-using ESFA.DC.NCS.Interfaces.Constants;
 using ESFA.DC.NCS.Interfaces.Service;
 using ESFA.DC.NCS.Models;
 using ESFA.DC.Queueing.Interface;
@@ -20,19 +19,19 @@ namespace ESFA.DC.NCS.Service.Services
             _queuePublishService = queuePublishService;
         }
 
-        public async Task PublishNcsSuccessMessage(INcsJobContextMessage ncsJobContextMessage, CancellationToken cancellationToken)
+        public async Task PublishNcsMessage(string status, INcsJobContextMessage ncsJobContextMessage, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
             var message = new DssPublishMessageModel
             {
-                Status = MessageConstants.Success,
+                Status = status,
                 JobId = ncsJobContextMessage.DssJobId
             };
 
             await _queuePublishService.PublishAsync(message);
 
-            _logger.LogInfo("Success message sent to Ncs");
+            _logger.LogInfo($"{status} message sent to Ncs");
         }
     }
 }

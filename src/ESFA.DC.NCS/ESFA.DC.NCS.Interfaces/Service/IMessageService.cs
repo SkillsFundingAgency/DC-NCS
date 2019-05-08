@@ -5,6 +5,6 @@ namespace ESFA.DC.NCS.Interfaces.Service
 {
     public interface IMessageService
     {
-        Task PublishNcsSuccessMessage(INcsJobContextMessage ncsJobContextMessage, CancellationToken cancellationToken);
+        Task PublishNcsMessage(string status, INcsJobContextMessage ncsJobContextMessage, CancellationToken cancellationToken);
     }
 }

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using ESFA.DC.Logging.Interfaces;
 using ESFA.DC.NCS.Interfaces;
+using ESFA.DC.NCS.Interfaces.Constants;
 using ESFA.DC.NCS.Interfaces.Service;
 
 namespace ESFA.DC.NCS.Service
@@ -21,7 +21,6 @@ namespace ESFA.DC.NCS.Service
 
         public async Task<bool> CallbackAsync(IEnumerable<INcsDataTask> ncsTasks, INcsJobContextMessage ncsJobContextMessage, CancellationToken cancellationToken)
         {
-            Debug.WriteLine("Entered EntryPoint");
             _logger.LogInfo("NCS callback invoked");
 
             foreach (var task in ncsTasks)
@@ -31,7 +30,7 @@ namespace ESFA.DC.NCS.Service
                 _logger.LogInfo($"NCS Service Task : {task.TaskName} Finished");
             }
 
-            await _messageService.PublishNcsSuccessMessage(ncsJobContextMessage, cancellationToken);
+            await _messageService.PublishNcsMessage(MessageConstants.Success, ncsJobContextMessage, cancellationToken);
 
             return true;
         }

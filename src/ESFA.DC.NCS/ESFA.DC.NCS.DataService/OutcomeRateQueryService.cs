@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using ESFA.DC.Logging.Interfaces;
 using ESFA.DC.NCS.EF;
 using ESFA.DC.NCS.EF.Interfaces;
 using ESFA.DC.NCS.Interfaces.DataService;
@@ -14,12 +12,10 @@ namespace ESFA.DC.NCS.DataService
 {
     public class OutcomeRateQueryService : IOutcomeRateQueryService
     {
-        private readonly ILogger _logger;
         private readonly Func<INcsContext> _ncsContext;
 
-        public OutcomeRateQueryService(ILogger logger, Func<INcsContext> ncsContext)
+        public OutcomeRateQueryService(Func<INcsContext> ncsContext)
         {
-            _logger = logger;
             _ncsContext = ncsContext;
         }
 

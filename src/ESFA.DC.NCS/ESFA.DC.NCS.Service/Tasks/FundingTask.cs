@@ -48,7 +48,7 @@ namespace ESFA.DC.NCS.Service.Tasks
                 _logger.LogInfo($"Retrieved {dssData.Count()} records from DSS for TouchpointId {ncsJobContextMessage.TouchpointId}");
 
                 var ncsSubmission = _modelBuilder.BuildNcsSubmission(dssData, ncsJobContextMessage);
-                var fundingValues = await _fundingService.CalculateFunding(ncsSubmission, ncsJobContextMessage, cancellationToken);
+                var fundingValues = await _fundingService.CalculateFundingAsync(ncsSubmission, ncsJobContextMessage, cancellationToken);
 
                 await _persistenceService.PersistSubmissionAndFundingValuesAsync(ncsSubmission, fundingValues, ncsJobContextMessage, cancellationToken);
             }

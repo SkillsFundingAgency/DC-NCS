@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ESFA.DC.DateTimeProvider.Interface;
-using ESFA.DC.Logging.Interfaces;
 using ESFA.DC.NCS.EF;
 using ESFA.DC.NCS.Interfaces;
 using ESFA.DC.NCS.Interfaces.Constants;
@@ -17,16 +16,14 @@ namespace ESFA.DC.NCS.Service.Services
     {
         private readonly IOutcomeRateQueryService _outcomeRateService;
         private readonly IDateTimeProvider _dateTimeProvider;
-        private readonly ILogger _logger;
 
-        public FundingService(IOutcomeRateQueryService outcomeRateService, IDateTimeProvider dateTimeProvider, ILogger logger)
+        public FundingService(IOutcomeRateQueryService outcomeRateService, IDateTimeProvider dateTimeProvider)
         {
             _outcomeRateService = outcomeRateService;
             _dateTimeProvider = dateTimeProvider;
-            _logger = logger;
         }
 
-        public async Task<IEnumerable<FundingValue>> CalculateFunding(IEnumerable<NcsSubmission> ncsSubmissions, INcsJobContextMessage ncsJobContextMessage, CancellationToken cancellationToken)
+        public async Task<IEnumerable<FundingValue>> CalculateFundingAsync(IEnumerable<NcsSubmission> ncsSubmissions, INcsJobContextMessage ncsJobContextMessage, CancellationToken cancellationToken)
         {
             var priorityCommunityRate = await _outcomeRateService.GetOutcomeRateByPriorityAndDeliveryAsync(OutcomeRatesConstants.Priority, OutcomeRatesConstants.Community, ncsJobContextMessage.DssTimeStamp, cancellationToken);
             var nonPriorityCommunityRate = await _outcomeRateService.GetOutcomeRateByPriorityAndDeliveryAsync(OutcomeRatesConstants.NonPriority, OutcomeRatesConstants.Community, ncsJobContextMessage.DssTimeStamp, cancellationToken);

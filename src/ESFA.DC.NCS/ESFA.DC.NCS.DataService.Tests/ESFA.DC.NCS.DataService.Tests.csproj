@@ -185,9 +185,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="OutcomeRateServiceTests.cs" />
+    <Compile Include="FundingValueQueryServiceTests.cs" />
+    <Compile Include="NcsSubmissionQueryServiceTests.cs" />
+    <Compile Include="OutcomeRateQueryServiceTests.cs" />
     <Compile Include="PersistenceServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SourceQueryServiceTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ESFA.DC.NCS.DataService\ESFA.DC.NCS.DataService.csproj">
@@ -205,7 +208,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\xunit.analyzers.0.10.0\analyzers\dotnet\cs\xunit.analyzers.dll" />

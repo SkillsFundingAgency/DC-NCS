@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using ESFA.DC.DateTimeProvider.Interface;
-using ESFA.DC.Logging.Interfaces;
 using ESFA.DC.NCS.EF;
 using ESFA.DC.NCS.Interfaces;
 using ESFA.DC.NCS.Interfaces.Constants;
@@ -67,7 +64,7 @@ namespace ESFA.DC.NCS.Service.Tests.Services
             var dateTimeProviderServiceMock = new Mock<IDateTimeProvider>();
             dateTimeProviderServiceMock.Setup(x => x.GetNowUtc()).Returns(new DateTime(2000, 01, 01));
 
-            var fundingValues = NewService(outcomeRateServiceMock.Object, dateTimeProviderServiceMock.Object).CalculateFunding(submissions, ncsJobContextMessage.Object, CancellationToken.None).Result;
+            var fundingValues = NewService(outcomeRateServiceMock.Object, dateTimeProviderServiceMock.Object).CalculateFundingAsync(submissions, ncsJobContextMessage.Object, CancellationToken.None).Result;
 
             fundingValues.Should().NotBeEmpty();
             fundingValues.Should().ContainSingle();
@@ -122,7 +119,7 @@ namespace ESFA.DC.NCS.Service.Tests.Services
             var dateTimeProviderServiceMock = new Mock<IDateTimeProvider>();
             dateTimeProviderServiceMock.Setup(x => x.GetNowUtc()).Returns(new DateTime(2000, 01, 01));
 
-            var fundingValues = NewService(outcomeRateServiceMock.Object, dateTimeProviderServiceMock.Object).CalculateFunding(submissions, ncsJobContextMessage.Object, CancellationToken.None).Result;
+            var fundingValues = NewService(outcomeRateServiceMock.Object, dateTimeProviderServiceMock.Object).CalculateFundingAsync(submissions, ncsJobContextMessage.Object, CancellationToken.None).Result;
 
             fundingValues.Should().NotBeEmpty();
             fundingValues.Should().ContainSingle();
@@ -174,7 +171,7 @@ namespace ESFA.DC.NCS.Service.Tests.Services
             var dateTimeProviderServiceMock = new Mock<IDateTimeProvider>();
             dateTimeProviderServiceMock.Setup(x => x.GetNowUtc()).Returns(new DateTime(2000, 01, 01));
 
-            Func<Task> act = async () => await NewService(outcomeRateServiceMock.Object, dateTimeProviderServiceMock.Object).CalculateFunding(submissions, ncsJobContextMessage.Object, CancellationToken.None);
+            Func<Task> act = async () => await NewService(outcomeRateServiceMock.Object, dateTimeProviderServiceMock.Object).CalculateFundingAsync(submissions, ncsJobContextMessage.Object, CancellationToken.None);
 
             act.Should()
                 .Throw<Exception>()
@@ -226,7 +223,7 @@ namespace ESFA.DC.NCS.Service.Tests.Services
             var dateTimeProviderServiceMock = new Mock<IDateTimeProvider>();
             dateTimeProviderServiceMock.Setup(x => x.GetNowUtc()).Returns(new DateTime(2000, 01, 01));
 
-            Func<Task> act = async () => await NewService(outcomeRateServiceMock.Object, dateTimeProviderServiceMock.Object).CalculateFunding(submissions, ncsJobContextMessage.Object, CancellationToken.None);
+            Func<Task> act = async () => await NewService(outcomeRateServiceMock.Object, dateTimeProviderServiceMock.Object).CalculateFundingAsync(submissions, ncsJobContextMessage.Object, CancellationToken.None);
 
             act.Should()
                 .Throw<Exception>()
@@ -290,7 +287,7 @@ namespace ESFA.DC.NCS.Service.Tests.Services
             var dateTimeProviderServiceMock = new Mock<IDateTimeProvider>();
             dateTimeProviderServiceMock.Setup(x => x.GetNowUtc()).Returns(new DateTime(2000, 01, 01));
 
-            var fundingValues = NewService(outcomeRateServiceMock.Object, dateTimeProviderServiceMock.Object).CalculateFunding(submissions, ncsJobContextMessage.Object, CancellationToken.None).Result;
+            var fundingValues = NewService(outcomeRateServiceMock.Object, dateTimeProviderServiceMock.Object).CalculateFundingAsync(submissions, ncsJobContextMessage.Object, CancellationToken.None).Result;
 
             fundingValues.Should().NotBeEmpty();
             fundingValues.Should().ContainSingle();
@@ -321,9 +318,9 @@ namespace ESFA.DC.NCS.Service.Tests.Services
             };
         }
 
-        private FundingService NewService(IOutcomeRateQueryService outcomeRateService = null, IDateTimeProvider dateTimeProvider = null, ILogger logger = null)
+        private FundingService NewService(IOutcomeRateQueryService outcomeRateService = null, IDateTimeProvider dateTimeProvider = null)
         {
-            return new FundingService(outcomeRateService, dateTimeProvider, logger);
+            return new FundingService(outcomeRateService, dateTimeProvider);
         }
     }
 }
