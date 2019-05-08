@@ -14,7 +14,7 @@ using Xunit;
 
 namespace ESFA.DC.NCS.DataService.Tests
 {
-    public class OutcomeRateServiceTests
+    public class OutcomeRateQueryServiceTests
     {
         [Theory]
         [InlineData(1, OutcomeRatesConstants.Community)]
@@ -233,9 +233,9 @@ namespace ESFA.DC.NCS.DataService.Tests
                 .WithMessage($"OutcomeRates table contains more than one rate for the values: OutcomePriorityCustomer-{priorityGroup}, Delivery-{delivery} and date-{submissionDate}");
         }
 
-        private OutcomeRateQueryService NewService(ILogger logger = null, Func<INcsContext> ncsContext = null)
+        private OutcomeRateQueryService NewService(Func<INcsContext> ncsContext = null)
         {
-            return new OutcomeRateQueryService(logger, ncsContext);
+            return new OutcomeRateQueryService(ncsContext);
         }
     }
 }

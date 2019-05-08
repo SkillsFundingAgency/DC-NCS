@@ -45,7 +45,6 @@ namespace ESFA.DC.NCS.Stateless
             }
             catch (Exception exception) when (!(exception is TaskCanceledException))
             {
-                Debug.WriteLine(exception.Message);
                 // Ignore, as an exception is only really thrown on cancellation of the token.
                 _logger.LogError("NCS Stateless Service Exception", exception);
             }
