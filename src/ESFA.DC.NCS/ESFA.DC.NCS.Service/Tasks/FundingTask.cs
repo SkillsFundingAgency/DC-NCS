@@ -18,8 +18,16 @@ namespace ESFA.DC.NCS.Service.Tasks
         private readonly IFundingService _fundingService;
         private readonly IPersistenceService _persistenceService;
         private readonly IModelBuilder _modelBuilder;
+        private readonly IStorageService _storageService;
 
-        public FundingTask(ILogger logger, IMessageHelper messageHelper, IDssDataRetrievalService dssDataRetrievalService, IFundingService fundingService, IPersistenceService persistenceService, IModelBuilder modelBuilder)
+        public FundingTask(
+            ILogger logger,
+            IMessageHelper messageHelper,
+            IDssDataRetrievalService dssDataRetrievalService,
+            IFundingService fundingService,
+            IPersistenceService persistenceService,
+            IModelBuilder modelBuilder,
+            IStorageService storageService)
         {
             _logger = logger;
             _messageHelper = messageHelper;
@@ -27,16 +35,14 @@ namespace ESFA.DC.NCS.Service.Tasks
             _fundingService = fundingService;
             _persistenceService = persistenceService;
             _modelBuilder = modelBuilder;
+            _storageService = storageService;
         }
 
         public string TaskName => TaskNameConstants.FundingTaskName;
 
         public async Task ExecuteAsync(INcsJobContextMessage ncsJobContextMessage, CancellationToken cancellationToken)
         {
-            if (cancellationToken.IsCancellationRequested)
-            {
-                return;
-            }
+            cancellationToken.ThrowIfCancellationRequested();
 
             Debug.WriteLine("Entered Funding Task");
 
@@ -50,7 +56,11 @@ namespace ESFA.DC.NCS.Service.Tasks
                 var ncsSubmission = _modelBuilder.BuildNcsSubmission(dssData, ncsJobContextMessage);
                 var fundingValues = await _fundingService.CalculateFundingAsync(ncsSubmission, ncsJobContextMessage, cancellationToken);
 
+                cancellationToken.ThrowIfCancellationRequested();
+
                 await _persistenceService.PersistSubmissionAndFundingValuesAsync(ncsSubmission, fundingValues, ncsJobContextMessage, cancellationToken);
+
+                await _storageService.StoreAsJsonAsync(dssData, FileNameConstants.sourceData, ncsJobContextMessage, cancellationToken);
             }
             else
             {

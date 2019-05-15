@@ -179,6 +179,7 @@ namespace ESFA.DC.NCS.Stateless
             containerBuilder.RegisterType<FundingService>().As<IFundingService>();
             containerBuilder.RegisterType<MessageService>().As<IMessageService>();
             containerBuilder.RegisterType<StreamProviderService>().As<IStreamProviderService>();
+            containerBuilder.RegisterType<StorageService>().As<IStorageService>().WithAttributeFiltering();
 
             // Ncs database
             containerBuilder.RegisterType<NcsContext>().As<INcsContext>();
