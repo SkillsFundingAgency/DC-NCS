@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Autofac.Features.AttributeFilters;
 using ESFA.DC.IO.Interfaces;
 using ESFA.DC.NCS.Interfaces;
+using ESFA.DC.NCS.Interfaces.Constants;
 using ESFA.DC.NCS.Interfaces.ReportingService;
 using ESFA.DC.NCS.Models.Reports;
 
@@ -43,7 +44,7 @@ namespace ESFA.DC.NCS.ReportingService
                     cancellationToken.ThrowIfCancellationRequested();
                 }
 
-                await _dctStorage.SaveAsync($"{ncsJobContextMessage.Ukprn}_{ncsJobContextMessage.JobId}_Reports.zip", memoryStream, cancellationToken);
+                await _dctStorage.SaveAsync($"{ncsJobContextMessage.Ukprn}_{ncsJobContextMessage.JobId}_{FileNameConstants.Reports}.zip", memoryStream, cancellationToken);
                 await _ncsStorage.SaveAsync($"{ncsJobContextMessage.ReportFileName}.zip", memoryStream, cancellationToken);
             }
         }
