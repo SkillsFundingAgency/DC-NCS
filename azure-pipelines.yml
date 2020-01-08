@@ -68,7 +68,7 @@ steps:
     msbuildArchitecture: x64
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
-    msbuildArguments: ' /p:DeployOnBuild=false /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)\ServiceFabric\ApplicationPackage" /p:version=$(Build.BuildNumber) /p:FileVersion=$(Build.BuildNumber)' 
+    msbuildArguments: '-p:version=$(Build.BuildNumber) -p:FileVersion=$(Build.BuildNumber) -p:SkipInvalidConfigurations=true'
     clean: true
     maximumCpuCount: true
     logProjectEvents: true
@@ -83,8 +83,8 @@ steps:
     msbuildArchitecture: x64
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
-    msbuildArguments: ' /p:DeployOnBuild=false /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)\ServiceFabric\ApplicationPackage" /p:version=$(Build.BuildNumber) /p:FileVersion=$(Build.BuildNumber)' 
-    clean: true
+    msbuildArguments: '/t:Package /p:PackageLocation=$(build.artifactstagingdirectory)\ServiceFabric\ApplicationPackage  /p:version=$(Build.BuildNumber) /p:FileVersion=$(Build.BuildNumber) -p:SkipInvalidConfigurations=true'
+    clean: false
     maximumCpuCount: true
     logProjectEvents: true
     createLogFile: true
