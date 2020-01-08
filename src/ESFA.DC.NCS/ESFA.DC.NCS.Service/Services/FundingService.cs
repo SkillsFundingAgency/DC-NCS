@@ -66,6 +66,7 @@ namespace ESFA.DC.NCS.Service.Services
                 OutcomePriorityCustomer = submission.OutcomePriorityCustomer,
                 Value = CalculateValue(submission.OutcomeType, outcomeRate),
                 Period = submission.OutcomeEffectiveDate.ToString("MMMM"),
+                OutcomeEffectiveDateMonth = submission.OutcomeEffectiveDate.Month,
                 CollectionYear = submission.CollectionYear,
                 CreatedOn = _dateTimeProvider.GetNowUtc()
             };
