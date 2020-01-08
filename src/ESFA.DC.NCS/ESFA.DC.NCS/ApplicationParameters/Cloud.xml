@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Application xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Name="fabric:/ESFA.DC.NCS" xmlns="http://schemas.microsoft.com/2011/01/fabric">
   <Parameters>
-    <Parameter Name="ESFA.DC.NCS.Stateless_InstanceCount" Value="-1" />
+    <Parameter Name="ESFA.DC.NCS.Stateless_InstanceCount" Value="__NCS_Stateless_InstanceCount__" />
+    <Parameter Name="ProcessingServicePlacementConstraints" Value="__ProcessingServicePlacementConstraints__" />
     <Parameter Name="ServiceBusConnectionString" Value="__ServiceBusConnectionString__" />
     <Parameter Name="TopicName" Value="__topicName__" />
     <Parameter Name="SubscriptionName" Value="__subscriptionName__" />
