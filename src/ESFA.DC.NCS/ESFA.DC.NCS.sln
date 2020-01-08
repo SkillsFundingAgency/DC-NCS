@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28010.2041
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{A07B5EB6-E848-4116-A8D0-A826331D98C6}") = "ESFA.DC.NCS", "ESFA.DC.NCS\ESFA.DC.NCS.sfproj", "{60E72392-F0E1-429E-B751-C961DC723FA2}"
 EndProject
@@ -31,6 +31,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESFA.DC.NCS.ReportingServic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESFA.DC.NCS.ReportingService.Tests", "ESFA.DC.NCS.ReportingService.Tests\ESFA.DC.NCS.ReportingService.Tests.csproj", "{C3A649CF-2352-4978-9971-4C7DD7891F4B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DD5A0F3C-53CB-4ACA-B105-DC71AC27B095}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\azure-pipelines.yml = ..\..\azure-pipelines.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,6 +49,7 @@ Global
 		{60E72392-F0E1-429E-B751-C961DC723FA2}.Debug|x64.Build.0 = Debug|x64
 		{60E72392-F0E1-429E-B751-C961DC723FA2}.Debug|x64.Deploy.0 = Debug|x64
 		{60E72392-F0E1-429E-B751-C961DC723FA2}.Release|Any CPU.ActiveCfg = Release|x64
+		{60E72392-F0E1-429E-B751-C961DC723FA2}.Release|Any CPU.Build.0 = Release|x64
 		{60E72392-F0E1-429E-B751-C961DC723FA2}.Release|x64.ActiveCfg = Release|x64
 		{60E72392-F0E1-429E-B751-C961DC723FA2}.Release|x64.Build.0 = Release|x64
 		{60E72392-F0E1-429E-B751-C961DC723FA2}.Release|x64.Deploy.0 = Release|x64
@@ -51,6 +57,7 @@ Global
 		{BEF2756B-D7DF-488C-B5C6-46DAF3BEAAED}.Debug|x64.ActiveCfg = Debug|x64
 		{BEF2756B-D7DF-488C-B5C6-46DAF3BEAAED}.Debug|x64.Build.0 = Debug|x64
 		{BEF2756B-D7DF-488C-B5C6-46DAF3BEAAED}.Release|Any CPU.ActiveCfg = Release|x64
+		{BEF2756B-D7DF-488C-B5C6-46DAF3BEAAED}.Release|Any CPU.Build.0 = Release|x64
 		{BEF2756B-D7DF-488C-B5C6-46DAF3BEAAED}.Release|x64.ActiveCfg = Release|x64
 		{BEF2756B-D7DF-488C-B5C6-46DAF3BEAAED}.Release|x64.Build.0 = Release|x64
 		{A057EAA2-4CC2-4C5F-A3B1-F56C1EC93430}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
