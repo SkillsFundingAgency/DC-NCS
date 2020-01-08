@@ -83,7 +83,7 @@ steps:
     msbuildArchitecture: x64
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
-    msbuildArguments: ' /p:DeployOnBuild=false /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)\applicationpackage" /p:version=$(Build.BuildNumber) /p:FileVersion=$(Build.BuildNumber)' 
+    msbuildArguments: ' /p:DeployOnBuild=false /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)\ServiceFabric\ApplicationPackage" /p:version=$(Build.BuildNumber) /p:FileVersion=$(Build.BuildNumber)' 
     clean: true
     maximumCpuCount: true
     logProjectEvents: true
