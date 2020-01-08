@@ -57,6 +57,7 @@ steps:
   displayName: 'Build solution'
   enabled: true
   inputs:
+    msbuildVersion: 16.0
     solution: '**/*.sln'
     msbuildArchitecture: x64
     platform: '$(BuildPlatform)'
@@ -72,6 +73,7 @@ steps:
   displayName: 'Build SF Project'
   enabled: true
   inputs:
+    msbuildVersion: 16.0
     solution: '**/$(ServiceFabricProjectFolderName)/*.sfproj'
     msbuildArchitecture: x64
     platform: '$(BuildPlatform)'
