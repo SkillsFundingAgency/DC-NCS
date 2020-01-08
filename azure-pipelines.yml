@@ -32,10 +32,16 @@ steps:
   inputs:
     versionSpec: '>=5.3.1'
 
+steps:
+- task: NuGetToolInstaller@0
+  displayName: 'Use NuGet 4.7.1'
+  inputs:
+    versionSpec: 4.7.1
+
 - task: DotNetCoreInstaller@2
   inputs:
-    version: 2.2.207
-  displayName: 'Use .NET Core sdk 2.2.7 (VS2019 = 2.2.207)'
+    version: 2.2.110
+  displayName: 'Use .NET Core sdk 2.2.8 (VS2019 = 2.2.207) | (VS2017 = 2.2.110)'
 
 # Generate the report using ReportGenerator (https://github.com/danielpalme/ReportGenerator)
 # First install the tool on the machine, then run it
@@ -57,7 +63,7 @@ steps:
   displayName: 'Build solution'
   enabled: true
   inputs:
-    msbuildVersion: 16.0
+    msbuildVersion: 15.0
     solution: '**/*.sln'
     msbuildArchitecture: x64
     platform: '$(BuildPlatform)'
@@ -68,12 +74,11 @@ steps:
     logProjectEvents: true
     createLogFile: true
 
-
 - task: MSBuild@1
   displayName: 'Build SF Project'
   enabled: true
   inputs:
-    msbuildVersion: 16.0
+    msbuildVersion: 15.0
     solution: '**/$(ServiceFabricProjectFolderName)/*.sfproj'
     msbuildArchitecture: x64
     platform: '$(BuildPlatform)'
@@ -212,14 +217,14 @@ steps:
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: ServiceFabric'
-  enabled: true
+  enabled: false
   inputs:
     ArtifactName: ServiceFabric
     PathtoPublish: '$(build.artifactstagingdirectory)\ServiceFabric'
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: NugetPackages'
-  enabled: true
+  enabled: false
   inputs:
     ArtifactName: NugetPackages
     PathtoPublish: '$(build.artifactstagingdirectory)\Nuget'
