@@ -2,6 +2,7 @@
 <ApplicationManifest xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ApplicationTypeName="ESFA.DC.NCSType" ApplicationTypeVersion="1.0.0" xmlns="http://schemas.microsoft.com/2011/01/fabric">
   <Parameters>
     <Parameter Name="ESFA.DC.NCS.Stateless_InstanceCount" DefaultValue="-1" />
+    <Parameter Name="ProcessingServicePlacementConstraints" DefaultValue="" />
     <Parameter Name="ServiceBusConnectionString" DefaultValue="ServiceBusConnectionString" />
     <Parameter Name="TopicName" DefaultValue="topicName" />
     <Parameter Name="SubscriptionName" DefaultValue="subscriptionName" />
@@ -68,6 +69,7 @@
     <Service Name="ESFA.DC.NCS.Stateless" ServicePackageActivationMode="ExclusiveProcess">
       <StatelessService ServiceTypeName="ESFA.DC.NCS.StatelessType" InstanceCount="[ESFA.DC.NCS.Stateless_InstanceCount]">
         <SingletonPartition />
+        <PlacementConstraints>[ProcessingServicePlacementConstraints]</PlacementConstraints>
       </StatelessService>
     </Service>
   </DefaultServices>
