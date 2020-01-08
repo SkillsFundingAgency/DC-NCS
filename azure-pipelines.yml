@@ -29,10 +29,10 @@ steps:
 
 - task: NuGetToolInstaller@0
   displayName: 'Use NuGet >=5.3.1'
+  enabled: false
   inputs:
     versionSpec: '>=5.3.1'
 
-steps:
 - task: NuGetToolInstaller@0
   displayName: 'Use NuGet 4.7.1'
   inputs:
