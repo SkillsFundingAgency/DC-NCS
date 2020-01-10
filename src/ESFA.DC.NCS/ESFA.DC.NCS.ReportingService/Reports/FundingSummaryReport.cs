@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO.Compression;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,11 +9,12 @@ using ESFA.DC.NCS.Interfaces;
 using ESFA.DC.NCS.Interfaces.Constants;
 using ESFA.DC.NCS.Interfaces.IO;
 using ESFA.DC.NCS.Interfaces.ReportingService;
+using ESFA.DC.NCS.Interfaces.Service;
 using ESFA.DC.NCS.Models.Reports;
 
 namespace ESFA.DC.NCS.ReportingService.Reports
 {
-    public class FundingSummaryReport : AbstractReportBuilder, IModelReport
+    public class FundingSummaryReport : IModelReport
     {
         private const string ProviderNameCell = "B1";
         private const string TouchpointIdCell = "B2";
@@ -26,35 +26,36 @@ namespace ESFA.DC.NCS.ReportingService.Reports
         private readonly IStreamProviderService _streamProviderService;
         private readonly IDateTimeProvider _dateTimeProvider;
         private readonly ILogger _logger;
+        private readonly IExcelService _excelService;
+        private readonly IFilenameService _filenameService;
         private readonly string[] _columns = { "OutcomeName", "AprilNumbers", "AprilFunding", "MayNumbers", "MayFunding", "JuneNumbers", "JuneFunding", "JulyNumbers", "JulyFunding", "AugustNumbers", "AugustFunding", "SeptemberNumbers", "SeptemberFunding", "OctoberNumbers", "OctoberFunding", "NovemberNumbers", "NovemberFunding", "DecemberNumbers", "DecemberFunding", "JanuaryNumbers", "JanuaryFunding", "FebruaryNumbers", "FebruaryFunding", "MarchNumbers", "MarchFunding", "TotalNumbers", "TotalFunding" };
 
-        public FundingSummaryReport(IFundingSummaryReportBuilder builder, IStreamProviderService streamProviderService, IDateTimeProvider dateTimeProvider, ILogger logger)
+        public FundingSummaryReport(IFundingSummaryReportBuilder builder, IStreamProviderService streamProviderService, IDateTimeProvider dateTimeProvider, ILogger logger, IExcelService excelService, IFilenameService filenameService)
         {
             _builder = builder;
             _streamProviderService = streamProviderService;
             _dateTimeProvider = dateTimeProvider;
             _logger = logger;
-            ReportFileName = "Funding Summary Report";
+            _excelService = excelService;
+            _filenameService = filenameService;
         }
 
-        public async Task GenerateReport(IEnumerable<ReportDataModel> data, INcsJobContextMessage ncsJobContextMessage, ZipArchive archive, CancellationToken cancellationToken)
+        public async Task<string[]> GenerateReport(IEnumerable<ReportDataModel> data, INcsJobContextMessage ncsJobContextMessage, CancellationToken cancellationToken)
         {
-            cancellationToken.ThrowIfCancellationRequested();
             _logger.LogInfo("Generating Funding Summary Report");
 
-            var fileName = GetFilename(ncsJobContextMessage.DssTimeStamp);
+            var fileName = _filenameService.GetFilename(ncsJobContextMessage.Ukprn, ncsJobContextMessage.JobId, ReportNameConstants.fundingSummary, ncsJobContextMessage.DssTimeStamp, OutputTypes.Excel);
             var manifestResourceStream = _streamProviderService.GetStreamFromTemplate(ReportTemplateConstants.FundingSummaryReport);
             var reportData = GetReportData(data, ncsJobContextMessage);
 
             Workbook workbook = new Workbook(manifestResourceStream);
             PopulateWorkbook(workbook, ncsJobContextMessage, reportData, cancellationToken);
 
-            using (var stream = _streamProviderService.GetStream(archive, $"{fileName}.xlsx"))
-            {
-                workbook.Save(stream, SaveFormat.Xlsx);
-            }
+            await _excelService.SaveWorkbookAsync(workbook, fileName, ncsJobContextMessage.DctContainer, cancellationToken);
 
             _logger.LogInfo("Funding Summary Report generated");
+
+            return new[] { fileName };
         }
 
         private void PopulateWorkbook(Workbook workbook, INcsJobContextMessage ncsJobContextMessage, IEnumerable<ReportDataModel> data, CancellationToken cancellationToken)
@@ -73,8 +74,8 @@ namespace ESFA.DC.NCS.ReportingService.Reports
             cells[SecurityClassificationCell].PutValue(headerData.SecurityClassification);
 
             // Body
-            WriteExcelRows(sheet, priorityGroupRows, _columns, 7);
-            WriteExcelRows(sheet, nonPriorityGroupRows, _columns, 15);
+            _excelService.WriteExcelRows(sheet, priorityGroupRows, _columns, 7);
+            _excelService.WriteExcelRows(sheet, nonPriorityGroupRows, _columns, 15);
 
             // Clean up blank rows ImportCustomObject inserts
             CleanUp(cells);

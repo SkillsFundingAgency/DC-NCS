@@ -19,6 +19,7 @@ namespace ESFA.DC.NCS.Service.Tasks
         private readonly IPersistenceService _persistenceService;
         private readonly IModelBuilder _modelBuilder;
         private readonly IStorageService _storageService;
+        private readonly IFilenameService _filenameService;
 
         public FundingTask(
             ILogger logger,
@@ -27,7 +28,8 @@ namespace ESFA.DC.NCS.Service.Tasks
             IFundingService fundingService,
             IPersistenceService persistenceService,
             IModelBuilder modelBuilder,
-            IStorageService storageService)
+            IStorageService storageService,
+            IFilenameService filenameService)
         {
             _logger = logger;
             _messageHelper = messageHelper;
@@ -36,6 +38,7 @@ namespace ESFA.DC.NCS.Service.Tasks
             _persistenceService = persistenceService;
             _modelBuilder = modelBuilder;
             _storageService = storageService;
+            _filenameService = filenameService;
         }
 
         public string TaskName => TaskNameConstants.FundingTaskName;
@@ -60,7 +63,8 @@ namespace ESFA.DC.NCS.Service.Tasks
 
                 await _persistenceService.PersistSubmissionAndFundingValuesAsync(ncsSubmission, fundingValues, ncsJobContextMessage, cancellationToken);
 
-                await _storageService.StoreAsJsonAsync(dssData, FileNameConstants.sourceData, ncsJobContextMessage, cancellationToken);
+                var fileName = _filenameService.GetFilename(ncsJobContextMessage.Ukprn, ncsJobContextMessage.JobId, FileNameConstants.sourceData, ncsJobContextMessage.DssTimeStamp, OutputTypes.Json);
+                await _storageService.StoreAsJsonAsync(dssData, fileName, ncsJobContextMessage, cancellationToken);
             }
             else
             {

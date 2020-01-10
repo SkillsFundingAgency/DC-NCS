@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Autofac.Features.AttributeFilters;
+using ESFA.DC.FileService.Interface;
 using ESFA.DC.IO.Interfaces;
 using ESFA.DC.NCS.Interfaces;
 using ESFA.DC.NCS.Interfaces.Service;
@@ -12,14 +13,12 @@ namespace ESFA.DC.NCS.Service.Services
     public class StorageService : IStorageService
     {
         private readonly IJsonSerializationService _jsonSerializationService;
-        private readonly IStreamableKeyValuePersistenceService _storage;
+        private readonly IFileService _fileService;
 
-        public StorageService(
-            IJsonSerializationService jsonSerializationService,
-            [KeyFilter(PersistenceStorageKeys.DctAzureStorage)] IStreamableKeyValuePersistenceService storage)
+        public StorageService(IJsonSerializationService jsonSerializationService, IFileService fileService)
         {
             _jsonSerializationService = jsonSerializationService;
-            _storage = storage;
+            _fileService = fileService;
         }
 
         public async Task StoreAsJsonAsync<T>(T data, string fileName, INcsJobContextMessage ncsJobContextMessage, CancellationToken cancellationToken)
@@ -27,8 +26,11 @@ namespace ESFA.DC.NCS.Service.Services
             using (var memoryStream = new MemoryStream())
             {
                 _jsonSerializationService.Serialize(data, memoryStream);
+            }
 
-                await _storage.SaveAsync($"{ncsJobContextMessage.Ukprn}_{ncsJobContextMessage.JobId}_{fileName}.json", memoryStream, cancellationToken);
+            using (var fileStream = await _fileService.OpenWriteStreamAsync(fileName, ncsJobContextMessage.DctContainer, cancellationToken))
+            {
+                _jsonSerializationService.Serialize(data, fileStream);
             }
         }
     }

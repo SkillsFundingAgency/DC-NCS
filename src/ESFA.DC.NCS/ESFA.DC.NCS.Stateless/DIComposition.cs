@@ -4,6 +4,10 @@ using Autofac;
 using Autofac.Features.AttributeFilters;
 using ESFA.DC.Auditing.Interface;
 using ESFA.DC.DateTimeProvider.Interface;
+using ESFA.DC.FileService;
+using ESFA.DC.FileService.Config;
+using ESFA.DC.FileService.Config.Interface;
+using ESFA.DC.FileService.Interface;
 using ESFA.DC.IO.AzureStorage;
 using ESFA.DC.IO.Interfaces;
 using ESFA.DC.JobContext.Interface;
@@ -179,7 +183,11 @@ namespace ESFA.DC.NCS.Stateless
             containerBuilder.RegisterType<FundingService>().As<IFundingService>();
             containerBuilder.RegisterType<MessageService>().As<IMessageService>();
             containerBuilder.RegisterType<StreamProviderService>().As<IStreamProviderService>();
-            containerBuilder.RegisterType<StorageService>().As<IStorageService>().WithAttributeFiltering();
+            containerBuilder.RegisterType<StorageService>().As<IStorageService>();
+            containerBuilder.RegisterType<CsvService>().As<ICsvService>();
+            containerBuilder.RegisterType<ExcelService>().As<IExcelService>();
+            containerBuilder.RegisterType<FileNameService>().As<IFilenameService>();
+            containerBuilder.RegisterType<ZipService>().As<IZipService>();
 
             // Ncs database
             containerBuilder.RegisterType<NcsContext>().As<INcsContext>();
@@ -263,6 +271,14 @@ namespace ESFA.DC.NCS.Stateless
                 .As<IStreamableKeyValuePersistenceService>()
                 .Keyed<IStreamableKeyValuePersistenceService>(PersistenceStorageKeys.NcsAzureStorage)
                 .SingleInstance();
+
+            var azureStorageFileServiceConfiguration = new AzureStorageFileServiceConfiguration()
+            {
+                ConnectionString = azureStorageOptions.DctAzureBlobConnectionString,
+            };
+
+            containerBuilder.RegisterInstance(azureStorageFileServiceConfiguration).As<IAzureStorageFileServiceConfiguration>();
+            containerBuilder.RegisterType<AzureStorageFileService>().As<IFileService>();
 
             return containerBuilder;
         }

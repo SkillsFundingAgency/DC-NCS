@@ -1,59 +1,45 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using CsvHelper;
 using ESFA.DC.Logging.Interfaces;
 using ESFA.DC.NCS.Interfaces;
-using ESFA.DC.NCS.Interfaces.IO;
+using ESFA.DC.NCS.Interfaces.Constants;
 using ESFA.DC.NCS.Interfaces.ReportingService;
+using ESFA.DC.NCS.Interfaces.Service;
 using ESFA.DC.NCS.Models.Reports;
 using ESFA.DC.NCS.ReportingService.Mappers;
 
 namespace ESFA.DC.NCS.ReportingService.Reports
 {
-    public class OccupancyReport : AbstractReportBuilder, IModelReport
+    public class OccupancyReport : IModelReport
     {
-        private readonly IStreamProviderService _streamProviderService;
+        private readonly ICsvService _csvService;
+        private readonly IFilenameService _filenameService;
         private readonly ILogger _logger;
 
-        public OccupancyReport(IStreamProviderService streamProviderService, ILogger logger)
+        public OccupancyReport(ICsvService csvService, IFilenameService filenameService, ILogger logger)
         {
-            _streamProviderService = streamProviderService;
+            _csvService = csvService;
+            _filenameService = filenameService;
             _logger = logger;
-            ReportFileName = "NCS Occupancy Report";
         }
 
-        public async Task GenerateReport(IEnumerable<ReportDataModel> data, INcsJobContextMessage ncsJobContextMessage, ZipArchive archive, CancellationToken cancellationToken)
+        public async Task<string[]> GenerateReport(IEnumerable<ReportDataModel> data, INcsJobContextMessage ncsJobContextMessage, CancellationToken cancellationToken)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-
             _logger.LogInfo("Generating Occupancy Report");
 
-            var fileName = GetFilename(ncsJobContextMessage.DssTimeStamp);
+            var fileName = _filenameService.GetFilename(ncsJobContextMessage.Ukprn, ncsJobContextMessage.JobId, ReportNameConstants.occupancy, ncsJobContextMessage.DssTimeStamp, OutputTypes.Csv);
 
             var reportData = GetOccupancyReportModel(data, ncsJobContextMessage.DssTimeStamp);
 
-            using (var stream = _streamProviderService.GetStream(archive, $"{fileName}.csv"))
-            {
-                CreateCsv(reportData, stream, cancellationToken);
-            }
+            await _csvService.WriteAsync<OccupancyReportModel, OccupancyReportMapper>(reportData, fileName, ncsJobContextMessage.DctContainer, cancellationToken);
 
             _logger.LogInfo("Occupancy Report generated");
-        }
 
-        private void CreateCsv(IEnumerable<OccupancyReportModel> reportData, Stream stream, CancellationToken cancellationToken)
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-
-            using (var textWriter = new StreamWriter(stream))
-            using (var csvWriter = new CsvWriter(textWriter))
-            {
-                WriteCsvRecords<OccupancyReportMapper, OccupancyReportModel>(csvWriter, reportData);
-            }
+            return new[] { fileName };
         }
 
         private IEnumerable<OccupancyReportModel> GetOccupancyReportModel(IEnumerable<ReportDataModel> data, DateTime submissionDate)

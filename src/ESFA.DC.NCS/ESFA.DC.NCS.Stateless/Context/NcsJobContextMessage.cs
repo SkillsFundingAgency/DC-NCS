@@ -26,6 +26,10 @@ namespace ESFA.DC.NCS.Stateless.Context
 
         public DateTime DssTimeStamp => DateTime.Parse(_jobContextMessage.KeyValuePairs["ExternalTimestamp"].ToString());
 
+        public string DssContainer => _jobContextMessage.KeyValuePairs["DssContainer"].ToString();
+
+        public string DctContainer => _jobContextMessage.KeyValuePairs[JobContextMessageKey.Container].ToString();
+
         public string ReportFileName => _jobContextMessage.KeyValuePairs[JobContextMessageKey.Filename].ToString();
 
         public string CollectionName => _jobContextMessage.KeyValuePairs["CollectionName"].ToString();
