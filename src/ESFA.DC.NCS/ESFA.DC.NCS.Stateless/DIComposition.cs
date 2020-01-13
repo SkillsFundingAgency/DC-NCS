@@ -6,10 +6,7 @@ using ESFA.DC.Auditing.Interface;
 using ESFA.DC.DateTimeProvider.Interface;
 using ESFA.DC.FileService;
 using ESFA.DC.FileService.Config;
-using ESFA.DC.FileService.Config.Interface;
 using ESFA.DC.FileService.Interface;
-using ESFA.DC.IO.AzureStorage;
-using ESFA.DC.IO.Interfaces;
 using ESFA.DC.JobContext.Interface;
 using ESFA.DC.JobContextManager;
 using ESFA.DC.JobContextManager.Interface;
@@ -183,11 +180,11 @@ namespace ESFA.DC.NCS.Stateless
             containerBuilder.RegisterType<FundingService>().As<IFundingService>();
             containerBuilder.RegisterType<MessageService>().As<IMessageService>();
             containerBuilder.RegisterType<StreamProviderService>().As<IStreamProviderService>();
-            containerBuilder.RegisterType<StorageService>().As<IStorageService>();
-            containerBuilder.RegisterType<CsvService>().As<ICsvService>();
-            containerBuilder.RegisterType<ExcelService>().As<IExcelService>();
+            containerBuilder.RegisterType<StorageService>().As<IStorageService>().WithAttributeFiltering();
+            containerBuilder.RegisterType<CsvService>().As<ICsvService>().WithAttributeFiltering();
+            containerBuilder.RegisterType<ExcelService>().As<IExcelService>().WithAttributeFiltering();
             containerBuilder.RegisterType<FileNameService>().As<IFilenameService>();
-            containerBuilder.RegisterType<ZipService>().As<IZipService>();
+            containerBuilder.RegisterType<ZipService>().As<IZipService>().WithAttributeFiltering();
 
             // Ncs database
             containerBuilder.RegisterType<NcsContext>().As<INcsContext>();
@@ -255,30 +252,22 @@ namespace ESFA.DC.NCS.Stateless
         private static ContainerBuilder RegisterAzureStorage(this ContainerBuilder containerBuilder, IAzureStorageOptions azureStorageOptions)
         {
             containerBuilder.Register(c =>
-                    new AzureStorageKeyValuePersistenceService(
-                        new AzureStorageKeyValuePersistenceConfig(
-                            azureStorageOptions.DctAzureBlobConnectionString,
-                            azureStorageOptions.DctAzureBlobContainerName)))
-                .As<IStreamableKeyValuePersistenceService>()
-                .Keyed<IStreamableKeyValuePersistenceService>(PersistenceStorageKeys.DctAzureStorage)
+                new AzureStorageFileService(
+                    new AzureStorageFileServiceConfiguration
+                    {
+                        ConnectionString = azureStorageOptions.DctAzureBlobConnectionString
+                    }))
+                .As<IFileService>()
                 .SingleInstance();
 
             containerBuilder.Register(c =>
-                    new AzureStorageKeyValuePersistenceService(
-                        new AzureStorageKeyValuePersistenceConfig(
-                            azureStorageOptions.NcsAzureBlobConnectionString,
-                            azureStorageOptions.NcsAzureBlobContainerName)))
-                .As<IStreamableKeyValuePersistenceService>()
-                .Keyed<IStreamableKeyValuePersistenceService>(PersistenceStorageKeys.NcsAzureStorage)
+                    new AzureStorageFileService(
+                        new AzureStorageFileServiceConfiguration
+                        {
+                            ConnectionString = azureStorageOptions.NcsAzureBlobConnectionString
+                        }))
+                .Keyed<IFileService>(PersistenceStorageKeys.DssAzureStorage)
                 .SingleInstance();
-
-            var azureStorageFileServiceConfiguration = new AzureStorageFileServiceConfiguration()
-            {
-                ConnectionString = azureStorageOptions.DctAzureBlobConnectionString,
-            };
-
-            containerBuilder.RegisterInstance(azureStorageFileServiceConfiguration).As<IAzureStorageFileServiceConfiguration>();
-            containerBuilder.RegisterType<AzureStorageFileService>().As<IFileService>();
 
             return containerBuilder;
         }

@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Autofac.Features.AttributeFilters;
-using ESFA.DC.IO.Interfaces;
+using ESFA.DC.FileService.Interface;
 using ESFA.DC.NCS.Interfaces;
 using ESFA.DC.NCS.Interfaces.ReportingService;
 using ESFA.DC.NCS.Interfaces.Service;
@@ -15,21 +15,21 @@ namespace ESFA.DC.NCS.ReportingService
         private readonly IEnumerable<IModelReport> _ncsReports;
         private readonly IZipService _zipService;
         private readonly IFilenameService _filenameService;
-        private readonly IStreamableKeyValuePersistenceService _dctStorage;
-        private readonly IStreamableKeyValuePersistenceService _ncsStorage;
+        private readonly IFileService _fileService;
+        private readonly IFileService _dssFileService;
 
         public ReportingController(
             IEnumerable<IModelReport> ncsReports,
             IZipService zipService,
             IFilenameService filenameService,
-            [KeyFilter(PersistenceStorageKeys.DctAzureStorage)] IStreamableKeyValuePersistenceService dctStorage,
-            [KeyFilter(PersistenceStorageKeys.NcsAzureStorage)] IStreamableKeyValuePersistenceService ncsStorage)
+            IFileService fileService,
+            [KeyFilter(PersistenceStorageKeys.DssAzureStorage)] IFileService dssFileService)
         {
             _ncsReports = ncsReports;
             _zipService = zipService;
             _filenameService = filenameService;
-            _dctStorage = dctStorage;
-            _ncsStorage = ncsStorage;
+            _fileService = fileService;
+            _dssFileService = dssFileService;
         }
 
         public async Task ProduceReportsAsync(IEnumerable<ReportDataModel> reportData, INcsJobContextMessage ncsJobContextMessage, CancellationToken cancellationToken)
@@ -45,6 +45,19 @@ namespace ESFA.DC.NCS.ReportingService
             var zipName = _filenameService.GetZipName(ncsJobContextMessage.Ukprn, ncsJobContextMessage.JobId, ncsJobContextMessage.ReportFileName);
 
             await _zipService.CreateZipAsync(zipName, reportOutputFileNames, ncsJobContextMessage.DctContainer, cancellationToken);
+
+            await CopyZipToDss(zipName, ncsJobContextMessage, cancellationToken);
+        }
+
+        private async Task CopyZipToDss(string dctZipName, INcsJobContextMessage ncsJobContextMessage, CancellationToken cancellationToken)
+        {
+            using (var fileStream = await _dssFileService.OpenWriteStreamAsync($"{ncsJobContextMessage.ReportFileName}.zip", ncsJobContextMessage.DssContainer, cancellationToken))
+            {
+                using (var readStream = await _fileService.OpenReadStreamAsync(dctZipName, ncsJobContextMessage.DctContainer, cancellationToken))
+                {
+                    await readStream.CopyToAsync(fileStream, 8096, cancellationToken);
+                }
+            }
         }
     }
 }
