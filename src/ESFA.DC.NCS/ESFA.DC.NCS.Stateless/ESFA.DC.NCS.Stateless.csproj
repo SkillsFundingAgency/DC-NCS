@@ -86,17 +86,20 @@
     <Reference Include="ESFA.DC.CrossLoad.Message, Version=0.1.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ESFA.DC.CrossLoad.0.1.4-beta0001\lib\netstandard2.0\ESFA.DC.CrossLoad.Message.dll</HintPath>
     </Reference>
+    <Reference Include="ESFA.DC.CsvService, Version=0.1.28.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ESFA.DC.CsvService.0.1.28-beta0001\lib\netstandard2.0\ESFA.DC.CsvService.dll</HintPath>
+    </Reference>
     <Reference Include="ESFA.DC.DateTimeProvider, Version=0.1.6.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ESFA.DC.DateTimeProvider.0.1.6-beta0001\lib\netstandard2.0\ESFA.DC.DateTimeProvider.dll</HintPath>
     </Reference>
     <Reference Include="ESFA.DC.DateTimeProvider.Interface, Version=0.1.6.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ESFA.DC.DateTimeProvider.Interface.0.1.6-beta0001\lib\netstandard2.0\ESFA.DC.DateTimeProvider.Interface.dll</HintPath>
     </Reference>
-    <Reference Include="ESFA.DC.FileService, Version=0.1.26.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ESFA.DC.FileService.0.1.26-beta0001\lib\netstandard2.0\ESFA.DC.FileService.dll</HintPath>
+    <Reference Include="ESFA.DC.FileService, Version=0.1.28.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ESFA.DC.FileService.0.1.28-beta0001\lib\netstandard2.0\ESFA.DC.FileService.dll</HintPath>
     </Reference>
-    <Reference Include="ESFA.DC.FileService.Interface, Version=0.1.24.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ESFA.DC.FileService.Interface.0.1.24-beta0001\lib\netstandard2.0\ESFA.DC.FileService.Interface.dll</HintPath>
+    <Reference Include="ESFA.DC.FileService.Interface, Version=0.1.27.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ESFA.DC.FileService.Interface.0.1.27-beta0001\lib\netstandard2.0\ESFA.DC.FileService.Interface.dll</HintPath>
     </Reference>
     <Reference Include="ESFA.DC.IO.AzureStorage, Version=0.1.15.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ESFA.DC.IO.AzureStorage.0.1.15-beta0001\lib\netstandard2.0\ESFA.DC.IO.AzureStorage.dll</HintPath>

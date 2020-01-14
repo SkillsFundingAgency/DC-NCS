@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using Autofac.Features.AttributeFilters;
 using ESFA.DC.FileService.Interface;
 using ESFA.DC.NCS.Interfaces;
 using ESFA.DC.NCS.Interfaces.Service;
@@ -14,7 +15,7 @@ namespace ESFA.DC.NCS.Service.Services
 
         public StorageService(
             IJsonSerializationService jsonSerializationService,
-            IFileService fileService)
+            [KeyFilter(PersistenceStorageKeys.DctAzureStorage)] IFileService fileService)
         {
             _jsonSerializationService = jsonSerializationService;
             _fileService = fileService;

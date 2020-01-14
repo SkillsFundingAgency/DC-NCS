@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ESFA.DC.CsvService.Interface;
 using ESFA.DC.Logging.Interfaces;
 using ESFA.DC.NCS.Interfaces;
 using ESFA.DC.NCS.Interfaces.Service;
@@ -34,7 +35,7 @@ namespace ESFA.DC.NCS.ReportingService.Tests.Reports
 
             var loggerMock = new Mock<ILogger>();
             var fileNameServiceMock = new Mock<IFilenameService>();
-            var csvServiceMock = new Mock<ICsvService>();
+            var csvServiceMock = new Mock<ICsvFileService>();
 
             fileNameServiceMock.Setup(fns => fns.GetFilename(ukprn, jobId, reportName, It.IsAny<DateTime>(), OutputTypes.Csv)).Returns(filename);
 
@@ -46,9 +47,9 @@ namespace ESFA.DC.NCS.ReportingService.Tests.Reports
             result.Should().HaveCount(1);
         }
 
-        private OccupancyReport NewService(ICsvService csvService = null, IFilenameService filenameService = null, ILogger logger = null)
+        private OccupancyReport NewService(ICsvFileService csvFileService = null, IFilenameService filenameService = null, ILogger logger = null)
         {
-            return new OccupancyReport(csvService, filenameService, logger);
+            return new OccupancyReport(csvFileService, filenameService, logger);
         }
     }
 }

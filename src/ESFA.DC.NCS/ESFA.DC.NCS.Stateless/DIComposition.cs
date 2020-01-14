@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Autofac;
 using Autofac.Features.AttributeFilters;
 using ESFA.DC.Auditing.Interface;
+using ESFA.DC.CsvService;
+using ESFA.DC.CsvService.Interface;
 using ESFA.DC.DateTimeProvider.Interface;
 using ESFA.DC.FileService;
 using ESFA.DC.FileService.Config;
@@ -181,10 +183,14 @@ namespace ESFA.DC.NCS.Stateless
             containerBuilder.RegisterType<MessageService>().As<IMessageService>();
             containerBuilder.RegisterType<StreamProviderService>().As<IStreamProviderService>();
             containerBuilder.RegisterType<StorageService>().As<IStorageService>().WithAttributeFiltering();
-            containerBuilder.RegisterType<CsvService>().As<ICsvService>().WithAttributeFiltering();
             containerBuilder.RegisterType<ExcelService>().As<IExcelService>().WithAttributeFiltering();
             containerBuilder.RegisterType<FileNameService>().As<IFilenameService>();
             containerBuilder.RegisterType<ZipService>().As<IZipService>().WithAttributeFiltering();
+            containerBuilder.Register(c =>
+            {
+                var csvFileService = new CsvFileService(c.ResolveKeyed<IFileService>(PersistenceStorageKeys.DctAzureStorage));
+                return csvFileService;
+            }).As<ICsvFileService>();
 
             // Ncs database
             containerBuilder.RegisterType<NcsContext>().As<INcsContext>();
@@ -257,7 +263,7 @@ namespace ESFA.DC.NCS.Stateless
                     {
                         ConnectionString = azureStorageOptions.DctAzureBlobConnectionString
                     }))
-                .As<IFileService>()
+                .Keyed<IFileService>(PersistenceStorageKeys.DctAzureStorage)
                 .SingleInstance();
 
             containerBuilder.Register(c =>

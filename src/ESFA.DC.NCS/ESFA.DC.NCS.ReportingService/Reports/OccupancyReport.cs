@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO.Compression;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ESFA.DC.CsvService.Interface;
 using ESFA.DC.Logging.Interfaces;
 using ESFA.DC.NCS.Interfaces;
 using ESFA.DC.NCS.Interfaces.Constants;
@@ -16,13 +16,13 @@ namespace ESFA.DC.NCS.ReportingService.Reports
 {
     public class OccupancyReport : IModelReport
     {
-        private readonly ICsvService _csvService;
+        private readonly ICsvFileService _csvFileService;
         private readonly IFilenameService _filenameService;
         private readonly ILogger _logger;
 
-        public OccupancyReport(ICsvService csvService, IFilenameService filenameService, ILogger logger)
+        public OccupancyReport(ICsvFileService csvFileService, IFilenameService filenameService, ILogger logger)
         {
-            _csvService = csvService;
+            _csvFileService = csvFileService;
             _filenameService = filenameService;
             _logger = logger;
         }
@@ -31,11 +31,11 @@ namespace ESFA.DC.NCS.ReportingService.Reports
         {
             _logger.LogInfo("Generating Occupancy Report");
 
-            var fileName = _filenameService.GetFilename(ncsJobContextMessage.Ukprn, ncsJobContextMessage.JobId, ReportNameConstants.occupancy, ncsJobContextMessage.DssTimeStamp, OutputTypes.Csv);
+            var fileName = _filenameService.GetFilename(ncsJobContextMessage.Ukprn, ncsJobContextMessage.JobId, ReportNameConstants.Occupancy, ncsJobContextMessage.DssTimeStamp, OutputTypes.Csv);
 
             var reportData = GetOccupancyReportModel(data, ncsJobContextMessage.DssTimeStamp);
 
-            await _csvService.WriteAsync<OccupancyReportModel, OccupancyReportMapper>(reportData, fileName, ncsJobContextMessage.DctContainer, cancellationToken);
+            await _csvFileService.WriteAsync<OccupancyReportModel, OccupancyReportMapper>(reportData, fileName, ncsJobContextMessage.DctContainer, cancellationToken);
 
             _logger.LogInfo("Occupancy Report generated");
 

@@ -4,7 +4,9 @@ using System.IO.Compression;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Autofac.Features.AttributeFilters;
 using ESFA.DC.FileService.Interface;
+using ESFA.DC.NCS.Interfaces;
 using ESFA.DC.NCS.Interfaces.Service;
 
 namespace ESFA.DC.NCS.Service
@@ -13,7 +15,7 @@ namespace ESFA.DC.NCS.Service
     {
         private readonly IFileService _fileService;
 
-        public ZipService(IFileService fileService)
+        public ZipService([KeyFilter(PersistenceStorageKeys.DctAzureStorage)] IFileService fileService)
         {
             _fileService = fileService;
         }

@@ -44,7 +44,7 @@ namespace ESFA.DC.NCS.ReportingService.Reports
         {
             _logger.LogInfo("Generating Funding Summary Report");
 
-            var fileName = _filenameService.GetFilename(ncsJobContextMessage.Ukprn, ncsJobContextMessage.JobId, ReportNameConstants.fundingSummary, ncsJobContextMessage.DssTimeStamp, OutputTypes.Excel);
+            var fileName = _filenameService.GetFilename(ncsJobContextMessage.Ukprn, ncsJobContextMessage.JobId, ReportNameConstants.FundingSummary, ncsJobContextMessage.DssTimeStamp, OutputTypes.Excel);
             var manifestResourceStream = _streamProviderService.GetStreamFromTemplate(ReportTemplateConstants.FundingSummaryReport);
             var reportData = GetReportData(data, ncsJobContextMessage);
 

@@ -15,20 +15,20 @@ namespace ESFA.DC.NCS.ReportingService
         private readonly IEnumerable<IModelReport> _ncsReports;
         private readonly IZipService _zipService;
         private readonly IFilenameService _filenameService;
-        private readonly IFileService _fileService;
+        private readonly IFileService _dctFileService;
         private readonly IFileService _dssFileService;
 
         public ReportingController(
             IEnumerable<IModelReport> ncsReports,
             IZipService zipService,
             IFilenameService filenameService,
-            IFileService fileService,
+            [KeyFilter(PersistenceStorageKeys.DctAzureStorage)] IFileService dctFileService,
             [KeyFilter(PersistenceStorageKeys.DssAzureStorage)] IFileService dssFileService)
         {
             _ncsReports = ncsReports;
             _zipService = zipService;
             _filenameService = filenameService;
-            _fileService = fileService;
+            _dctFileService = dctFileService;
             _dssFileService = dssFileService;
         }
 
@@ -53,7 +53,7 @@ namespace ESFA.DC.NCS.ReportingService
         {
             using (var fileStream = await _dssFileService.OpenWriteStreamAsync($"{ncsJobContextMessage.ReportFileName}.zip", ncsJobContextMessage.DssContainer, cancellationToken))
             {
-                using (var readStream = await _fileService.OpenReadStreamAsync(dctZipName, ncsJobContextMessage.DctContainer, cancellationToken))
+                using (var readStream = await _dctFileService.OpenReadStreamAsync(dctZipName, ncsJobContextMessage.DctContainer, cancellationToken))
                 {
                     await readStream.CopyToAsync(fileStream, 8096, cancellationToken);
                 }

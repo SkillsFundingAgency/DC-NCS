@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Aspose.Cells;
+using Autofac.Features.AttributeFilters;
 using ESFA.DC.FileService.Interface;
+using ESFA.DC.NCS.Interfaces;
 using ESFA.DC.NCS.Interfaces.Service;
 
 namespace ESFA.DC.NCS.Service
@@ -13,7 +15,7 @@ namespace ESFA.DC.NCS.Service
     {
         private readonly IFileService _fileService;
 
-        public ExcelService(IFileService fileService)
+        public ExcelService([KeyFilter(PersistenceStorageKeys.DctAzureStorage)] IFileService fileService)
         {
             _fileService = fileService;
         }

@@ -2,8 +2,8 @@
 {
     public class ReportNameConstants
     {
-        public const string fundingSummary = "Funding Summary Report";
+        public const string FundingSummary = "Funding Summary Report";
 
-        public const string occupancy = "NCS Occupancy Report";
+        public const string Occupancy = "NCS Occupancy Report";
     }
 }
