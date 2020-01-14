@@ -1,13 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.IO;
-using System.IO.Compression;
 using System.Threading;
 using System.Threading.Tasks;
 using Autofac.Features.AttributeFilters;
-using ESFA.DC.IO.Interfaces;
+using ESFA.DC.FileService.Interface;
 using ESFA.DC.NCS.Interfaces;
-using ESFA.DC.NCS.Interfaces.Constants;
 using ESFA.DC.NCS.Interfaces.ReportingService;
+using ESFA.DC.NCS.Interfaces.Service;
 using ESFA.DC.NCS.Models.Reports;
 
 namespace ESFA.DC.NCS.ReportingService
@@ -15,37 +13,50 @@ namespace ESFA.DC.NCS.ReportingService
     public class ReportingController : IReportingController
     {
         private readonly IEnumerable<IModelReport> _ncsReports;
-        private readonly IStreamableKeyValuePersistenceService _dctStorage;
-        private readonly IStreamableKeyValuePersistenceService _ncsStorage;
+        private readonly IZipService _zipService;
+        private readonly IFilenameService _filenameService;
+        private readonly IFileService _dctFileService;
+        private readonly IFileService _dssFileService;
 
         public ReportingController(
             IEnumerable<IModelReport> ncsReports,
-            [KeyFilter(PersistenceStorageKeys.DctAzureStorage)] IStreamableKeyValuePersistenceService dctStorage,
-            [KeyFilter(PersistenceStorageKeys.NcsAzureStorage)] IStreamableKeyValuePersistenceService ncsStorage)
+            IZipService zipService,
+            IFilenameService filenameService,
+            [KeyFilter(PersistenceStorageKeys.DctAzureStorage)] IFileService dctFileService,
+            [KeyFilter(PersistenceStorageKeys.DssAzureStorage)] IFileService dssFileService)
         {
             _ncsReports = ncsReports;
-            _dctStorage = dctStorage;
-            _ncsStorage = ncsStorage;
+            _zipService = zipService;
+            _filenameService = filenameService;
+            _dctFileService = dctFileService;
+            _dssFileService = dssFileService;
         }
 
         public async Task ProduceReportsAsync(IEnumerable<ReportDataModel> reportData, INcsJobContextMessage ncsJobContextMessage, CancellationToken cancellationToken)
         {
-            using (var memoryStream = new MemoryStream())
+            var reportOutputFileNames = new List<string>();
+
+            foreach (var report in _ncsReports)
             {
-                using (var archive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
+                var reportsGenerated = await report.GenerateReport(reportData, ncsJobContextMessage, cancellationToken);
+                reportOutputFileNames.AddRange(reportsGenerated);
+            }
+
+            var zipName = _filenameService.GetZipName(ncsJobContextMessage.Ukprn, ncsJobContextMessage.JobId, ncsJobContextMessage.ReportFileName);
+
+            await _zipService.CreateZipAsync(zipName, reportOutputFileNames, ncsJobContextMessage.DctContainer, cancellationToken);
+
+            await CopyZipToDss(zipName, ncsJobContextMessage, cancellationToken);
+        }
+
+        private async Task CopyZipToDss(string dctZipName, INcsJobContextMessage ncsJobContextMessage, CancellationToken cancellationToken)
+        {
+            using (var fileStream = await _dssFileService.OpenWriteStreamAsync($"{ncsJobContextMessage.ReportFileName}.zip", ncsJobContextMessage.DssContainer, cancellationToken))
+            {
+                using (var readStream = await _dctFileService.OpenReadStreamAsync(dctZipName, ncsJobContextMessage.DctContainer, cancellationToken))
                 {
-                    cancellationToken.ThrowIfCancellationRequested();
-
-                    foreach (var report in _ncsReports)
-                    {
-                        await report.GenerateReport(reportData, ncsJobContextMessage, archive, cancellationToken);
-                    }
-
-                    cancellationToken.ThrowIfCancellationRequested();
+                    await readStream.CopyToAsync(fileStream, 8096, cancellationToken);
                 }
-
-                await _dctStorage.SaveAsync($"{ncsJobContextMessage.Ukprn}_{ncsJobContextMessage.JobId}_{FileNameConstants.Reports}.zip", memoryStream, cancellationToken);
-                await _ncsStorage.SaveAsync($"{ncsJobContextMessage.ReportFileName}.zip", memoryStream, cancellationToken);
             }
         }
     }

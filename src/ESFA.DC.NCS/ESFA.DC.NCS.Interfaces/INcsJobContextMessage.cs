@@ -16,6 +16,10 @@ namespace ESFA.DC.NCS.Interfaces
 
         DateTime DssTimeStamp { get; }
 
+        string DctContainer { get; }
+
+        string DssContainer { get; }
+
         string ReportFileName { get; }
 
         string CollectionName { get; }

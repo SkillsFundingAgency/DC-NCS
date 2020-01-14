@@ -3,6 +3,6 @@
     public enum PersistenceStorageKeys
     {
         DctAzureStorage,
-        NcsAzureStorage,
+        DssAzureStorage,
     }
 }

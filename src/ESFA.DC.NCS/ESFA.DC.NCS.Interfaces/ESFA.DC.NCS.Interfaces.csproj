@@ -13,6 +13,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Aspose.Cells" Version="19.2.0" />
+    <PackageReference Include="CsvHelper" Version="12.2.3" />
     <PackageReference Include="ESFA.DC.CrossLoad" Version="0.1.4-beta0001" />
     <PackageReference Include="ESFA.DC.JobContext.Interface" Version="0.2.4-beta0001" />
     <PackageReference Include="ESFA.DC.JobContextManager" Version="0.2.6-beta0001" />
