@@ -16,9 +16,7 @@
     <Parameter Name="OrgDbConnectionString" DefaultValue="OrgDbConnectionString" />
     <Parameter Name="AsposeLicence" DefaultValue="AsposeLicence" />
     <Parameter Name="DctAzureBlobConnectionString" DefaultValue="DctAzureBlobConnectionString" />
-    <Parameter Name="DctAzureBlobContainerName" DefaultValue="DctAzureBlobContainerName" />
     <Parameter Name="NcsAzureBlobConnectionString" DefaultValue="NcsAzureBlobConnectionString" />
-    <Parameter Name="NcsAzureBlobContainerName" DefaultValue="NcsAzureBlobContainerName" />
   </Parameters>
   <!-- Import the ServiceManifest from the ServicePackage. The ServiceManifestName and ServiceManifestVersion 
        should match the Name and Version attributes of the ServiceManifest element defined in the 
@@ -52,9 +50,7 @@
           </Section>
           <Section Name="AzureStorageOptions">
             <Parameter Name="DctAzureBlobConnectionString" Value="[DctAzureBlobConnectionString]" />
-            <Parameter Name="DctAzureBlobContainerName" Value="[DctAzureBlobContainerName]" />
             <Parameter Name="NcsAzureBlobConnectionString" Value="[NcsAzureBlobConnectionString]" />
-            <Parameter Name="NcsAzureBlobContainerName" Value="[NcsAzureBlobContainerName]" />
           </Section>
         </Settings>
       </ConfigOverride>
