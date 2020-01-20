@@ -33,7 +33,7 @@ namespace ESFA.DC.NCS.ReportingService.Reports
 
             var fileName = _filenameService.GetFilename(ncsJobContextMessage.Ukprn, ncsJobContextMessage.JobId, ReportNameConstants.Occupancy, ncsJobContextMessage.DssTimeStamp, OutputTypes.Csv);
 
-            var reportData = GetOccupancyReportModel(data, ncsJobContextMessage.DssTimeStamp);
+            var reportData = GetOccupancyReportModel(data, ncsJobContextMessage);
 
             await _csvFileService.WriteAsync<OccupancyReportModel, OccupancyReportMapper>(reportData, fileName, ncsJobContextMessage.DctContainer, cancellationToken);
 
@@ -42,11 +42,10 @@ namespace ESFA.DC.NCS.ReportingService.Reports
             return new[] { fileName };
         }
 
-        private IEnumerable<OccupancyReportModel> GetOccupancyReportModel(IEnumerable<ReportDataModel> data, DateTime submissionDate)
+        private IEnumerable<OccupancyReportModel> GetOccupancyReportModel(IEnumerable<ReportDataModel> data, INcsJobContextMessage ncsJobContextMessage)
         {
-            // TODO: Need clarification on the date to filter on - waiting for collection dates
             return data
-                    .Where(d => d.OutcomeEffectiveDate <= submissionDate)
+                    .Where(d => d.OutcomeEffectiveDate <= ncsJobContextMessage.DssTimeStamp)
                     .OrderBy(d => d.CustomerId)
                     .ThenBy(d => d.ActionPlanId)
                     .ThenBy(d => d.OutcomeId)

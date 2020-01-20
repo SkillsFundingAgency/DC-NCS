@@ -4,6 +4,6 @@ namespace ESFA.DC.NCS.Interfaces.Service
 {
     public interface IMessageHelper
     {
-        DateTime CalculateFundingYearStart(DateTime submissionDate);
+        DateTime CalculateFundingYearStart(INcsJobContextMessage ncsJobContextMessage);
     }
 }
