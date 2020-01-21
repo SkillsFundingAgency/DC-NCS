@@ -7,6 +7,7 @@ using ESFA.DC.NCS.Interfaces.Constants;
 using ESFA.DC.NCS.Interfaces.DataService;
 using ESFA.DC.NCS.Interfaces.ReportingService;
 using ESFA.DC.NCS.Models.Reports;
+using ESFA.DC.NCS.ReportingService.Constants;
 
 namespace ESFA.DC.NCS.ReportingService.Builders
 {

@@ -1,4 +1,4 @@
-﻿namespace ESFA.DC.NCS.Interfaces.Constants
+﻿namespace ESFA.DC.NCS.ReportingService.Constants
 {
     public class FundingSummaryReportConstants
     {
