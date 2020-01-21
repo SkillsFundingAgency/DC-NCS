@@ -116,6 +116,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Builders\FundingSummaryReportBuilder.cs" />
+    <Compile Include="Constants\FundingSummaryReportConstants.cs" />
     <Compile Include="IO\StreamProviderService.cs" />
     <Compile Include="Mappers\OccupancyReportMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

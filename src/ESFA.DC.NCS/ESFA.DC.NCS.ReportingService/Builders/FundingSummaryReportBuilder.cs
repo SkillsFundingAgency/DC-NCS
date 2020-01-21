@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using ESFA.DC.DateTimeProvider.Interface;
 using ESFA.DC.NCS.Interfaces;
 using ESFA.DC.NCS.Interfaces.Constants;
 using ESFA.DC.NCS.Interfaces.DataService;
 using ESFA.DC.NCS.Interfaces.ReportingService;
 using ESFA.DC.NCS.Models.Reports;
-using ESFA.DC.NCS.Models.Reports.FundingSummaryReport;
+using ESFA.DC.NCS.ReportingService.Constants;
 
 namespace ESFA.DC.NCS.ReportingService.Builders
 {
@@ -15,24 +15,27 @@ namespace ESFA.DC.NCS.ReportingService.Builders
     {
         private readonly IOrgDataService _orgDataService;
         private readonly ISourceQueryService _sourceQueryService;
+        private readonly IDateTimeProvider _dateTimeProvider;
 
-        public FundingSummaryReportBuilder(IOrgDataService orgDataService, ISourceQueryService sourceQueryService)
+        public FundingSummaryReportBuilder(IOrgDataService orgDataService, ISourceQueryService sourceQueryService, IDateTimeProvider dateTimeProvider)
         {
             _orgDataService = orgDataService;
             _sourceQueryService = sourceQueryService;
+            _dateTimeProvider = dateTimeProvider;
         }
 
-        public FundingSummaryReportHeaderModel BuildHeaderData(INcsJobContextMessage ncsJobContextMessage, CancellationToken cancellationToken)
+        public IDictionary<string, string> BuildHeaderData(INcsJobContextMessage ncsJobContextMessage, CancellationToken cancellationToken)
         {
             var lastNcsSubmissionDate = _sourceQueryService.GetLastNcsSubmissionDate(ncsJobContextMessage, cancellationToken);
+            var providerName = _orgDataService.GetProviderName(ncsJobContextMessage.Ukprn, cancellationToken);
+            var lastNcsUpdate = lastNcsSubmissionDate != null ? lastNcsSubmissionDate.Value.ToString("dd/MM/yyyy hh:mm:ss") : "Unknown";
 
-            return new FundingSummaryReportHeaderModel
+            return new Dictionary<string, string>()
             {
-                ProviderName = _orgDataService.GetProviderName(ncsJobContextMessage.Ukprn, cancellationToken),
-                TouchpointId = ncsJobContextMessage.TouchpointId,
-                LastNcsUpdate = lastNcsSubmissionDate != null
-                                ? lastNcsSubmissionDate.Value.ToString("dd/MM/yyyy hh:mm:ss")
-                                : "Unknown"
+                { FundingSummaryReportConstants.ProviderName, providerName },
+                { FundingSummaryReportConstants.TouchpointId, ncsJobContextMessage.TouchpointId },
+                { FundingSummaryReportConstants.LastNcsUpdate, lastNcsUpdate },
+                { FundingSummaryReportConstants.SecurityClassification, FundingSummaryReportConstants.OfficialSensitive }
             };
         }
 
@@ -46,7 +49,7 @@ namespace ESFA.DC.NCS.ReportingService.Builders
                 BuildRow(priorityGroupRecords, OutcomeTypesConstants.CareerManagement, "Career Management Priority Group Outcomes"),
                 BuildRow(priorityGroupRecords, OutcomeTypesConstants.JobsAndLearning[0], "Sustainable Employment Priority Group Outcomes"),
                 BuildRow(priorityGroupRecords, OutcomeTypesConstants.JobsAndLearning[1], "Accredited Learning Priority Group Outcomes"),
-                BuildRow(priorityGroupRecords, OutcomeTypesConstants.JobsAndLearning[2], "Career Progression Priority Group Outcomes"),
+                BuildRow(priorityGroupRecords, OutcomeTypesConstants.JobsAndLearning[2], "Career Progression Priority Group Outcomes")
             };
         }
 
@@ -60,7 +63,18 @@ namespace ESFA.DC.NCS.ReportingService.Builders
                 BuildRow(nonPriorityGroupRecords, OutcomeTypesConstants.CareerManagement, "Career Management Non-Priority Group Outcomes"),
                 BuildRow(nonPriorityGroupRecords, OutcomeTypesConstants.JobsAndLearning[0], "Sustainable Employment Non-Priority Group Outcomes"),
                 BuildRow(nonPriorityGroupRecords, OutcomeTypesConstants.JobsAndLearning[1], "Accredited Learning Non-Priority Group Outcomes"),
-                BuildRow(nonPriorityGroupRecords, OutcomeTypesConstants.JobsAndLearning[2], "Career Progression Non-Priority Group Outcomes"),
+                BuildRow(nonPriorityGroupRecords, OutcomeTypesConstants.JobsAndLearning[2], "Career Progression Non-Priority Group Outcomes")
+            };
+        }
+
+        public IDictionary<string, string> BuildFooterData(CancellationToken cancellationToken)
+        {
+            var dateTimeNowUtc = _dateTimeProvider.GetNowUtc();
+            var dateTimeNowUk = _dateTimeProvider.ConvertUtcToUk(dateTimeNowUtc).ToString("dd/MM/yyyy hh:mm:ss");
+
+            return new Dictionary<string, string>()
+            {
+                { FundingSummaryReportConstants.ReportGeneratedAt, dateTimeNowUk }
             };
         }
 

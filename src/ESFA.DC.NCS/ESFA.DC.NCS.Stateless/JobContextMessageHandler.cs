@@ -54,6 +54,7 @@ namespace ESFA.DC.NCS.Stateless
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message, ex);
+                throw;
             }
 
             _logger.LogDebug($"Completed NCS Service for jobId:{jobContextMessage.JobId}");

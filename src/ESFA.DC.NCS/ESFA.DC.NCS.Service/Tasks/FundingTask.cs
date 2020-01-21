@@ -49,7 +49,7 @@ namespace ESFA.DC.NCS.Service.Tasks
 
             Debug.WriteLine("Entered Funding Task");
 
-            var fundingYearStartDate = _messageHelper.CalculateFundingYearStart(ncsJobContextMessage.DssTimeStamp);
+            var fundingYearStartDate = _messageHelper.CalculateFundingYearStart(ncsJobContextMessage);
             var dssData = await _dssDataRetrievalService.GetDataForTouchpoint(ncsJobContextMessage.TouchpointId, ncsJobContextMessage.DssTimeStamp, fundingYearStartDate);
 
             if (dssData.Any())

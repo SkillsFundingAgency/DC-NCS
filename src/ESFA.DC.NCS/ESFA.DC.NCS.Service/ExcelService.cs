@@ -38,7 +38,7 @@ namespace ESFA.DC.NCS.Service
                 firstRow,
                 0,
                 rows.Count(),
-                true,
+                false,
                 "dd/mm/yyyy",
                 false);
         }
