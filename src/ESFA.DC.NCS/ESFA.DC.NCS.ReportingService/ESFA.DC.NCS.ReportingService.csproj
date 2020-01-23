@@ -115,13 +115,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Builders\FundingSummaryReportBuilder.cs" />
+    <Compile Include="Reports\FundingSummary\FundingSummaryReportBuilder.cs" />
     <Compile Include="Constants\FundingSummaryReportConstants.cs" />
     <Compile Include="IO\StreamProviderService.cs" />
     <Compile Include="Mappers\OccupancyReportMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReportingController.cs" />
-    <Compile Include="Reports\FundingSummaryReport.cs" />
+    <Compile Include="Reports\FundingSummary\FundingSummaryReport.cs" />
     <Compile Include="Reports\OccupancyReport.cs" />
   </ItemGroup>
   <ItemGroup>

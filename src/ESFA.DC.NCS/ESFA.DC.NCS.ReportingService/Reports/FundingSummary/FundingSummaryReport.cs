@@ -10,8 +10,9 @@ using ESFA.DC.NCS.Interfaces.IO;
 using ESFA.DC.NCS.Interfaces.ReportingService;
 using ESFA.DC.NCS.Interfaces.Service;
 using ESFA.DC.NCS.Models.Reports;
+using ESFA.DC.NCS.Models.Reports.FundingSummaryReport;
 
-namespace ESFA.DC.NCS.ReportingService.Reports
+namespace ESFA.DC.NCS.ReportingService.Reports.FundingSummary
 {
     public class FundingSummaryReport : IModelReport
     {
@@ -20,7 +21,6 @@ namespace ESFA.DC.NCS.ReportingService.Reports
         private readonly ILogger _logger;
         private readonly IExcelService _excelService;
         private readonly IFilenameService _filenameService;
-        private readonly string[] _columns = { "OutcomeName", "AprilNumbers", "AprilFunding", "MayNumbers", "MayFunding", "JuneNumbers", "JuneFunding", "JulyNumbers", "JulyFunding", "AugustNumbers", "AugustFunding", "SeptemberNumbers", "SeptemberFunding", "OctoberNumbers", "OctoberFunding", "NovemberNumbers", "NovemberFunding", "DecemberNumbers", "DecemberFunding", "JanuaryNumbers", "JanuaryFunding", "FebruaryNumbers", "FebruaryFunding", "MarchNumbers", "MarchFunding", "TotalNumbers", "TotalFunding" };
 
         public FundingSummaryReport(IFundingSummaryReportBuilder builder, IStreamProviderService streamProviderService, ILogger logger, IExcelService excelService, IFilenameService filenameService)
         {
@@ -52,6 +52,7 @@ namespace ESFA.DC.NCS.ReportingService.Reports
         private void PopulateWorkbook(Workbook workbook, INcsJobContextMessage ncsJobContextMessage, IEnumerable<ReportDataModel> data, CancellationToken cancellationToken)
         {
             var headerData = _builder.BuildHeaderData(ncsJobContextMessage, cancellationToken);
+            var columnHeaders = _builder.BuildColumnHeaders(ncsJobContextMessage, cancellationToken);
             var priorityGroupRows = _builder.BuildPriorityGroupRows(data);
             var nonPriorityGroupRows = _builder.BuildNonPriorityGroupRows(data);
             var footerData = _builder.BuildFooterData(cancellationToken);
@@ -62,8 +63,9 @@ namespace ESFA.DC.NCS.ReportingService.Reports
             RenderDictionary(sheet, 0, headerData);
 
             // Body
-            _excelService.WriteExcelRows(sheet, priorityGroupRows, _columns, 7);
-            _excelService.WriteExcelRows(sheet, nonPriorityGroupRows, _columns, 13);
+            RenderColumnHeaders(sheet, 5, columnHeaders);
+            _excelService.WriteExcelRows(sheet, priorityGroupRows, 7);
+            _excelService.WriteExcelRows(sheet, nonPriorityGroupRows, 13);
 
             // Footer
             RenderDictionary(sheet, 21, footerData);
@@ -83,6 +85,40 @@ namespace ESFA.DC.NCS.ReportingService.Reports
 
                 row++;
             }
+        }
+
+        private void RenderColumnHeaders(Worksheet worksheet, int row, FundingSummaryColumnHeaders fundingSummaryColumnHeaders)
+        {
+            worksheet.Cells.ImportObjectArray(
+                new object[]
+                {
+                    fundingSummaryColumnHeaders.April,
+                    null,
+                    fundingSummaryColumnHeaders.May,
+                    null,
+                    fundingSummaryColumnHeaders.June,
+                    null,
+                    fundingSummaryColumnHeaders.July,
+                    null,
+                    fundingSummaryColumnHeaders.August,
+                    null,
+                    fundingSummaryColumnHeaders.September,
+                    null,
+                    fundingSummaryColumnHeaders.October,
+                    null,
+                    fundingSummaryColumnHeaders.November,
+                    null,
+                    fundingSummaryColumnHeaders.December,
+                    null,
+                    fundingSummaryColumnHeaders.January,
+                    null,
+                    fundingSummaryColumnHeaders.February,
+                    null,
+                    fundingSummaryColumnHeaders.March
+                },
+                row,
+                1,
+                false);
         }
 
         private IEnumerable<ReportDataModel> GetReportData(IEnumerable<ReportDataModel> data, INcsJobContextMessage ncsJobContextMessage)

@@ -7,9 +7,10 @@ using ESFA.DC.NCS.Interfaces.Constants;
 using ESFA.DC.NCS.Interfaces.DataService;
 using ESFA.DC.NCS.Interfaces.ReportingService;
 using ESFA.DC.NCS.Models.Reports;
+using ESFA.DC.NCS.Models.Reports.FundingSummaryReport;
 using ESFA.DC.NCS.ReportingService.Constants;
 
-namespace ESFA.DC.NCS.ReportingService.Builders
+namespace ESFA.DC.NCS.ReportingService.Reports.FundingSummary
 {
     public class FundingSummaryReportBuilder : IFundingSummaryReportBuilder
     {
@@ -36,6 +37,28 @@ namespace ESFA.DC.NCS.ReportingService.Builders
                 { FundingSummaryReportConstants.TouchpointId, ncsJobContextMessage.TouchpointId },
                 { FundingSummaryReportConstants.LastNcsUpdate, lastNcsUpdate },
                 { FundingSummaryReportConstants.SecurityClassification, FundingSummaryReportConstants.OfficialSensitive }
+            };
+        }
+
+        public FundingSummaryColumnHeaders BuildColumnHeaders(INcsJobContextMessage ncsJobContextMessage, CancellationToken cancellationToken)
+        {
+            var startYear = ncsJobContextMessage.CollectionYear.ToString().Substring(0, 2);
+            var endYear = ncsJobContextMessage.CollectionYear.ToString().Substring(2, 2);
+
+            return new FundingSummaryColumnHeaders()
+            {
+                April = $"{FundingSummaryReportConstants.April}-{startYear}",
+                May = $"{FundingSummaryReportConstants.May}-{startYear}",
+                June = $"{FundingSummaryReportConstants.June}-{startYear}",
+                July = $"{FundingSummaryReportConstants.July}-{startYear}",
+                August = $"{FundingSummaryReportConstants.August}-{startYear}",
+                September = $"{FundingSummaryReportConstants.September}-{startYear}",
+                October = $"{FundingSummaryReportConstants.October}-{startYear}",
+                November = $"{FundingSummaryReportConstants.November}-{startYear}",
+                December = $"{FundingSummaryReportConstants.December}-{startYear}",
+                January = $"{FundingSummaryReportConstants.January}-{endYear}",
+                February = $"{FundingSummaryReportConstants.February}-{endYear}",
+                March = $"{FundingSummaryReportConstants.March}-{endYear}"
             };
         }
 

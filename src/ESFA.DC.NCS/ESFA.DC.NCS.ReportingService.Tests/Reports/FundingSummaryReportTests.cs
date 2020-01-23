@@ -11,7 +11,7 @@ using ESFA.DC.NCS.Interfaces.IO;
 using ESFA.DC.NCS.Interfaces.ReportingService;
 using ESFA.DC.NCS.Interfaces.Service;
 using ESFA.DC.NCS.Models.Reports;
-using ESFA.DC.NCS.ReportingService.Reports;
+using ESFA.DC.NCS.ReportingService.Reports.FundingSummary;
 using FluentAssertions;
 using Moq;
 using Xunit;
