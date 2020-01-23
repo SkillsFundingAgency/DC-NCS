@@ -11,6 +11,7 @@ using ESFA.DC.NCS.Interfaces.IO;
 using ESFA.DC.NCS.Interfaces.ReportingService;
 using ESFA.DC.NCS.Interfaces.Service;
 using ESFA.DC.NCS.Models.Reports;
+using ESFA.DC.NCS.Models.Reports.FundingSummaryReport;
 using ESFA.DC.NCS.ReportingService.Reports.FundingSummary;
 using FluentAssertions;
 using Moq;
@@ -25,6 +26,7 @@ namespace ESFA.DC.NCS.ReportingService.Tests.Reports
         public async Task GenerateReport_Success()
         {
             var reportData = new List<ReportDataModel>();
+            var columnHeaders = new FundingSummaryColumnHeaders();
             var headerData = new Dictionary<string, string>();
             var fundingSummaryData = new List<FundingSummaryReportModel>();
             var footerData = new Dictionary<string, string>();
@@ -50,6 +52,7 @@ namespace ESFA.DC.NCS.ReportingService.Tests.Reports
 
             var builderMock = new Mock<IFundingSummaryReportBuilder>();
             builderMock.Setup(bm => bm.BuildHeaderData(It.IsAny<INcsJobContextMessage>(), CancellationToken.None)).Returns(headerData);
+            builderMock.Setup(bm => bm.BuildColumnHeaders(It.IsAny<INcsJobContextMessage>(), CancellationToken.None)).Returns(columnHeaders);
             builderMock.Setup(bm => bm.BuildPriorityGroupRows(It.IsAny<IEnumerable<ReportDataModel>>())).Returns(fundingSummaryData);
             builderMock.Setup(bm => bm.BuildNonPriorityGroupRows(It.IsAny<IEnumerable<ReportDataModel>>())).Returns(fundingSummaryData);
             builderMock.Setup(bm => bm.BuildFooterData(CancellationToken.None)).Returns(footerData);
