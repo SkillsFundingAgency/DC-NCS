@@ -9,6 +9,6 @@ namespace ESFA.DC.NCS.Interfaces.Service
     {
         Task SaveWorkbookAsync(Workbook workbook, string fileName, string container, CancellationToken cancellationToken);
 
-        void WriteExcelRows<TModel>(Worksheet sheet, IEnumerable<TModel> rows, string[] columns, int firstRow) where TModel : class;
+        void WriteExcelRows<TModel>(Worksheet sheet, IEnumerable<TModel> rows, int firstRow) where TModel : class;
     }
 }

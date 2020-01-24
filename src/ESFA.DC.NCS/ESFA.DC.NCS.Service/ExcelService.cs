@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Aspose.Cells;
@@ -28,19 +28,11 @@ namespace ESFA.DC.NCS.Service
             }
         }
 
-        public void WriteExcelRows<TModel>(Worksheet sheet, IEnumerable<TModel> rows, string[] columns, int firstRow)
+        public void WriteExcelRows<TModel>(Worksheet sheet, IEnumerable<TModel> rows, int firstRow)
             where TModel : class
         {
-            sheet.Cells.ImportCustomObjects(
-                rows.ToList(),
-                columns,
-                false,
-                firstRow,
-                0,
-                rows.Count(),
-                false,
-                "dd/mm/yyyy",
-                false);
+            ImportTableOptions tableOptions = new ImportTableOptions { IsFieldNameShown = false, InsertRows = false };
+            sheet.Cells.ImportCustomObjects((ICollection)rows, firstRow, 0, tableOptions);
         }
     }
 }
