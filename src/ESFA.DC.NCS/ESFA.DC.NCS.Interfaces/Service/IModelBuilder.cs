@@ -9,7 +9,7 @@ namespace ESFA.DC.NCS.Interfaces.Service
     {
         IEnumerable<NcsSubmission> BuildNcsSubmission(IEnumerable<DssDataModel> dssData, INcsJobContextMessage ncsJobContextMessage);
 
-        IEnumerable<ReportDataModel> BuildReportData(IEnumerable<NcsSubmission> submissionData, IEnumerable<FundingValue> fundingValue);
+        ICollection<ReportDataModel> BuildReportData(IEnumerable<NcsSubmission> submissionData, IEnumerable<FundingValue> fundingValue);
 
         Source BuildSourceData(INcsJobContextMessage ncsJobContextMessage);
     }

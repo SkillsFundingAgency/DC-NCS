@@ -25,5 +25,7 @@ namespace ESFA.DC.NCS.Interfaces
         string CollectionName { get; }
 
         int CollectionYear { get; }
+
+        DateTime ReportEndDate { get; }
     }
 }

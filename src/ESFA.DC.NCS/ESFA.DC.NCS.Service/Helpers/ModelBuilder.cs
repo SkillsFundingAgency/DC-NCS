@@ -42,7 +42,7 @@ namespace ESFA.DC.NCS.Service.Helpers
                 });
         }
 
-        public IEnumerable<ReportDataModel> BuildReportData(IEnumerable<NcsSubmission> submissionData, IEnumerable<FundingValue> fundingValue)
+        public ICollection<ReportDataModel> BuildReportData(IEnumerable<NcsSubmission> submissionData, IEnumerable<FundingValue> fundingValue)
         {
             return submissionData
                 .Join(
@@ -51,8 +51,6 @@ namespace ESFA.DC.NCS.Service.Helpers
                     fv => new { fv.TouchpointId, fv.ActionPlanId, fv.CustomerId, fv.OutcomeId },
                     (sd, fv) => new ReportDataModel
                     {
-                        Ukprn = sd.Ukprn,
-                        TouchpointId = sd.TouchpointId,
                         CustomerId = sd.CustomerId,
                         DateOfBirth = sd.DateOfBirth,
                         HomePostCode = sd.HomePostCode,
@@ -64,13 +62,9 @@ namespace ESFA.DC.NCS.Service.Helpers
                         OutcomeType = sd.OutcomeType,
                         OutcomeEffectiveDate = sd.OutcomeEffectiveDate,
                         OutcomePriorityCustomer = sd.OutcomePriorityCustomer,
-                        CollectionYear = sd.CollectionYear,
-                        DssJobId = sd.DssJobId,
-                        DssTimestamp = sd.DssTimestamp,
-                        CreatedOn = sd.CreatedOn,
                         Value = fv.Value,
                         Period = fv.Period
-                    });
+                    }).ToList();
         }
 
         public Source BuildSourceData(INcsJobContextMessage ncsJobContextMessage)
