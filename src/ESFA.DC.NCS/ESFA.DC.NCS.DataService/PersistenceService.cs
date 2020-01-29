@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ESFA.DC.DateTimeProvider.Interface;
 using ESFA.DC.Logging.Interfaces;
 using ESFA.DC.NCS.EF;
 using ESFA.DC.NCS.EF.Interfaces;
@@ -15,11 +16,13 @@ namespace ESFA.DC.NCS.DataService
     {
         private readonly Func<INcsContext> _ncsContext;
         private readonly ILogger _logger;
+        private readonly IDateTimeProvider _dateTimeProvider;
 
-        public PersistenceService(Func<INcsContext> ncsContext, ILogger logger)
+        public PersistenceService(Func<INcsContext> ncsContext, ILogger logger, IDateTimeProvider dateTimeProvider)
         {
             _ncsContext = ncsContext;
             _logger = logger;
+            _dateTimeProvider = dateTimeProvider;
         }
 
         public async Task PersistSubmissionAndFundingValuesAsync(IEnumerable<NcsSubmission> ncsSubmissions, IEnumerable<FundingValue> fundingValues, INcsJobContextMessage ncsJobContextMessage, CancellationToken cancellationToken)
@@ -37,8 +40,17 @@ namespace ESFA.DC.NCS.DataService
             }
         }
 
-        public async Task PersistSourceDataAsync(Source sourceData, CancellationToken cancellationToken)
+        public async Task PersistSourceDataAsync(INcsJobContextMessage ncsJobContextMessage, CancellationToken cancellationToken)
         {
+            var sourceData = new Source()
+            {
+                Ukprn = ncsJobContextMessage.Ukprn,
+                TouchpointId = ncsJobContextMessage.TouchpointId,
+                SubmissionDate = ncsJobContextMessage.DssTimeStamp,
+                DssJobId = ncsJobContextMessage.DssJobId,
+                CreatedOn = _dateTimeProvider.GetNowUtc()
+            };
+
             using (var context = _ncsContext())
             {
                 context.Sources.Add(sourceData);

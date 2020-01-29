@@ -9,6 +9,6 @@ namespace ESFA.DC.NCS.Interfaces.DataService
     {
         Task PersistSubmissionAndFundingValuesAsync(IEnumerable<NcsSubmission> ncsSubmissions, IEnumerable<FundingValue> fundingValues, INcsJobContextMessage ncsJobContextMessage, CancellationToken cancellationToken);
 
-        Task PersistSourceDataAsync(Source sourceData, CancellationToken cancellationToken);
+        Task PersistSourceDataAsync(INcsJobContextMessage ncsJobContextMessage, CancellationToken cancellationToken);
     }
 }
