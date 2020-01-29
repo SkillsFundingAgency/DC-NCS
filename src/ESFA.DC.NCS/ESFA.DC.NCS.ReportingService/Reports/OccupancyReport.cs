@@ -45,7 +45,7 @@ namespace ESFA.DC.NCS.ReportingService.Reports
         private IEnumerable<OccupancyReportModel> GetOccupancyReportModel(IEnumerable<ReportDataModel> data, INcsJobContextMessage ncsJobContextMessage)
         {
             return data
-                    .Where(d => d.OutcomeEffectiveDate <= ncsJobContextMessage.DssTimeStamp)
+                    .Where(d => d.OutcomeEffectiveDate <= ncsJobContextMessage.ReportEndDate)
                     .OrderBy(d => d.CustomerId)
                     .ThenBy(d => d.ActionPlanId)
                     .ThenBy(d => d.OutcomeId)

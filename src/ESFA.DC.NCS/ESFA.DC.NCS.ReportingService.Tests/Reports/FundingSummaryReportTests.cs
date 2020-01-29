@@ -40,6 +40,7 @@ namespace ESFA.DC.NCS.ReportingService.Tests.Reports
 
             var ncsMessageMock = new Mock<INcsJobContextMessage>();
             ncsMessageMock.Setup(nmm => nmm.DssTimeStamp).Returns(new DateTime(2020, 03, 31));
+            ncsMessageMock.Setup(nmm => nmm.ReportEndDate).Returns(new DateTime(2020, 03, 31));
             ncsMessageMock.Setup(nmm => nmm.Ukprn).Returns(ukprn);
             ncsMessageMock.Setup(nmm => nmm.JobId).Returns(jobId);
             ncsMessageMock.Setup(nmm => nmm.DctContainer).Returns(container);

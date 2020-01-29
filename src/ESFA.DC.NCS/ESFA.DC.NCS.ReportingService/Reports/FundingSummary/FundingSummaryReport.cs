@@ -123,7 +123,7 @@ namespace ESFA.DC.NCS.ReportingService.Reports.FundingSummary
 
         private IEnumerable<ReportDataModel> GetReportData(IEnumerable<ReportDataModel> data, INcsJobContextMessage ncsJobContextMessage)
         {
-            return data.Where(d => d.OutcomeEffectiveDate <= ncsJobContextMessage.DssTimeStamp);
+            return data.Where(d => d.OutcomeEffectiveDate <= ncsJobContextMessage.ReportEndDate);
         }
     }
 }

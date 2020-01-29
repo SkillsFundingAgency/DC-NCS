@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using ESFA.DC.DateTimeProvider.Interface;
 using ESFA.DC.Logging.Interfaces;
 using ESFA.DC.NCS.EF;
 using ESFA.DC.NCS.EF.Interfaces;
@@ -256,9 +257,9 @@ namespace ESFA.DC.NCS.DataService.Tests
             };
         }
 
-        private PersistenceService NewService(Func<INcsContext> ncsContext = null, ILogger logger = null)
+        private PersistenceService NewService(Func<INcsContext> ncsContext = null, ILogger logger = null, IDateTimeProvider dateTimeProvider = null)
         {
-            return new PersistenceService(ncsContext, logger);
+            return new PersistenceService(ncsContext, logger, dateTimeProvider);
         }
     }
 }

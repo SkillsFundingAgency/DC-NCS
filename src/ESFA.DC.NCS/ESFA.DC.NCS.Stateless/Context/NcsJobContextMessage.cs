@@ -35,5 +35,7 @@ namespace ESFA.DC.NCS.Stateless.Context
         public string CollectionName => _jobContextMessage.KeyValuePairs["CollectionName"].ToString();
 
         public int CollectionYear => int.Parse(_jobContextMessage.KeyValuePairs["CollectionYear"].ToString());
+
+        public DateTime ReportEndDate => DateTime.Parse(_jobContextMessage.KeyValuePairs["ReportEndDate"].ToString());
     }
 }
