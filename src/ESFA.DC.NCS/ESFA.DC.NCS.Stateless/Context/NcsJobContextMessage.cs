@@ -30,7 +30,7 @@ namespace ESFA.DC.NCS.Stateless.Context
 
         public string DctContainer => _jobContextMessage.KeyValuePairs[JobContextMessageKey.Container].ToString();
 
-        public string ReportFileName => _jobContextMessage.KeyValuePairs[JobContextMessageKey.Filename].ToString();
+        public string ReportFileName => _jobContextMessage.KeyValuePairs["ReportFileName"].ToString();
 
         public string CollectionName => _jobContextMessage.KeyValuePairs["CollectionName"].ToString();
 

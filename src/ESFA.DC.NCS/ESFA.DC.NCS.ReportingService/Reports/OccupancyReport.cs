@@ -45,26 +45,34 @@ namespace ESFA.DC.NCS.ReportingService.Reports
         private IEnumerable<OccupancyReportModel> GetOccupancyReportModel(IEnumerable<ReportDataModel> data, INcsJobContextMessage ncsJobContextMessage)
         {
             return data
-                    .Where(d => d.OutcomeEffectiveDate <= ncsJobContextMessage.ReportEndDate)
-                    .OrderBy(d => d.CustomerId)
-                    .ThenBy(d => d.ActionPlanId)
-                    .ThenBy(d => d.OutcomeId)
-                    .Select(d => new OccupancyReportModel()
-                    {
-                        CustomerId = d.CustomerId,
-                        DateOfBirth = d.DateOfBirth,
-                        HomePostCode = d.HomePostCode,
-                        ActionPlanId = d.ActionPlanId,
-                        SessionDate = d.SessionDate,
-                        SubContractorId = d.SubContractorId,
-                        AdviserName = d.AdviserName,
-                        OutcomeId = d.OutcomeId,
-                        OutcomeType = d.OutcomeType,
-                        OutcomeEffectiveDate = d.OutcomeEffectiveDate,
-                        OutcomePriorityCustomer = d.OutcomePriorityCustomer,
-                        Period = d.Period,
-                        Value = d.Value
-                    });
+                .Where(d => d.OutcomeEffectiveDate <= ncsJobContextMessage.ReportEndDate)
+                .OrderBy(d => d.CustomerId)
+                .ThenBy(d => d.ActionPlanId)
+                .ThenBy(d => d.OutcomeId)
+                .Select(d => new OccupancyReportModel()
+                {
+                    CustomerId = d.CustomerId,
+                    DateOfBirth = d.DateOfBirth,
+                    HomePostCode = d.HomePostCode,
+                    ActionPlanId = d.ActionPlanId,
+                    SessionDate = d.SessionDate,
+                    SubContractorId = d.SubContractorId,
+                    AdviserName = d.AdviserName,
+                    OutcomeId = d.OutcomeId,
+                    OutcomeType = d.OutcomeType,
+                    OutcomeEffectiveDate = d.OutcomeEffectiveDate,
+                    OutcomePriorityCustomer = d.OutcomePriorityCustomer,
+                    PeriodValues = BuildPeriodValues(d)
+                });
+        }
+
+        private int[] BuildPeriodValues(ReportDataModel reportData)
+        {
+            var periodValues = new[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
+            periodValues[reportData.OutcomeEffectiveDate.Month - 1] = reportData.Value;
+
+            return periodValues;
         }
     }
 }
