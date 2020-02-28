@@ -18,13 +18,13 @@ namespace ESFA.DC.NCS.ReportingService.Reports
     {
         private readonly ICsvFileService _csvFileService;
         private readonly IFilenameService _filenameService;
-        private readonly IClassMapFactory<OccupancyReportMapper, OccupancyReportModel> _classMapFactory;
+        private readonly IClassMapFactory<OccupancyReportModel> _classMapFactory;
         private readonly ILogger _logger;
 
         public OccupancyReport(
             ICsvFileService csvFileService,
             IFilenameService filenameService,
-            IClassMapFactory<OccupancyReportMapper, OccupancyReportModel> classMapFactory,
+            IClassMapFactory<OccupancyReportModel> classMapFactory,
             ILogger logger)
         {
             _csvFileService = csvFileService;

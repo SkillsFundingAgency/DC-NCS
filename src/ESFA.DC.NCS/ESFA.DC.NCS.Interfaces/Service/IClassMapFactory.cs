@@ -2,9 +2,8 @@
 
 namespace ESFA.DC.NCS.Interfaces.Service
 {
-    public interface IClassMapFactory<out TClassMap, TModel>
-        where TClassMap : ClassMap<TModel>
+    public interface IClassMapFactory<TModel>
     {
-        TClassMap Build(INcsJobContextMessage ncsJobContextMessage);
+        ClassMap<TModel> Build(INcsJobContextMessage ncsJobContextMessage);
     }
 }

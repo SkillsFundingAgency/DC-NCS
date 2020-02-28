@@ -183,7 +183,7 @@ namespace ESFA.DC.NCS.Stateless
             containerBuilder.RegisterType<ExcelService>().As<IExcelService>().WithAttributeFiltering();
             containerBuilder.RegisterType<FileNameService>().As<IFilenameService>();
             containerBuilder.RegisterType<ZipService>().As<IZipService>().WithAttributeFiltering();
-            containerBuilder.RegisterType<OccupancyReportMapperFactory>().As<IClassMapFactory<OccupancyReportMapper, OccupancyReportModel>>();
+            containerBuilder.RegisterType<OccupancyReportMapperFactory>().As<IClassMapFactory<OccupancyReportModel>>();
             containerBuilder.Register(c =>
             {
                 var csvFileService = new CsvFileService(c.ResolveKeyed<IFileService>(PersistenceStorageKeys.DctAzureStorage));

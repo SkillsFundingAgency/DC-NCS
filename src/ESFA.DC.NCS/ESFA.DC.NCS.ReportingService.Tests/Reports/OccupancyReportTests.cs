@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using CsvHelper.Configuration;
 using ESFA.DC.CsvService.Interface;
 using ESFA.DC.Logging.Interfaces;
 using ESFA.DC.NCS.Interfaces;
@@ -36,8 +37,8 @@ namespace ESFA.DC.NCS.ReportingService.Tests.Reports
             ncsMessageMock.Setup(nmm => nmm.JobId).Returns(jobId);
             ncsMessageMock.Setup(nmm => nmm.DctContainer).Returns(container);
 
-            var classMapFactoryMock = new Mock<IClassMapFactory<OccupancyReportMapper, OccupancyReportModel>>();
-            classMapFactoryMock.Setup(cmf => cmf.Build(ncsMessageMock.Object)).Returns(new OccupancyReportMapper(collectionYear));
+            var classMapFactoryMock = new Mock<IClassMapFactory<OccupancyReportModel>>();
+            classMapFactoryMock.Setup(cmf => cmf.Build(ncsMessageMock.Object)).Returns(Mock.Of<ClassMap<OccupancyReportModel>>());
 
             var loggerMock = new Mock<ILogger>();
             var fileNameServiceMock = new Mock<IFilenameService>();
@@ -53,7 +54,7 @@ namespace ESFA.DC.NCS.ReportingService.Tests.Reports
             result.Should().HaveCount(1);
         }
 
-        private OccupancyReport NewService(ICsvFileService csvFileService = null, IFilenameService filenameService = null, IClassMapFactory<OccupancyReportMapper, OccupancyReportModel> mapFactory = null, ILogger logger = null)
+        private OccupancyReport NewService(ICsvFileService csvFileService = null, IFilenameService filenameService = null, IClassMapFactory<OccupancyReportModel> mapFactory = null, ILogger logger = null)
         {
             return new OccupancyReport(csvFileService, filenameService, mapFactory, logger);
         }
