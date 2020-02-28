@@ -18,12 +18,18 @@ namespace ESFA.DC.NCS.ReportingService.Reports
     {
         private readonly ICsvFileService _csvFileService;
         private readonly IFilenameService _filenameService;
+        private readonly IClassMapFactory<OccupancyReportMapper, OccupancyReportModel> _classMapFactory;
         private readonly ILogger _logger;
 
-        public OccupancyReport(ICsvFileService csvFileService, IFilenameService filenameService, ILogger logger)
+        public OccupancyReport(
+            ICsvFileService csvFileService,
+            IFilenameService filenameService,
+            IClassMapFactory<OccupancyReportMapper, OccupancyReportModel> classMapFactory,
+            ILogger logger)
         {
             _csvFileService = csvFileService;
             _filenameService = filenameService;
+            _classMapFactory = classMapFactory;
             _logger = logger;
         }
 
@@ -35,7 +41,9 @@ namespace ESFA.DC.NCS.ReportingService.Reports
 
             var reportData = GetOccupancyReportModel(data, ncsJobContextMessage);
 
-            await _csvFileService.WriteAsync<OccupancyReportModel, OccupancyReportMapper>(reportData, fileName, ncsJobContextMessage.DctContainer, cancellationToken);
+            var mapper = _classMapFactory.Build(ncsJobContextMessage);
+
+            await _csvFileService.WriteAsync(reportData, fileName, ncsJobContextMessage.DctContainer, cancellationToken, classMap: mapper);
 
             _logger.LogInfo("Occupancy Report generated");
 

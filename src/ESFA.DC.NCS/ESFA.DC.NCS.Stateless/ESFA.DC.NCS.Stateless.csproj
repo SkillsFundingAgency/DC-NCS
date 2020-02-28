@@ -86,8 +86,8 @@
     <Reference Include="ESFA.DC.CrossLoad.Message, Version=0.1.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ESFA.DC.CrossLoad.0.1.4-beta0001\lib\netstandard2.0\ESFA.DC.CrossLoad.Message.dll</HintPath>
     </Reference>
-    <Reference Include="ESFA.DC.CsvService, Version=0.1.28.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ESFA.DC.CsvService.0.1.28-beta0001\lib\netstandard2.0\ESFA.DC.CsvService.dll</HintPath>
+    <Reference Include="ESFA.DC.CsvService, Version=0.1.33.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ESFA.DC.CsvService.0.1.33-beta0001\lib\netstandard2.0\ESFA.DC.CsvService.dll</HintPath>
     </Reference>
     <Reference Include="ESFA.DC.DateTimeProvider, Version=0.1.6.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ESFA.DC.DateTimeProvider.0.1.6-beta0001\lib\netstandard2.0\ESFA.DC.DateTimeProvider.dll</HintPath>

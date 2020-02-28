@@ -45,8 +45,8 @@
     <Reference Include="DotNetZip, Version=1.13.4.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
       <HintPath>..\packages\DotNetZip.1.13.4\lib\net40\DotNetZip.dll</HintPath>
     </Reference>
-    <Reference Include="ESFA.DC.CsvService, Version=0.1.28.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ESFA.DC.CsvService.0.1.28-beta0001\lib\netstandard2.0\ESFA.DC.CsvService.dll</HintPath>
+    <Reference Include="ESFA.DC.CsvService, Version=0.1.33.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ESFA.DC.CsvService.0.1.33-beta0001\lib\netstandard2.0\ESFA.DC.CsvService.dll</HintPath>
     </Reference>
     <Reference Include="ESFA.DC.DateTimeProvider, Version=0.1.6.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ESFA.DC.DateTimeProvider.0.1.6-beta0001\lib\netstandard2.0\ESFA.DC.DateTimeProvider.dll</HintPath>

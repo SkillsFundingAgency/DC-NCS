@@ -8,6 +8,7 @@ using ESFA.DC.Logging.Interfaces;
 using ESFA.DC.NCS.Interfaces;
 using ESFA.DC.NCS.Interfaces.Service;
 using ESFA.DC.NCS.Models.Reports;
+using ESFA.DC.NCS.ReportingService.Mappers;
 using ESFA.DC.NCS.ReportingService.Reports;
 using FluentAssertions;
 using Moq;
@@ -25,6 +26,7 @@ namespace ESFA.DC.NCS.ReportingService.Tests.Reports
             var reportName = "NCS Occupancy Report";
             var filename = $"12345678/100/NCS Occupancy Report-{new DateTime():yyyyMMdd-HHmmss}.csv";
             var container = "container";
+            var collectionYear= 1920;
             var reportData = new List<ReportDataModel>();
 
             var ncsMessageMock = new Mock<INcsJobContextMessage>();
@@ -34,13 +36,16 @@ namespace ESFA.DC.NCS.ReportingService.Tests.Reports
             ncsMessageMock.Setup(nmm => nmm.JobId).Returns(jobId);
             ncsMessageMock.Setup(nmm => nmm.DctContainer).Returns(container);
 
+            var classMapFactoryMock = new Mock<IClassMapFactory<OccupancyReportMapper, OccupancyReportModel>>();
+            classMapFactoryMock.Setup(cmf => cmf.Build(ncsMessageMock.Object)).Returns(new OccupancyReportMapper(collectionYear));
+
             var loggerMock = new Mock<ILogger>();
             var fileNameServiceMock = new Mock<IFilenameService>();
             var csvServiceMock = new Mock<ICsvFileService>();
 
             fileNameServiceMock.Setup(fns => fns.GetFilename(ukprn, jobId, reportName, It.IsAny<DateTime>(), OutputTypes.Csv)).Returns(filename);
 
-            var report = NewService(csvServiceMock.Object, fileNameServiceMock.Object, loggerMock.Object);
+            var report = NewService(csvServiceMock.Object, fileNameServiceMock.Object, classMapFactoryMock.Object, loggerMock.Object);
 
             var result = await report.GenerateReport(reportData, ncsMessageMock.Object, CancellationToken.None);
 
@@ -48,9 +53,9 @@ namespace ESFA.DC.NCS.ReportingService.Tests.Reports
             result.Should().HaveCount(1);
         }
 
-        private OccupancyReport NewService(ICsvFileService csvFileService = null, IFilenameService filenameService = null, ILogger logger = null)
+        private OccupancyReport NewService(ICsvFileService csvFileService = null, IFilenameService filenameService = null, IClassMapFactory<OccupancyReportMapper, OccupancyReportModel> mapFactory = null, ILogger logger = null)
         {
-            return new OccupancyReport(csvFileService, filenameService, logger);
+            return new OccupancyReport(csvFileService, filenameService, mapFactory, logger);
         }
     }
 }
