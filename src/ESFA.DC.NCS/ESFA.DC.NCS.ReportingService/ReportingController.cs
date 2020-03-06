@@ -7,6 +7,7 @@ using ESFA.DC.NCS.Interfaces;
 using ESFA.DC.NCS.Interfaces.ReportingService;
 using ESFA.DC.NCS.Interfaces.Service;
 using ESFA.DC.NCS.Models.Reports;
+using ESFA.DC.NCS.ReportingService.Constants;
 
 namespace ESFA.DC.NCS.ReportingService
 {
@@ -42,7 +43,7 @@ namespace ESFA.DC.NCS.ReportingService
                 reportOutputFileNames.AddRange(reportsGenerated);
             }
 
-            var zipName = _filenameService.GetZipName(ncsJobContextMessage.Ukprn, ncsJobContextMessage.JobId, "Reports");
+            var zipName = _filenameService.GetZipName(ncsJobContextMessage.Ukprn, ncsJobContextMessage.JobId, ReportConstants.DctZipName);
 
             await _zipService.CreateZipAsync(zipName, reportOutputFileNames, ncsJobContextMessage.DctContainer, cancellationToken);
 
