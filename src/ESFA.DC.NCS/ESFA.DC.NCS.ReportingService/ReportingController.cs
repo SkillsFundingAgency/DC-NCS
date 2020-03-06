@@ -51,7 +51,7 @@ namespace ESFA.DC.NCS.ReportingService
 
         private async Task CopyZipToDss(string dctZipName, INcsJobContextMessage ncsJobContextMessage, CancellationToken cancellationToken)
         {
-            using (var fileStream = await _dssFileService.OpenWriteStreamAsync($"{ncsJobContextMessage.ReportFileName}", ncsJobContextMessage.DssContainer, cancellationToken))
+            using (var fileStream = await _dssFileService.OpenWriteStreamAsync(ncsJobContextMessage.ReportFileName, ncsJobContextMessage.DssContainer, cancellationToken))
             {
                 using (var readStream = await _dctFileService.OpenReadStreamAsync(dctZipName, ncsJobContextMessage.DctContainer, cancellationToken))
                 {
