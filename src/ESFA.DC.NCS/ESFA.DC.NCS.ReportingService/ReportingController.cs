@@ -42,7 +42,7 @@ namespace ESFA.DC.NCS.ReportingService
                 reportOutputFileNames.AddRange(reportsGenerated);
             }
 
-            var zipName = _filenameService.GetZipName(ncsJobContextMessage.Ukprn, ncsJobContextMessage.JobId, ncsJobContextMessage.ReportFileName);
+            var zipName = _filenameService.GetZipName(ncsJobContextMessage.Ukprn, ncsJobContextMessage.JobId, "Reports");
 
             await _zipService.CreateZipAsync(zipName, reportOutputFileNames, ncsJobContextMessage.DctContainer, cancellationToken);
 
@@ -51,7 +51,7 @@ namespace ESFA.DC.NCS.ReportingService
 
         private async Task CopyZipToDss(string dctZipName, INcsJobContextMessage ncsJobContextMessage, CancellationToken cancellationToken)
         {
-            using (var fileStream = await _dssFileService.OpenWriteStreamAsync($"{ncsJobContextMessage.ReportFileName}.zip", ncsJobContextMessage.DssContainer, cancellationToken))
+            using (var fileStream = await _dssFileService.OpenWriteStreamAsync($"{ncsJobContextMessage.ReportFileName}", ncsJobContextMessage.DssContainer, cancellationToken))
             {
                 using (var readStream = await _dctFileService.OpenReadStreamAsync(dctZipName, ncsJobContextMessage.DctContainer, cancellationToken))
                 {
