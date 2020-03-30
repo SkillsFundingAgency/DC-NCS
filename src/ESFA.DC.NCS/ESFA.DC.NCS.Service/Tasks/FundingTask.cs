@@ -104,7 +104,7 @@ namespace ESFA.DC.NCS.Service.Tasks
                 OutcomeType = item.OutcomeType,
                 SubContractorId = item.SubContractorId,
                 SessionDate = item.SessionDate,
-                Ukprn = ncsJobContextMessage.Ukprn,
+                UKPRN = ncsJobContextMessage.Ukprn,
                 TouchpointId = ncsJobContextMessage.TouchpointId,
                 DssJobId = ncsJobContextMessage.DssJobId,
                 DssTimestamp = ncsJobContextMessage.DssTimeStamp,

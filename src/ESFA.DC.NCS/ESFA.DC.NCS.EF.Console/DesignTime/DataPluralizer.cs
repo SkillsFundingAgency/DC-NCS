@@ -1,9 +1,8 @@
-﻿using ESFA.DC.NCS.EF.Console.DesignTime;
-using Microsoft.EntityFrameworkCore.Design;
+﻿using Microsoft.EntityFrameworkCore.Design;
 
-namespace ESFA.DC.ReferenceData.EF.Console.DesignTime
+namespace ESFA.DC.NCS.EF.Console.DesignTime
 {
-    public class ReferenceDataPluralizer : IPluralizer
+    public class DataPluralizer : IPluralizer
     {
         public string Pluralize(string name)
         {

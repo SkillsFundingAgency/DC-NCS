@@ -5,7 +5,7 @@ namespace ESFA.DC.NCS.EF
 {
     public partial class FundingValue
     {
-        public int Ukprn { get; set; }
+        public int UKPRN { get; set; }
         public string TouchpointId { get; set; }
         public Guid CustomerId { get; set; }
         public Guid ActionPlanId { get; set; }
