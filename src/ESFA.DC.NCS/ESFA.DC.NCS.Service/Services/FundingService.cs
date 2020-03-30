@@ -56,7 +56,7 @@ namespace ESFA.DC.NCS.Service.Services
         {
             return new FundingValue()
             {
-                Ukprn = submission.Ukprn,
+                UKPRN = submission.UKPRN,
                 TouchpointId = submission.TouchpointId,
                 CustomerId = submission.CustomerId,
                 ActionPlanId = submission.ActionPlanId,

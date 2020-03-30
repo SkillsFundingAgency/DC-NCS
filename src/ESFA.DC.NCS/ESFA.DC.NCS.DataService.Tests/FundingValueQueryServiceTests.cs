@@ -25,7 +25,7 @@ namespace ESFA.DC.NCS.DataService.Tests
             {
                 new FundingValue()
                 {
-                    Ukprn = 123456789,
+                    UKPRN = 123456789,
                     TouchpointId = "9999999999",
                     CustomerId = new Guid("5ef69cda-1193-4c80-8427-e79544ddb46e"),
                     ActionPlanId = new Guid("1e35c9f6-39b2-4620-87d6-9dcf276b37e7"),
@@ -65,7 +65,7 @@ namespace ESFA.DC.NCS.DataService.Tests
             {
                 new FundingValue()
                 {
-                    Ukprn = 123456789,
+                    UKPRN = 123456789,
                     TouchpointId = touchpointId,
                     CustomerId = new Guid("5ef69cda-1193-4c80-8427-e79544ddb46e"),
                     ActionPlanId = new Guid("1e35c9f6-39b2-4620-87d6-9dcf276b37e7"),
@@ -79,7 +79,7 @@ namespace ESFA.DC.NCS.DataService.Tests
                 },
                 new FundingValue()
                 {
-                    Ukprn = 123456789,
+                    UKPRN = 123456789,
                     TouchpointId = "1111111111",
                     CustomerId = new Guid("5ef69cda-1193-4c80-8427-e79544ddb46e"),
                     ActionPlanId = new Guid("1e35c9f6-39b2-4620-87d6-9dcf276b37e7"),
@@ -122,7 +122,7 @@ namespace ESFA.DC.NCS.DataService.Tests
             {
                 new FundingValue()
                 {
-                    Ukprn = 123456789,
+                    UKPRN = 123456789,
                     TouchpointId = touchpointId,
                     CustomerId = new Guid("5ef69cda-1193-4c80-8427-e79544ddb46e"),
                     ActionPlanId = new Guid("1e35c9f6-39b2-4620-87d6-9dcf276b37e7"),
@@ -136,7 +136,7 @@ namespace ESFA.DC.NCS.DataService.Tests
                 },
                 new FundingValue()
                 {
-                    Ukprn = 123456789,
+                    UKPRN = 123456789,
                     TouchpointId = touchpointId,
                     CustomerId = new Guid("5ef69cda-1193-4c80-8427-e79544ddb46e"),
                     ActionPlanId = new Guid("1e35c9f6-39b2-4620-87d6-9dcf276b37e7"),

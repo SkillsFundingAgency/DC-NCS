@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Autofac;
 using Autofac.Features.AttributeFilters;
 using ESFA.DC.Auditing.Interface;
+using ESFA.DC.BulkCopy;
+using ESFA.DC.BulkCopy.Interfaces;
 using ESFA.DC.CsvService;
 using ESFA.DC.CsvService.Interface;
 using ESFA.DC.DateTimeProvider.Interface;
@@ -184,6 +186,7 @@ namespace ESFA.DC.NCS.Stateless
             containerBuilder.RegisterType<FileNameService>().As<IFilenameService>();
             containerBuilder.RegisterType<ZipService>().As<IZipService>().WithAttributeFiltering();
             containerBuilder.RegisterType<OccupancyReportMapperFactory>().As<IClassMapFactory<OccupancyReportModel>>();
+            containerBuilder.RegisterType<BulkInsert>().As<IBulkInsert>();
             containerBuilder.Register(c =>
             {
                 var csvFileService = new CsvFileService(c.ResolveKeyed<IFileService>(PersistenceStorageKeys.DctAzureStorage));
@@ -202,6 +205,9 @@ namespace ESFA.DC.NCS.Stateless
             containerBuilder.RegisterType<NcsSubmissionQueryService>().As<INcsSubmissionQueryService>();
             containerBuilder.RegisterType<FundingValueQueryService>().As<IFundingValueQueryService>();
             containerBuilder.RegisterType<SourceQueryService>().As<ISourceQueryService>();
+            containerBuilder.RegisterType<ClearService>().As<IClearService>();
+
+            containerBuilder.Register(c => new DataServiceConfiguration(ncsServiceConfiguration.NcsDbConnectionString)).As<IDataServiceConfiguration>();
 
             return containerBuilder;
         }

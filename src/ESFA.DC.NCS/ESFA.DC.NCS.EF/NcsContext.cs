@@ -35,9 +35,7 @@ namespace ESFA.DC.NCS.EF
 
             modelBuilder.Entity<FundingValue>(entity =>
             {
-                entity.HasKey(e => new { e.Ukprn, e.TouchpointId, e.CustomerId, e.ActionPlanId, e.OutcomeId });
-
-                entity.Property(e => e.Ukprn).HasColumnName("UKPRN");
+                entity.HasKey(e => new { e.UKPRN, e.TouchpointId, e.CustomerId, e.ActionPlanId, e.OutcomeId });
 
                 entity.Property(e => e.TouchpointId)
                     .HasMaxLength(10)
@@ -55,11 +53,9 @@ namespace ESFA.DC.NCS.EF
 
             modelBuilder.Entity<NcsSubmission>(entity =>
             {
-                entity.HasKey(e => new { e.Ukprn, e.TouchpointId, e.CustomerId, e.ActionPlanId, e.OutcomeId });
+                entity.HasKey(e => new { e.UKPRN, e.TouchpointId, e.CustomerId, e.ActionPlanId, e.OutcomeId });
 
                 entity.ToTable("NcsSubmission");
-
-                entity.Property(e => e.Ukprn).HasColumnName("UKPRN");
 
                 entity.Property(e => e.TouchpointId)
                     .HasMaxLength(10)
@@ -114,8 +110,6 @@ namespace ESFA.DC.NCS.EF
                     .IsRequired()
                     .HasMaxLength(10)
                     .IsUnicode(false);
-
-                entity.Property(e => e.Ukprn).HasColumnName("UKPRN");
             });
         }
     }

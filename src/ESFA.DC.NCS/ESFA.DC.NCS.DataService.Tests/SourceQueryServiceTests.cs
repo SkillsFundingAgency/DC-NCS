@@ -22,7 +22,7 @@ namespace ESFA.DC.NCS.DataService.Tests
             {
                 new Source()
                 {
-                    Ukprn = 123456789,
+                    UKPRN = 123456789,
                     TouchpointId = "11111111111",
                     SubmissionDate = new DateTime(2019, 05, 01),
                     DssJobId = Guid.NewGuid(),
@@ -55,7 +55,7 @@ namespace ESFA.DC.NCS.DataService.Tests
             {
                 new Source()
                 {
-                    Ukprn = 123456789,
+                    UKPRN = 123456789,
                     TouchpointId = touchpointId,
                     SubmissionDate = submissionDate,
                     DssJobId = Guid.NewGuid(),
@@ -89,7 +89,7 @@ namespace ESFA.DC.NCS.DataService.Tests
             {
                 new Source()
                 {
-                    Ukprn = 123456789,
+                    UKPRN = 123456789,
                     TouchpointId = touchpointId,
                     SubmissionDate = submissionDate,
                     DssJobId = Guid.NewGuid(),
@@ -97,7 +97,7 @@ namespace ESFA.DC.NCS.DataService.Tests
                 },
                 new Source()
                 {
-                    Ukprn = 123456789,
+                    UKPRN = 123456789,
                     TouchpointId = touchpointId,
                     SubmissionDate = latestSubmissionDate,
                     DssJobId = Guid.NewGuid(),

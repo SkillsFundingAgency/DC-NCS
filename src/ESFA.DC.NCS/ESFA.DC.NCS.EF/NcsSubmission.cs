@@ -5,7 +5,7 @@ namespace ESFA.DC.NCS.EF
 {
     public partial class NcsSubmission
     {
-        public int Ukprn { get; set; }
+        public int UKPRN { get; set; }
         public string TouchpointId { get; set; }
         public Guid CustomerId { get; set; }
         public DateTime DateOfBirth { get; set; }
