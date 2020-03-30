@@ -58,10 +58,8 @@ namespace ESFA.DC.NCS.DataService
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogDebug($"NCS Transaction failed rolling back - {ex.Message}");
-
                         ncsTransaction.Rollback();
-
+                        _logger.LogError($"NCS Transaction failed rolling back - {ex.Message}");
                         throw;
                     }
 
