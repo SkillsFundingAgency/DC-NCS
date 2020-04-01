@@ -13,5 +13,5 @@
 	[OutcomeEffectiveDateMonth]  INT NOT NULL,
 	[CollectionYear] INT NOT NULL,
 	[CreatedOn] DATETIME NOT NULL
-	CONSTRAINT [PK_FundingValues] PRIMARY KEY CLUSTERED ([UKPRN] ASC, [TouchpointId] ASC, [CustomerId] ASC, [ActionPlanId] ASC, [OutcomeId] ASC)
+	CONSTRAINT [PK_FundingValues] PRIMARY KEY CLUSTERED ([UKPRN] ASC, [TouchpointId] ASC, [CustomerId] ASC, [ActionPlanId] ASC, [OutcomeId] ASC, [CollectionYear] ASC)
 )
