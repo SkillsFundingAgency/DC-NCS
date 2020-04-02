@@ -45,7 +45,8 @@ namespace ESFA.DC.NCS.DataService
 	                                    [OutcomePriorityCustomer] 
                                     FROM [dbo].[dcc-collections](@touchpointId, @startDate, @endDate)",
                                 parameters,
-                                commandType: CommandType.Text);
+                                commandType: CommandType.Text,
+                                commandTimeout: 600);
                 }
             }
             catch (Exception ex)
