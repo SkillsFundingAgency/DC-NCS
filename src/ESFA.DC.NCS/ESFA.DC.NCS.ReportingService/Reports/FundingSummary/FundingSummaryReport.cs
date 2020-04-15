@@ -69,6 +69,8 @@ namespace ESFA.DC.NCS.ReportingService.Reports.FundingSummary
 
             // Footer
             RenderDictionary(sheet, 21, footerData);
+
+            workbook.CalculateFormula();
         }
 
         private void RenderDictionary(Worksheet worksheet, int row, IDictionary<string, string> data)
