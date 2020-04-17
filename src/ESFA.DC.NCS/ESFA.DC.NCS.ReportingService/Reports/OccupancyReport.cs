@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,7 +9,7 @@ using ESFA.DC.NCS.Interfaces.Constants;
 using ESFA.DC.NCS.Interfaces.ReportingService;
 using ESFA.DC.NCS.Interfaces.Service;
 using ESFA.DC.NCS.Models.Reports;
-using ESFA.DC.NCS.ReportingService.Mappers;
+using ESFA.DC.NCS.ReportingService.Constants;
 
 namespace ESFA.DC.NCS.ReportingService.Reports
 {
@@ -20,6 +19,15 @@ namespace ESFA.DC.NCS.ReportingService.Reports
         private readonly IFilenameService _filenameService;
         private readonly IClassMapFactory<OccupancyReportModel> _classMapFactory;
         private readonly ILogger _logger;
+
+        private readonly IDictionary<int, string> _outcomeTypesDictionary = new Dictionary<int, string>()
+        {
+            { 1, OutcomeConstants.CustomerSatisfaction },
+            { 2, OutcomeConstants.CareerManagement },
+            { 3, OutcomeConstants.SustainableEmployment },
+            { 4, OutcomeConstants.AccreditedLearning },
+            { 5, OutcomeConstants.CareerProgression },
+        };
 
         public OccupancyReport(
             ICsvFileService csvFileService,
@@ -67,16 +75,16 @@ namespace ESFA.DC.NCS.ReportingService.Reports
                     SubContractorId = d.SubContractorId,
                     AdviserName = d.AdviserName,
                     OutcomeId = d.OutcomeId,
-                    OutcomeType = d.OutcomeType,
+                    OutcomeType = _outcomeTypesDictionary[d.OutcomeType],
                     OutcomeEffectiveDate = d.OutcomeEffectiveDate,
                     OutcomePriorityCustomer = d.OutcomePriorityCustomer,
                     PeriodValues = BuildPeriodValues(d)
                 });
         }
 
-        private int[] BuildPeriodValues(ReportDataModel reportData)
+        private int?[] BuildPeriodValues(ReportDataModel reportData)
         {
-            var periodValues = new[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            var periodValues = new int?[] { null, null, null, null, null, null, null, null, null, null, null, null };
 
             periodValues[reportData.OutcomeEffectiveDate.Month - 1] = reportData.Value;
 

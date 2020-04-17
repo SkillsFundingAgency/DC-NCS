@@ -115,6 +115,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants\OutcomeConstants.cs" />
     <Compile Include="Constants\ReportConstants.cs" />
     <Compile Include="Mappers\Factory\OccupancyReportMapperFactory.cs" />
     <Compile Include="Reports\FundingSummary\FundingSummaryReportBuilder.cs" />
