@@ -22,11 +22,11 @@ namespace ESFA.DC.NCS.DataService
             _dssConfig = dssConfig;
         }
 
-        public async Task<IEnumerable<DssDataModel>> GetDataForTouchpoint(string touchpointId, DateTime dssSubmissionDateTime, DateTime fundingYearStart)
+        public async Task<IEnumerable<DssDataModel>> GetDataForTouchpoint(string touchpointId, DateTime endDate, DateTime fundingYearStart)
         {
             try
             {
-                var parameters = GetParameters(touchpointId, fundingYearStart, dssSubmissionDateTime);
+                var parameters = GetParameters(touchpointId, fundingYearStart, endDate);
 
                 using (IDbConnection db = new SqlConnection(_dssConfig.ConnectionString))
                 {
