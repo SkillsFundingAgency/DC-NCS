@@ -30,10 +30,10 @@ namespace ESFA.DC.NCS.ReportingService.Tests.Reports
             var headerData = new Dictionary<string, string>();
             var fundingSummaryData = new List<FundingSummaryReportModel>();
             var footerData = new Dictionary<string, string>();
-            var reportName = "Funding Summary Report";
+            var reportName = "NCS Funding Summary Report";
             var ukprn = 12345678;
             var jobId = 100;
-            var filename = $"12345678/100/Funding Summary Report-{new DateTime():yyyyMMdd-HHmmss}.xlsx";
+            var filename = $"12345678/100/NCS Funding Summary Report-{new DateTime():yyyyMMdd-HHmmss}.xlsx";
             var container = "container";
 
             var loggerMock = new Mock<ILogger>();
