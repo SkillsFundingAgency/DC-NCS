@@ -15,6 +15,7 @@ GO
 
 RAISERROR('		   Ref Data',10,1) WITH NOWAIT;
 	:r .\ReferenceData\OutcomeRates.sql
+	:r .\ReferenceData\FamFunding.sql
 
 GO
 RAISERROR('		   Extended Property',10,1) WITH NOWAIT;
