@@ -15,6 +15,7 @@ namespace ESFA.DC.NCS.EF
         {
         }
 
+        public virtual DbSet<FamFunding> FamFundings { get; set; }
         public virtual DbSet<FundingValue> FundingValues { get; set; }
         public virtual DbSet<NcsSubmission> NcsSubmissions { get; set; }
         public virtual DbSet<OutcomeRate> OutcomeRates { get; set; }
@@ -32,6 +33,50 @@ namespace ESFA.DC.NCS.EF
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("ProductVersion", "2.2.0-rtm-35687");
+
+            modelBuilder.Entity<FamFunding>(entity =>
+            {
+                entity.ToTable("FamFunding");
+
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.April).HasColumnType("decimal(10, 2)");
+
+                entity.Property(e => e.Area)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.August).HasColumnType("decimal(10, 2)");
+
+                entity.Property(e => e.December).HasColumnType("decimal(10, 2)");
+
+                entity.Property(e => e.February).HasColumnType("decimal(10, 2)");
+
+                entity.Property(e => e.January).HasColumnType("decimal(10, 2)");
+
+                entity.Property(e => e.July).HasColumnType("decimal(10, 2)");
+
+                entity.Property(e => e.June).HasColumnType("decimal(10, 2)");
+
+                entity.Property(e => e.March).HasColumnType("decimal(10, 2)");
+
+                entity.Property(e => e.May).HasColumnType("decimal(10, 2)");
+
+                entity.Property(e => e.November).HasColumnType("decimal(10, 2)");
+
+                entity.Property(e => e.October).HasColumnType("decimal(10, 2)");
+
+                entity.Property(e => e.PrimeContractor)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.September).HasColumnType("decimal(10, 2)");
+
+                entity.Property(e => e.TouchpointId)
+                    .IsRequired()
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+            });
 
             modelBuilder.Entity<FundingValue>(entity =>
             {
