@@ -88,11 +88,6 @@ namespace ESFA.DC.NCS.EF
             {
                 entity.Property(e => e.Id).ValueGeneratedNever();
 
-                entity.Property(e => e.Delivery)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
                 entity.Property(e => e.EffectiveFrom).HasColumnType("date");
 
                 entity.Property(e => e.EffectiveTo).HasColumnType("date");

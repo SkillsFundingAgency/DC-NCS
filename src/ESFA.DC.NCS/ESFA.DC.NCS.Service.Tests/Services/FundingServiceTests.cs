@@ -17,13 +17,19 @@ namespace ESFA.DC.NCS.Service.Tests.Services
     public class FundingServiceTests
     {
         [Theory]
-        [InlineData(1, 45)]
-        [InlineData(2, 50)]
-        [InlineData(3, 70)]
-        [InlineData(4, 70)]
-        [InlineData(5, 70)]
-        public void CalculateFunding_PriorityRate(int outcomeType, int expectedRate)
+        [InlineData(1, 45, "2020/09/30")]
+        [InlineData(2, 50, "2020/09/30")]
+        [InlineData(3, 70, "2020/09/30")]
+        [InlineData(4, 70, "2020/09/30")]
+        [InlineData(5, 70, "2020/09/30")]
+        [InlineData(1, 45, "2020/10/01")]
+        [InlineData(2, 50, "2020/10/01")]
+        [InlineData(3, 70, "2020/10/01")]
+        [InlineData(4, 60, "2020/10/01")]
+        [InlineData(5, 70, "2020/10/01")]
+        public void CalculateFunding_PriorityRate(int outcomeType, int expectedRate, string outcomeDate)
         {
+            var outcomeEffectiveDate = DateTime.Parse(outcomeDate);
             var submissions = new List<NcsSubmission>()
             {
                 new NcsSubmission()
@@ -33,7 +39,7 @@ namespace ESFA.DC.NCS.Service.Tests.Services
                     CustomerId = new Guid("dd4cdc23-486c-4ec6-aec6-39ff71207ce5"),
                     DateOfBirth = new DateTime(2000, 01, 01),
                     HomePostCode = "XXX XXX",
-                    OutcomeEffectiveDate = new DateTime(2019, 04, 01),
+                    OutcomeEffectiveDate = outcomeEffectiveDate,
                     OutcomeId = new Guid("854f9d3b-8729-4bee-82c2-fa7f24af5d50"),
                     OutcomePriorityCustomer = OutcomeRatesConstants.Priority,
                     OutcomeType = outcomeType,
@@ -55,10 +61,10 @@ namespace ESFA.DC.NCS.Service.Tests.Services
 
             var outcomeRateServiceMock = new Mock<IOutcomeRateQueryService>();
 
-            outcomeRateServiceMock.Setup(orsm => orsm.GetOutcomeRateByPriorityAndDeliveryAsync(OutcomeRatesConstants.Priority, OutcomeRatesConstants.Community, It.IsAny<DateTime>(), CancellationToken.None))
+            outcomeRateServiceMock.Setup(orsm => orsm.GetOutcomeRatesByPriorityAsync(OutcomeRatesConstants.Priority, CancellationToken.None))
                 .ReturnsAsync(priorityOutcome);
 
-            outcomeRateServiceMock.Setup(orsm => orsm.GetOutcomeRateByPriorityAndDeliveryAsync(OutcomeRatesConstants.NonPriority, OutcomeRatesConstants.Community, It.IsAny<DateTime>(), CancellationToken.None))
+            outcomeRateServiceMock.Setup(orsm => orsm.GetOutcomeRatesByPriorityAsync(OutcomeRatesConstants.NonPriority, CancellationToken.None))
                 .ReturnsAsync(nonPriorityOutcome);
 
             var dateTimeProviderServiceMock = new Mock<IDateTimeProvider>();
@@ -72,13 +78,19 @@ namespace ESFA.DC.NCS.Service.Tests.Services
         }
 
         [Theory]
-        [InlineData(1, 10)]
-        [InlineData(2, 10)]
-        [InlineData(3, 20)]
-        [InlineData(4, 20)]
-        [InlineData(5, 20)]
-        public void CalculateFunding_NonPriorityRate(int outcomeType, int expectedRate)
+        [InlineData(1, 10, "2020/09/30")]
+        [InlineData(2, 10, "2020/09/30")]
+        [InlineData(3, 20, "2020/09/30")]
+        [InlineData(4, 20, "2020/09/30")]
+        [InlineData(5, 20, "2020/09/30")]
+        [InlineData(1, 10, "2020/10/01")]
+        [InlineData(2, 10, "2020/10/01")]
+        [InlineData(3, 30, "2020/10/01")]
+        [InlineData(4, 20, "2020/10/01")]
+        [InlineData(5, 30, "2020/10/01")]
+        public void CalculateFunding_NonPriorityRate(int outcomeType, int expectedRate, string outcomeDate)
         {
+            var outcomeEffectiveDate = DateTime.Parse(outcomeDate);
             var submissions = new List<NcsSubmission>()
             {
                 new NcsSubmission()
@@ -88,7 +100,7 @@ namespace ESFA.DC.NCS.Service.Tests.Services
                     CustomerId = new Guid("dd4cdc23-486c-4ec6-aec6-39ff71207ce5"),
                     DateOfBirth = new DateTime(2000, 01, 01),
                     HomePostCode = "XXX XXX",
-                    OutcomeEffectiveDate = new DateTime(2019, 04, 01),
+                    OutcomeEffectiveDate = outcomeEffectiveDate,
                     OutcomeId = new Guid("854f9d3b-8729-4bee-82c2-fa7f24af5d50"),
                     OutcomePriorityCustomer = OutcomeRatesConstants.NonPriority,
                     OutcomeType = outcomeType,
@@ -110,10 +122,10 @@ namespace ESFA.DC.NCS.Service.Tests.Services
 
             var outcomeRateServiceMock = new Mock<IOutcomeRateQueryService>();
 
-            outcomeRateServiceMock.Setup(orsm => orsm.GetOutcomeRateByPriorityAndDeliveryAsync(OutcomeRatesConstants.Priority, OutcomeRatesConstants.Community, It.IsAny<DateTime>(), CancellationToken.None))
+            outcomeRateServiceMock.Setup(orsm => orsm.GetOutcomeRatesByPriorityAsync(OutcomeRatesConstants.Priority, CancellationToken.None))
                 .ReturnsAsync(priorityOutcome);
 
-            outcomeRateServiceMock.Setup(orsm => orsm.GetOutcomeRateByPriorityAndDeliveryAsync(OutcomeRatesConstants.NonPriority, OutcomeRatesConstants.Community, It.IsAny<DateTime>(), CancellationToken.None))
+            outcomeRateServiceMock.Setup(orsm => orsm.GetOutcomeRatesByPriorityAsync(OutcomeRatesConstants.NonPriority, CancellationToken.None))
                 .ReturnsAsync(nonPriorityOutcome);
 
             var dateTimeProviderServiceMock = new Mock<IDateTimeProvider>();
@@ -162,10 +174,10 @@ namespace ESFA.DC.NCS.Service.Tests.Services
 
             var outcomeRateServiceMock = new Mock<IOutcomeRateQueryService>();
 
-            outcomeRateServiceMock.Setup(orsm => orsm.GetOutcomeRateByPriorityAndDeliveryAsync(OutcomeRatesConstants.Priority, OutcomeRatesConstants.Community, It.IsAny<DateTime>(), CancellationToken.None))
+            outcomeRateServiceMock.Setup(orsm => orsm.GetOutcomeRatesByPriorityAsync(OutcomeRatesConstants.Priority, CancellationToken.None))
                 .ReturnsAsync(priorityOutcome);
 
-            outcomeRateServiceMock.Setup(orsm => orsm.GetOutcomeRateByPriorityAndDeliveryAsync(OutcomeRatesConstants.NonPriority, OutcomeRatesConstants.Community, It.IsAny<DateTime>(), CancellationToken.None))
+            outcomeRateServiceMock.Setup(orsm => orsm.GetOutcomeRatesByPriorityAsync(OutcomeRatesConstants.NonPriority, CancellationToken.None))
                 .ReturnsAsync(nonPriorityOutcome);
 
             var dateTimeProviderServiceMock = new Mock<IDateTimeProvider>();
@@ -214,10 +226,10 @@ namespace ESFA.DC.NCS.Service.Tests.Services
 
             var outcomeRateServiceMock = new Mock<IOutcomeRateQueryService>();
 
-            outcomeRateServiceMock.Setup(orsm => orsm.GetOutcomeRateByPriorityAndDeliveryAsync(OutcomeRatesConstants.Priority, OutcomeRatesConstants.Community, It.IsAny<DateTime>(), CancellationToken.None))
+            outcomeRateServiceMock.Setup(orsm => orsm.GetOutcomeRatesByPriorityAsync(OutcomeRatesConstants.Priority, CancellationToken.None))
                 .ReturnsAsync(priorityOutcome);
 
-            outcomeRateServiceMock.Setup(orsm => orsm.GetOutcomeRateByPriorityAndDeliveryAsync(OutcomeRatesConstants.NonPriority, OutcomeRatesConstants.Community, It.IsAny<DateTime>(), CancellationToken.None))
+            outcomeRateServiceMock.Setup(orsm => orsm.GetOutcomeRatesByPriorityAsync(OutcomeRatesConstants.NonPriority, CancellationToken.None))
                 .ReturnsAsync(nonPriorityOutcome);
 
             var dateTimeProviderServiceMock = new Mock<IDateTimeProvider>();
@@ -228,6 +240,59 @@ namespace ESFA.DC.NCS.Service.Tests.Services
             act.Should()
                 .Throw<Exception>()
                 .WithMessage($"The outcome type {outcomeType}, doesn't correspond with an outcome rate");
+        }
+
+        [Fact]
+        public void CalculateFunding_NoValidRateForOutcomeDate()
+        {
+            var outcomePriorityCustomer = 1;
+            var outcomeEffectiveDate = new DateTime(2016, 04, 01);
+
+            var submissions = new List<NcsSubmission>()
+            {
+                new NcsSubmission()
+                {
+                    ActionPlanId = new Guid("d01b4976-bc3a-4731-9ef0-e41baa2f0619"),
+                    AdviserName = "Adviser Name",
+                    CustomerId = new Guid("dd4cdc23-486c-4ec6-aec6-39ff71207ce5"),
+                    DateOfBirth = new DateTime(2000, 01, 01),
+                    HomePostCode = "XXX XXX",
+                    OutcomeEffectiveDate = outcomeEffectiveDate,
+                    OutcomeId = new Guid("854f9d3b-8729-4bee-82c2-fa7f24af5d50"),
+                    OutcomePriorityCustomer = outcomePriorityCustomer,
+                    OutcomeType = 1,
+                    SubContractorId = "Subcontractor ID",
+                    SessionDate = new DateTime(2019, 03, 01),
+                    UKPRN = 123456789,
+                    TouchpointId = "000000001",
+                    DssJobId = new Guid("0d2c8ffe-0b54-4e44-b67c-e1d7915257ab"),
+                    DssTimestamp = new DateTime(2019, 04, 01),
+                    CollectionYear = 1819
+                }
+            };
+
+            var priorityOutcome = GetPriorityRate();
+            var nonPriorityOutcome = GetNonPriorityRate();
+
+            var ncsJobContextMessage = new Mock<INcsJobContextMessage>();
+            ncsJobContextMessage.Setup(m => m.DssTimeStamp).Returns(new DateTime(2019, 04, 01));
+
+            var outcomeRateServiceMock = new Mock<IOutcomeRateQueryService>();
+
+            outcomeRateServiceMock.Setup(orsm => orsm.GetOutcomeRatesByPriorityAsync(OutcomeRatesConstants.Priority, CancellationToken.None))
+                .ReturnsAsync(priorityOutcome);
+
+            outcomeRateServiceMock.Setup(orsm => orsm.GetOutcomeRatesByPriorityAsync(OutcomeRatesConstants.NonPriority, CancellationToken.None))
+                .ReturnsAsync(nonPriorityOutcome);
+
+            var dateTimeProviderServiceMock = new Mock<IDateTimeProvider>();
+            dateTimeProviderServiceMock.Setup(x => x.GetNowUtc()).Returns(new DateTime(2000, 01, 01));
+
+            Func<Task> act = async () => await NewService(outcomeRateServiceMock.Object, dateTimeProviderServiceMock.Object).CalculateFundingAsync(submissions, ncsJobContextMessage.Object, CancellationToken.None);
+
+            act.Should()
+                .Throw<Exception>()
+                .WithMessage($"OutcomeRates table has none or multiple rates for the values: OutcomePriorityCustomer-{outcomePriorityCustomer} and outcome effective date-{outcomeEffectiveDate}");
         }
 
         [Theory]
@@ -278,10 +343,10 @@ namespace ESFA.DC.NCS.Service.Tests.Services
 
             var outcomeRateServiceMock = new Mock<IOutcomeRateQueryService>();
 
-            outcomeRateServiceMock.Setup(orsm => orsm.GetOutcomeRateByPriorityAndDeliveryAsync(OutcomeRatesConstants.Priority, OutcomeRatesConstants.Community, It.IsAny<DateTime>(), CancellationToken.None))
+            outcomeRateServiceMock.Setup(orsm => orsm.GetOutcomeRatesByPriorityAsync(OutcomeRatesConstants.Priority, CancellationToken.None))
                 .ReturnsAsync(priorityOutcome);
 
-            outcomeRateServiceMock.Setup(orsm => orsm.GetOutcomeRateByPriorityAndDeliveryAsync(OutcomeRatesConstants.NonPriority, OutcomeRatesConstants.Community, It.IsAny<DateTime>(), CancellationToken.None))
+            outcomeRateServiceMock.Setup(orsm => orsm.GetOutcomeRatesByPriorityAsync(OutcomeRatesConstants.NonPriority, CancellationToken.None))
                 .ReturnsAsync(nonPriorityOutcome);
 
             var dateTimeProviderServiceMock = new Mock<IDateTimeProvider>();
@@ -294,27 +359,55 @@ namespace ESFA.DC.NCS.Service.Tests.Services
             fundingValues.Should().Contain(x => x.Period.Equals(expectedPeriod));
         }
 
-        private OutcomeRate GetPriorityRate()
+        private IEnumerable<OutcomeRate> GetPriorityRate()
         {
-            return new OutcomeRate()
+            return new List<OutcomeRate>()
             {
-                OutcomePriorityCustomer = OutcomeRatesConstants.Priority,
-                CustomerSatisfaction = 45,
-                CareerManagement = 50,
-                JobsAndLearning = 70,
-                EffectiveFrom = new DateTime(2018, 10, 01)
+                new OutcomeRate()
+                {
+                    OutcomePriorityCustomer = OutcomeRatesConstants.Priority,
+                    CustomerSatisfaction = 45,
+                    CareerManagement = 50,
+                    Jobs = 70,
+                    Learning = 70,
+                    EffectiveFrom = new DateTime(2018, 10, 01),
+                    EffectiveTo = new DateTime(2020, 09, 30)
+                },
+                new OutcomeRate()
+                {
+                    OutcomePriorityCustomer = OutcomeRatesConstants.Priority,
+                    CustomerSatisfaction = 45,
+                    CareerManagement = 50,
+                    Jobs = 70,
+                    Learning = 60,
+                    EffectiveFrom = new DateTime(2020, 10, 01)
+                }
             };
         }
 
-        private OutcomeRate GetNonPriorityRate()
+        private IEnumerable<OutcomeRate> GetNonPriorityRate()
         {
-            return new OutcomeRate()
+            return new List<OutcomeRate>()
             {
-                OutcomePriorityCustomer = OutcomeRatesConstants.NonPriority,
-                CustomerSatisfaction = 10,
-                CareerManagement = 10,
-                JobsAndLearning = 20,
-                EffectiveFrom = new DateTime(2018, 10, 01)
+                new OutcomeRate()
+                {
+                    OutcomePriorityCustomer = OutcomeRatesConstants.NonPriority,
+                    CustomerSatisfaction = 10,
+                    CareerManagement = 10,
+                    Jobs = 20,
+                    Learning = 20,
+                    EffectiveFrom = new DateTime(2018, 10, 01),
+                    EffectiveTo = new DateTime(2020, 09, 30)
+                },
+                new OutcomeRate()
+                {
+                    OutcomePriorityCustomer = OutcomeRatesConstants.NonPriority,
+                    CustomerSatisfaction = 10,
+                    CareerManagement = 10,
+                    Jobs = 30,
+                    Learning = 20,
+                    EffectiveFrom = new DateTime(2020, 10, 01)
+                }
             };
         }
 

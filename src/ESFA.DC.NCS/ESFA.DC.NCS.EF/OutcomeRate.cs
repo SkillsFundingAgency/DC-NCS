@@ -9,9 +9,9 @@ namespace ESFA.DC.NCS.EF
         public int OutcomePriorityCustomer { get; set; }
         public int CustomerSatisfaction { get; set; }
         public int CareerManagement { get; set; }
-        public int JobsAndLearning { get; set; }
+        public int Jobs { get; set; }
+        public int Learning { get; set; }
         public DateTime EffectiveFrom { get; set; }
         public DateTime? EffectiveTo { get; set; }
-        public string Delivery { get; set; }
     }
 }
