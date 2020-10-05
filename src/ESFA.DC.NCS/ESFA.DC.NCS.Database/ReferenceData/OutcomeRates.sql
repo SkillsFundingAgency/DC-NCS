@@ -2,10 +2,12 @@
 
 MERGE INTO [OutcomeRates] AS Target
 USING (VALUES		
-	(1, 0, 10, 10, 20, CONVERT(DATETIME, N'2018-10-01T00:00:00.000'), NULL, N'Community'),
-	(2, 1, 45, 50, 70, CONVERT(DATETIME, N'2018-10-01T00:00:00.000'), NULL, N'Community')
+	(1, 0, 10, 10, 20, 20, CONVERT(DATETIME, N'2018-10-01T00:00:00.000'), CONVERT(DATETIME, N'2020-09-30T00:00:00.000')),
+	(2, 1, 45, 50, 70, 70, CONVERT(DATETIME, N'2018-10-01T00:00:00.000'), CONVERT(DATETIME, N'2020-09-30T00:00:00.000')),
+	(3, 0, 10, 10, 30, 20, CONVERT(DATETIME, N'2020-10-01T00:00:00.000'), NULL),
+	(4, 1, 45, 50, 70, 60, CONVERT(DATETIME, N'2020-10-01T00:00:00.000'), NULL)
 )
-	AS Source([Id], [OutcomePriorityCustomer], [CustomerSatisfaction], [CareerManagement], [JobsAndLearning], [EffectiveFrom], [EffectiveTo], [Delivery])
+	AS Source([Id], [OutcomePriorityCustomer], [CustomerSatisfaction], [CareerManagement], [Jobs], [Learning], [EffectiveFrom], [EffectiveTo])
 	ON Target.[Id] = Source.[Id]
 	WHEN MATCHED 
 			AND EXISTS 
@@ -13,31 +15,31 @@ USING (VALUES
 							Target.[OutcomePriorityCustomer],
 							Target.[CustomerSatisfaction],
 							Target.[CareerManagement],
-							Target.[JobsAndLearning],
+							Target.[Jobs],
+							Target.[Learning],
 							Target.[EffectiveFrom],
-							Target.[EffectiveTo],
-							Target.[Delivery]
+							Target.[EffectiveTo]
 					EXCEPT 
 						SELECT Source.[Id] ,
 							Source.[OutcomePriorityCustomer],
 							Source.[CustomerSatisfaction],
 							Source.[CareerManagement],
-							Source.[JobsAndLearning],
+							Source.[Jobs],
+							Source.[Learning],
 							Source.[EffectiveFrom],
-							Source.[EffectiveTo],
-							Source.[Delivery]													      
+							Source.[EffectiveTo]													      
 				)
 		  THEN UPDATE SET 
 						Target.[Id] = Source.[Id],
 						Target.[OutcomePriorityCustomer] = Source.[OutcomePriorityCustomer],
 						Target.[CustomerSatisfaction] = Source.[CustomerSatisfaction],
 						Target.[CareerManagement] = Source.[CareerManagement],
-						Target.[JobsAndLearning] = Source.[JobsAndLearning],
+						Target.[Jobs] = Source.[Jobs],
+						Target.[Learning] = Source.[Learning],
 						Target.[EffectiveFrom] = Source.[EffectiveFrom],
-						Target.[EffectiveTo] = Source.[EffectiveTo],
-						Target.[Delivery] = Source.[Delivery]
-	WHEN NOT MATCHED BY TARGET THEN INSERT([Id], [OutcomePriorityCustomer], [CustomerSatisfaction], [CareerManagement], [JobsAndLearning], [EffectiveFrom], [EffectiveTo], [Delivery]) 
-		VALUES ([Id], [OutcomePriorityCustomer], [CustomerSatisfaction], [CareerManagement], [JobsAndLearning], [EffectiveFrom], [EffectiveTo], [Delivery])
+						Target.[EffectiveTo] = Source.[EffectiveTo]
+	WHEN NOT MATCHED BY TARGET THEN INSERT([Id], [OutcomePriorityCustomer], [CustomerSatisfaction], [CareerManagement], [Jobs], [Learning], [EffectiveFrom], [EffectiveTo]) 
+		VALUES ([Id], [OutcomePriorityCustomer], [CustomerSatisfaction], [CareerManagement], [Jobs], [Learning], [EffectiveFrom], [EffectiveTo])
 	WHEN NOT MATCHED BY SOURCE THEN DELETE
 	OUTPUT isnull(deleted.Id,Inserted.[Id]),$action INTO @SummaryOfChanges_OutcomeRates	([Id], [Action])
 ;

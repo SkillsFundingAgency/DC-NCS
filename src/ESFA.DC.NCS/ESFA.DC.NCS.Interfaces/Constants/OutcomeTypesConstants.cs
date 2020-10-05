@@ -6,6 +6,8 @@
 
         public const int CareerManagement = 2;
 
-        public static readonly int[] JobsAndLearning = {3,4,5};
+        public const int Learning = 4;
+
+        public static readonly int[] Jobs = {3,5};
     }
 }

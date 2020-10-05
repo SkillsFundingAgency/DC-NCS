@@ -25,8 +25,8 @@ namespace ESFA.DC.NCS.Service.Services
 
         public async Task<IEnumerable<FundingValue>> CalculateFundingAsync(IEnumerable<NcsSubmission> ncsSubmissions, INcsJobContextMessage ncsJobContextMessage, CancellationToken cancellationToken)
         {
-            var priorityCommunityRate = await _outcomeRateService.GetOutcomeRateByPriorityAndDeliveryAsync(OutcomeRatesConstants.Priority, OutcomeRatesConstants.Community, ncsJobContextMessage.DssTimeStamp, cancellationToken);
-            var nonPriorityCommunityRate = await _outcomeRateService.GetOutcomeRateByPriorityAndDeliveryAsync(OutcomeRatesConstants.NonPriority, OutcomeRatesConstants.Community, ncsJobContextMessage.DssTimeStamp, cancellationToken);
+            var priorityCommunityRate = await _outcomeRateService.GetOutcomeRatesByPriorityAsync(OutcomeRatesConstants.Priority, cancellationToken);
+            var nonPriorityCommunityRate = await _outcomeRateService.GetOutcomeRatesByPriorityAsync(OutcomeRatesConstants.NonPriority, cancellationToken);
 
             var fundingValues = new List<FundingValue>();
 
@@ -52,8 +52,10 @@ namespace ESFA.DC.NCS.Service.Services
             return fundingValues;
         }
 
-        private FundingValue BuildFundingValue(NcsSubmission submission, OutcomeRate outcomeRate)
+        private FundingValue BuildFundingValue(NcsSubmission submission, IEnumerable<OutcomeRate> outcomeRates)
         {
+            var outcomeRate = GetOutcomeRate(outcomeRates, submission.OutcomeEffectiveDate, submission.OutcomePriorityCustomer);
+
             return new FundingValue()
             {
                 UKPRN = submission.UKPRN,
@@ -72,6 +74,20 @@ namespace ESFA.DC.NCS.Service.Services
             };
         }
 
+        private OutcomeRate GetOutcomeRate(IEnumerable<OutcomeRate> outcomeRates, DateTime outcomeEffectiveDate, int outcomePriorityCustomer)
+        {
+            var outcomeRate = outcomeRates
+                .Where(or => outcomeEffectiveDate >= or.EffectiveFrom && outcomeEffectiveDate <= (or.EffectiveTo ?? DateTime.MaxValue))
+                .ToList();
+
+            if (!outcomeRate.Any() || outcomeRate.Count > 1)
+            {
+                throw new Exception($"OutcomeRates table has none or multiple rates for the values: OutcomePriorityCustomer-{outcomePriorityCustomer} and outcome effective date-{outcomeEffectiveDate}");
+            }
+
+            return outcomeRate.Single();
+        }
+
         private int CalculateValue(int outcomeType, OutcomeRate outcomeRate)
         {
             if (outcomeType == OutcomeTypesConstants.CustomerSatisfaction)
@@ -84,9 +100,14 @@ namespace ESFA.DC.NCS.Service.Services
                 return outcomeRate.CareerManagement;
             }
 
-            if (OutcomeTypesConstants.JobsAndLearning.Contains(outcomeType))
+            if (outcomeType == OutcomeTypesConstants.Learning)
             {
-                return outcomeRate.JobsAndLearning;
+                return outcomeRate.Learning;
+            }
+
+            if (OutcomeTypesConstants.Jobs.Contains(outcomeType))
+            {
+                return outcomeRate.Jobs;
             }
 
             throw new Exception($"The outcome type {outcomeType}, doesn't correspond with an outcome rate");

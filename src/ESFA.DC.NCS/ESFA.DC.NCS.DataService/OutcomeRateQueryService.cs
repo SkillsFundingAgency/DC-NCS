@@ -19,31 +19,23 @@ namespace ESFA.DC.NCS.DataService
             _ncsContext = ncsContext;
         }
 
-        public async Task<OutcomeRate> GetOutcomeRateByPriorityAndDeliveryAsync(int priorityGroup, string delivery, DateTime date, CancellationToken cancellationToken)
+        public async Task<IEnumerable<OutcomeRate>> GetOutcomeRatesByPriorityAsync(int priorityGroup, CancellationToken cancellationToken)
         {
             List<OutcomeRate> outcomeRates;
 
             using (var context = _ncsContext())
             {
                 outcomeRates = await context.OutcomeRates
-                    .Where(or => or.Delivery == delivery
-                              && or.OutcomePriorityCustomer == priorityGroup
-                              && date >= or.EffectiveFrom
-                              && date < (or.EffectiveTo ?? DateTime.MaxValue))
+                    .Where(or => or.OutcomePriorityCustomer == priorityGroup)
                     .ToListAsync(cancellationToken);
             }
 
             if (!outcomeRates.Any())
             {
-                throw new Exception($"OutcomeRates table does not contain an outcome rate for the values: OutcomePriorityCustomer-{priorityGroup}, Delivery-{delivery} and date-{date}");
+                throw new Exception($"OutcomeRates table does not contain an outcome rate for the values: OutcomePriorityCustomer-{priorityGroup}");
             }
 
-            if (outcomeRates.Count > 1)
-            {
-                throw new Exception($"OutcomeRates table contains more than one rate for the values: OutcomePriorityCustomer-{priorityGroup}, Delivery-{delivery} and date-{date}");
-            }
-
-            return outcomeRates.Single();
+            return outcomeRates;
         }
     }
 }

@@ -70,9 +70,9 @@ namespace ESFA.DC.NCS.ReportingService.Reports.FundingSummary
             {
                 BuildRow(priorityGroupRecords, OutcomeTypesConstants.CustomerSatisfaction, "Customer Satisfaction Priority Group Outcomes"),
                 BuildRow(priorityGroupRecords, OutcomeTypesConstants.CareerManagement, "Career Management Priority Group Outcomes"),
-                BuildRow(priorityGroupRecords, OutcomeTypesConstants.JobsAndLearning[0], "Sustainable Employment Priority Group Outcomes"),
-                BuildRow(priorityGroupRecords, OutcomeTypesConstants.JobsAndLearning[1], "Accredited Learning Priority Group Outcomes"),
-                BuildRow(priorityGroupRecords, OutcomeTypesConstants.JobsAndLearning[2], "Career Progression Priority Group Outcomes")
+                BuildRow(priorityGroupRecords, OutcomeTypesConstants.Jobs[0], "Sustainable Employment Priority Group Outcomes"),
+                BuildRow(priorityGroupRecords, OutcomeTypesConstants.Learning, "Accredited Learning Priority Group Outcomes"),
+                BuildRow(priorityGroupRecords, OutcomeTypesConstants.Jobs[1], "Career Progression Priority Group Outcomes")
             };
         }
 
@@ -84,9 +84,9 @@ namespace ESFA.DC.NCS.ReportingService.Reports.FundingSummary
             {
                 BuildRow(nonPriorityGroupRecords, OutcomeTypesConstants.CustomerSatisfaction, "Customer Satisfaction Non-Priority Group Outcomes"),
                 BuildRow(nonPriorityGroupRecords, OutcomeTypesConstants.CareerManagement, "Career Management Non-Priority Group Outcomes"),
-                BuildRow(nonPriorityGroupRecords, OutcomeTypesConstants.JobsAndLearning[0], "Sustainable Employment Non-Priority Group Outcomes"),
-                BuildRow(nonPriorityGroupRecords, OutcomeTypesConstants.JobsAndLearning[1], "Accredited Learning Non-Priority Group Outcomes"),
-                BuildRow(nonPriorityGroupRecords, OutcomeTypesConstants.JobsAndLearning[2], "Career Progression Non-Priority Group Outcomes")
+                BuildRow(nonPriorityGroupRecords, OutcomeTypesConstants.Jobs[0], "Sustainable Employment Non-Priority Group Outcomes"),
+                BuildRow(nonPriorityGroupRecords, OutcomeTypesConstants.Learning, "Accredited Learning Non-Priority Group Outcomes"),
+                BuildRow(nonPriorityGroupRecords, OutcomeTypesConstants.Jobs[1], "Career Progression Non-Priority Group Outcomes")
             };
         }
 

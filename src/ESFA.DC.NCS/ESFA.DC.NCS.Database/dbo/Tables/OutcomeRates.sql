@@ -4,9 +4,9 @@
 	[OutcomePriorityCustomer] INT NOT NULL, 
 	[CustomerSatisfaction] INT NOT NULL, 
 	[CareerManagement] INT NOT NULL, 
-	[JobsAndLearning] INT NOT NULL, 
+	[Jobs] INT NOT NULL, 
+	[Learning] INT NOT NULL, 
 	[EffectiveFrom] DATE NOT NULL, 
-	[EffectiveTo] DATE NULL, 
-	[Delivery] VARCHAR(50) NOT NULL
+	[EffectiveTo] DATE NULL
 	CONSTRAINT [PK_OutcomeRates] PRIMARY KEY CLUSTERED ([Id] Asc )
 )
