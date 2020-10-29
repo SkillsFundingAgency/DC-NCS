@@ -14,8 +14,6 @@ SET NOCOUNT ON;
 GO
 
 RAISERROR('		   Ref Data',10,1) WITH NOWAIT;
-	:r .\ReferenceData\OutcomeRates.sql
-
 GO
 RAISERROR('		   Extended Property',10,1) WITH NOWAIT;
 GO

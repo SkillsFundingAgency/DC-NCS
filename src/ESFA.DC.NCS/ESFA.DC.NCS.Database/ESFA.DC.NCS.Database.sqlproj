@@ -78,7 +78,6 @@
     <Build Include="dbo\Tables\Source.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ReferenceData\OutcomeRates.sql" />
     <None Include="zzDeploymentProfiles\zz.Local.Dev.Version.publish.xml" />
   </ItemGroup>
   <ItemGroup>
