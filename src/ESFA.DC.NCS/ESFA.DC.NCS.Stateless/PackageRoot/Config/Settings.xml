@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Settings xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.microsoft.com/2011/01/fabric">
+  <!-- Add your custom configuration sections and parameters here -->
+  <!--
+  <Section Name="MyConfigSection">
+    <Parameter Name="MyParameter" Value="Value1" />
+  </Section>
+  -->
+  <Section Name="NcsServiceConfiguration">
+    <Parameter Name="ServiceBusConnectionString" Value="" />
+    <Parameter Name="TopicName" Value="" />
+    <Parameter Name="SubscriptionName" Value=""/>
+    <Parameter Name="JobStatusQueueName" Value="" />
+    <Parameter Name="AuditQueueName" Value="" />
+    <Parameter Name="LoggerConnectionString" Value="" />
+    <Parameter Name="NcsDbConnectionString" Value="" />
+  </Section>
+  <Section Name="LoggerConfiguration">
+    <Parameter Name="LoggerConnectionString" Value="" />
+  </Section>
+  <Section Name="DssServiceConfiguration">
+    <Parameter Name="DssDbConnectionString" Value="" />
+    <Parameter Name="DssQueueConnectionString" Value="" />
+    <Parameter Name="DssQueueName" Value="" />
+  </Section>
+  <Section Name="ReferenceDataConfiguration">
+    <Parameter Name="OrgDbConnectionString" Value="" />
+  </Section>
+  <Section Name="SoftwareLicenceSection">
+    <Parameter Name="AsposeLicence" Value="" />
+  </Section>
+  <Section Name="AzureStorageOptions">
+    <Parameter Name="DctAzureBlobConnectionString" Value="" />
+    <Parameter Name="NcsAzureBlobConnectionString" Value="" />
+  </Section>
+</Settings>
